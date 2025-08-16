@@ -36,8 +36,11 @@ export function PDFThumbnailPreview({ files, onThumbnailsGenerated }: PDFThumbna
 
         // Check if any thumbnails failed due to worker issues
         const hasWorkerErrors = generatedThumbnails.some(t => 
-          t.error && t.error.includes('GlobalWorkerOptions')
+          t.error && (t.error.includes('GlobalWorkerOptions') || t.error.includes('worker'))
         );
+
+        console.log('Generated thumbnails:', generatedThumbnails);
+        console.log('Has worker errors:', hasWorkerErrors);
 
         if (hasWorkerErrors) {
           // Fall back to simple preview
