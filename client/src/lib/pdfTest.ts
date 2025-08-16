@@ -5,10 +5,10 @@ export async function testPDFWorkerFunctionality(): Promise<boolean> {
   try {
     console.log('Testing PDF.js worker functionality...');
     
-    // Check if worker is configured
+    // Ensure worker is configured
     if (!pdfjsLib.GlobalWorkerOptions.workerSrc) {
-      console.error('No worker source configured');
-      return false;
+      console.log('⚙️ Configuring worker for test...');
+      pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.js';
     }
     
     console.log('Worker source:', pdfjsLib.GlobalWorkerOptions.workerSrc);

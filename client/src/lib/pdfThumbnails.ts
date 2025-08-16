@@ -1,15 +1,13 @@
 import * as pdfjsLib from 'pdfjs-dist';
 import type { PDFDocumentProxy } from 'pdfjs-dist';
+import { ensurePDFWorker } from './pdfWorkerSetup';
 
-// Set up PDF.js worker immediately when module loads
-pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.js';
+// Ensure worker is set up
+ensurePDFWorker();
 
 // Enhanced logging
 console.log('PDF.js version:', pdfjsLib.version);
 console.log('PDF.js worker source:', pdfjsLib.GlobalWorkerOptions.workerSrc);
-
-// Import test functionality
-import './pdfTest';
 
 export interface PDFThumbnail {
   file: File;
@@ -25,6 +23,13 @@ export interface PDFThumbnail {
 export async function generatePDFThumbnail(file: File): Promise<PDFThumbnail> {
   try {
     console.log('🖼️ Generating thumbnail for:', file.name);
+    
+    // Ensure worker is configured before processing
+    if (!pdfjsLib.GlobalWorkerOptions.workerSrc) {
+      console.log('⚙️ Setting up PDF.js worker...');
+      pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.js';
+    }
+    console.log('📋 Worker configured:', pdfjsLib.GlobalWorkerOptions.workerSrc);
     
     // Read file as array buffer
     const arrayBuffer = await file.arrayBuffer();
@@ -89,11 +94,13 @@ export async function generatePDFThumbnail(file: File): Promise<PDFThumbnail> {
     };
   } catch (error) {
     console.error('PDF thumbnail generation failed for:', file.name, error);
+    const errorMessage = error instanceof Error ? error.message : 'Failed to generate thumbnail';
+    console.error('Error details:', errorMessage);
     return {
       file,
       thumbnailUrl: '',
       pageCount: 0,
-      error: error instanceof Error ? error.message : 'Failed to generate thumbnail',
+      error: errorMessage,
     };
   }
 }
@@ -121,12 +128,15 @@ export async function generateMultiplePDFThumbnails(
  */
 export async function getPDFInfo(file: File): Promise<{ pageCount: number; title?: string }> {
   try {
+    // Ensure worker is configured before processing
+    if (!pdfjsLib.GlobalWorkerOptions.workerSrc) {
+      pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.js';
+    }
+    
     const arrayBuffer = await file.arrayBuffer();
     const loadingTask = pdfjsLib.getDocument({
       data: arrayBuffer,
-      disableFontFace: true,
-      disableRange: true,
-      disableStream: true,
+      verbosity: 0,
     });
     const pdf = await loadingTask.promise;
     const metadata = await pdf.getMetadata();
