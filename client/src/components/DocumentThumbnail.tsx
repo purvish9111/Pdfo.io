@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { ChevronDown, ChevronRight, FileText, GripVertical } from 'lucide-react';
-import { SimplePDFPreview } from './SimplePDFPreview';
+import { SimplePDFPreview } from '@/components/SimplePDFPreview';
 
 interface PDFPageInfo {
   id: string;
@@ -72,11 +72,15 @@ export function DocumentThumbnail({
 
           {/* Document Icon and Preview */}
           <div className="flex-shrink-0 mr-4">
-            <div className="w-16 h-20 bg-white dark:bg-gray-800 rounded border border-gray-300 dark:border-gray-600 overflow-hidden relative">
-              <div className="absolute inset-0 flex items-center justify-center">
-                <FileText className="w-8 h-8 text-red-500" />
-              </div>
-              {/* Mini PDF preview could go here */}
+            <div className="w-20 h-24 bg-white dark:bg-gray-800 rounded border border-gray-300 dark:border-gray-600 overflow-hidden relative">
+              <SimplePDFPreview 
+                file={file} 
+                className="w-full h-full object-cover"
+                onError={() => {
+                  // Fallback to icon on error
+                }}
+              />
+              {/* PDF badge */}
               <div className="absolute bottom-0 left-0 right-0 bg-red-600 text-white text-xs text-center py-1">
                 PDF
               </div>
@@ -124,14 +128,26 @@ export function DocumentThumbnail({
             </p>
           </div>
 
-          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
             {pages.map((page, index) => (
               <div
                 key={page.id}
                 className="group/page relative bg-gray-100 dark:bg-gray-700 rounded-lg overflow-hidden aspect-[3/4] border-2 border-transparent hover:border-blue-300 dark:hover:border-blue-600 cursor-move transition-all duration-200"
               >
-                {/* Page Preview Placeholder */}
-                <div className="absolute inset-0 flex flex-col items-center justify-center text-gray-500 dark:text-gray-400">
+                {/* Page Preview - could show specific page from PDF */}
+                <div className="absolute inset-0">
+                  <SimplePDFPreview 
+                    file={file} 
+                    pageNumber={page.pageNumber}
+                    className="w-full h-full object-cover"
+                    onError={() => {
+                      // Show fallback
+                    }}
+                  />
+                </div>
+                
+                {/* Fallback content - only shown when PDF fails to load */}
+                <div className="absolute inset-0 flex flex-col items-center justify-center text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-700" style={{ zIndex: -1 }}>
                   <FileText className="w-8 h-8 mb-2" />
                   <span className="text-sm font-medium">{page.pageNumber}</span>
                 </div>
@@ -140,7 +156,7 @@ export function DocumentThumbnail({
                 <div className="absolute inset-0 bg-blue-500/10 opacity-0 group-hover/page:opacity-100 transition-opacity duration-200" />
                 
                 {/* Page Number Badge */}
-                <div className="absolute top-2 left-2 bg-gray-800 dark:bg-gray-600 text-white text-xs px-2 py-1 rounded">
+                <div className="absolute top-2 left-2 bg-gray-800 dark:bg-gray-600 text-white text-xs px-2 py-1 rounded shadow">
                   {index + 1}
                 </div>
               </div>
