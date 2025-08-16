@@ -1,7 +1,7 @@
 import { Link } from "wouter";
 import { ArrowLeft, MapPin, Building, User, Heart, Coffee } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { ToolFooter } from "@/components/ToolFooter";
+import { MainFooter } from "@/components/MainFooter";
 import { BuyMeCoffeeButton } from "@/components/BuyMeCoffeeButton";
 import purvishPhoto from "@assets/image_1755367460356.jpg";
 
@@ -153,16 +153,16 @@ export default function About() {
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link href="/contact">
-                  <Button size="lg" className="bg-white text-blue-600 hover:bg-gray-100 border-0 w-full sm:w-auto">
+                  <button className="inline-flex items-center px-6 py-3 bg-white text-blue-600 hover:bg-gray-100 transition-colors font-medium rounded-lg text-lg w-full sm:w-auto justify-center">
                     <i className="fas fa-envelope mr-2"></i>
                     Get in Touch
-                  </Button>
+                  </button>
                 </Link>
                 <a href="https://buymeacoffee.com/pravaah" target="_blank" rel="noopener noreferrer">
-                  <Button variant="outline" size="lg" className="border-2 border-white text-white hover:bg-white hover:text-blue-600 w-full sm:w-auto">
+                  <button className="inline-flex items-center px-6 py-3 border-2 border-white text-white hover:bg-white hover:text-blue-600 transition-colors font-medium rounded-lg text-lg w-full sm:w-auto justify-center">
                     <i className="fas fa-coffee mr-2"></i>
                     Buy Me a Coffee
-                  </Button>
+                  </button>
                 </a>
               </div>
             </div>
@@ -170,7 +170,7 @@ export default function About() {
         </div>
       </div>
 
-      <ToolFooter />
+      <MainFooter />
     </>
   );
 }

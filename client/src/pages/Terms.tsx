@@ -1,7 +1,7 @@
 import { Link } from "wouter";
 import { ArrowLeft, FileText, Scale, AlertTriangle } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { ToolFooter } from "@/components/ToolFooter";
+import { MainFooter } from "@/components/MainFooter";
 
 export default function Terms() {
   return (
@@ -197,7 +197,7 @@ export default function Terms() {
         </div>
       </div>
 
-      <ToolFooter />
+      <MainFooter />
     </>
   );
 }

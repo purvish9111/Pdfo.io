@@ -1,7 +1,7 @@
 import { Link } from "wouter";
 import { ArrowLeft, Mail, MessageCircle, Coffee, MapPin, Building2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { ToolFooter } from "@/components/ToolFooter";
+import { MainFooter } from "@/components/MainFooter";
 
 export default function Contact() {
   return (
@@ -155,7 +155,7 @@ export default function Contact() {
         </div>
       </div>
 
-      <ToolFooter />
+      <MainFooter />
     </>
   );
 }

@@ -1,7 +1,7 @@
 import { Link } from "wouter";
 import { ArrowLeft, Shield, Lock, Eye, Database } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { ToolFooter } from "@/components/ToolFooter";
+import { MainFooter } from "@/components/MainFooter";
 
 export default function Privacy() {
   return (
@@ -177,7 +177,7 @@ export default function Privacy() {
         </div>
       </div>
 
-      <ToolFooter />
+      <MainFooter />
     </>
   );
 }
