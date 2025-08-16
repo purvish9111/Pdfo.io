@@ -160,7 +160,7 @@ export default function Company() {
                 PDFo and our other tools are completely free. Your support helps us continue developing amazing tools for everyone.
               </p>
               <a href="https://buymeacoffee.com/pravaah" target="_blank" rel="noopener noreferrer">
-                <Button size="lg" variant="secondary" className="bg-white text-blue-600 hover:bg-gray-100">
+                <Button size="lg" className="bg-white text-blue-600 hover:bg-gray-100 border-0">
                   <Coffee className="h-5 w-5 mr-2" />
                   Buy Me a Coffee
                 </Button>
@@ -171,7 +171,7 @@ export default function Company() {
           {/* Back to Tools */}
           <div className="text-center mt-8">
             <Link href="/">
-              <Button size="lg" variant="outline">
+              <Button size="lg" variant="outline" className="border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
                 Back to PDF Tools
               </Button>
             </Link>

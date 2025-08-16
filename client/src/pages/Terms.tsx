@@ -182,12 +182,12 @@ export default function Terms() {
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
                 <Link href="/contact">
-                  <Button variant="secondary" size="lg" className="bg-white text-purple-600 hover:bg-gray-100">
+                  <Button size="lg" className="bg-white text-purple-600 hover:bg-gray-100 border-0">
                     Contact Us
                   </Button>
                 </Link>
                 <Link href="/privacy">
-                  <Button variant="outline" size="lg" className="border-white text-white hover:bg-white hover:text-purple-600">
+                  <Button variant="outline" size="lg" className="border-2 border-white text-white hover:bg-white hover:text-purple-600">
                     Privacy Policy
                   </Button>
                 </Link>

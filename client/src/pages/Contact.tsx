@@ -140,13 +140,13 @@ export default function Contact() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a href="mailto:contact@pravaahaitech.com">
-                <Button size="lg" variant="secondary" className="bg-white text-green-600 hover:bg-gray-100">
+                <Button size="lg" className="bg-white text-green-600 hover:bg-gray-100 border-0">
                   <Mail className="h-4 w-4 mr-2" />
                   Send Email
                 </Button>
               </a>
               <Link href="/about">
-                <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-green-600">
+                <Button size="lg" variant="outline" className="border-2 border-white text-white hover:bg-white hover:text-green-600">
                   Learn More About Us
                 </Button>
               </Link>

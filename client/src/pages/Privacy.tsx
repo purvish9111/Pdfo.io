@@ -42,14 +42,14 @@ export default function Privacy() {
               </div>
               <div className="text-center">
                 <div className="w-16 h-16 bg-green-500 rounded-2xl flex items-center justify-center text-white mx-auto mb-4">
-                  <Eye className="h-8 w-8" />
+                  <Shield className="h-8 w-8" />
                 </div>
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">No File Storage</h3>
                 <p className="text-gray-600 dark:text-gray-300 text-sm">We never store your files on our servers</p>
               </div>
               <div className="text-center">
                 <div className="w-16 h-16 bg-purple-500 rounded-2xl flex items-center justify-center text-white mx-auto mb-4">
-                  <Database className="h-8 w-8" />
+                  <Lock className="h-8 w-8" />
                 </div>
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">No Data Collection</h3>
                 <p className="text-gray-600 dark:text-gray-300 text-sm">We don't collect personal information</p>
@@ -162,12 +162,12 @@ export default function Privacy() {
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
                 <Link href="/contact">
-                  <Button variant="secondary" size="lg" className="bg-white text-blue-600 hover:bg-gray-100">
+                  <Button size="lg" className="bg-white text-blue-600 hover:bg-gray-100 border-0">
                     Contact Us
                   </Button>
                 </Link>
                 <Link href="/about">
-                  <Button variant="outline" size="lg" className="border-white text-white hover:bg-white hover:text-blue-600">
+                  <Button variant="outline" size="lg" className="border-2 border-white text-white hover:bg-white hover:text-blue-600">
                     About PDFo
                   </Button>
                 </Link>
