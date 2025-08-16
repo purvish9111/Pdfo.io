@@ -35,7 +35,13 @@ export function DocumentThumbnail({
     transform,
     transition,
     isDragging,
-  } = useSortable({ id });
+  } = useSortable({ 
+    id,
+    data: {
+      type: 'document',
+      document: { id, file }
+    }
+  });
 
   const style = {
     transform: CSS.Transform.toString(transform),
@@ -48,7 +54,7 @@ export function DocumentThumbnail({
       ref={setNodeRef}
       style={style}
       className={`group border border-gray-200 dark:border-gray-600 rounded-xl overflow-hidden transition-all duration-300 ${
-        isDragging ? 'shadow-2xl ring-2 ring-blue-500 bg-blue-50 dark:bg-blue-900/20' : 'hover:border-gray-300 dark:hover:border-gray-500'
+        isDragging ? 'shadow-2xl ring-2 ring-blue-500 bg-blue-50 dark:bg-blue-900/20 z-50' : 'hover:border-gray-300 dark:hover:border-gray-500'
       }`}
     >
       {/* Document Header */}
@@ -58,19 +64,20 @@ export function DocumentThumbnail({
           <div
             {...attributes}
             {...listeners}
-            className="flex-shrink-0 p-1 hover:bg-gray-200 dark:hover:bg-gray-600 rounded cursor-grab active:cursor-grabbing mr-3"
+            className="flex-shrink-0 p-2 hover:bg-gray-200 dark:hover:bg-gray-600 rounded cursor-grab active:cursor-grabbing mr-3 touch-none"
+            style={{ touchAction: 'none' }}
           >
-            <GripVertical className="w-4 h-4 text-gray-400" />
+            <GripVertical className="w-5 h-5 text-gray-500 dark:text-gray-400" />
           </div>
 
           {/* Document Icon and Preview */}
           <div className="flex-shrink-0 mr-4">
-            <div className="w-12 h-16 bg-white dark:bg-gray-800 rounded border border-gray-300 dark:border-gray-600 overflow-hidden relative">
+            <div className="w-16 h-20 bg-white dark:bg-gray-800 rounded border border-gray-300 dark:border-gray-600 overflow-hidden relative">
               <div className="absolute inset-0 flex items-center justify-center">
-                <FileText className="w-6 h-6 text-red-500" />
+                <FileText className="w-8 h-8 text-red-500" />
               </div>
               {/* Mini PDF preview could go here */}
-              <div className="absolute bottom-0 left-0 right-0 bg-red-600 text-white text-xs text-center py-0.5">
+              <div className="absolute bottom-0 left-0 right-0 bg-red-600 text-white text-xs text-center py-1">
                 PDF
               </div>
             </div>
@@ -117,7 +124,7 @@ export function DocumentThumbnail({
             </p>
           </div>
 
-          <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-3">
+          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-4">
             {pages.map((page, index) => (
               <div
                 key={page.id}
@@ -125,15 +132,15 @@ export function DocumentThumbnail({
               >
                 {/* Page Preview Placeholder */}
                 <div className="absolute inset-0 flex flex-col items-center justify-center text-gray-500 dark:text-gray-400">
-                  <FileText className="w-6 h-6 mb-1" />
-                  <span className="text-xs font-medium">{page.pageNumber}</span>
+                  <FileText className="w-8 h-8 mb-2" />
+                  <span className="text-sm font-medium">{page.pageNumber}</span>
                 </div>
                 
                 {/* Drag Indicator */}
                 <div className="absolute inset-0 bg-blue-500/10 opacity-0 group-hover/page:opacity-100 transition-opacity duration-200" />
                 
                 {/* Page Number Badge */}
-                <div className="absolute top-1 left-1 bg-gray-800 dark:bg-gray-600 text-white text-xs px-1.5 py-0.5 rounded">
+                <div className="absolute top-2 left-2 bg-gray-800 dark:bg-gray-600 text-white text-xs px-2 py-1 rounded">
                   {index + 1}
                 </div>
               </div>

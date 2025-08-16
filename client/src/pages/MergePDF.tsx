@@ -58,7 +58,7 @@ export default function MergePDF() {
           </div>
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">Merge PDF</h1>
           <p className="text-gray-600 dark:text-gray-300 max-w-xl mx-auto leading-relaxed">
-            Merge multiple PDF files into a single document with our free online PDF merger. Simply upload your PDF files, arrange them in the desired order, and download your combined PDF instantly. Our secure tool processes files locally without uploading to servers.
+            Combine multiple PDF files into one document
           </p>
           
           {/* Features */}

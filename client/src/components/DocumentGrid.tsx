@@ -44,7 +44,7 @@ export function DocumentGrid({ files, onFilesReorder, onMerge, isProcessing }: D
   const sensors = useSensors(
     useSensor(PointerSensor, {
       activationConstraint: {
-        distance: 8,
+        distance: 3,
       },
     }),
     useSensor(KeyboardSensor, {
@@ -108,7 +108,6 @@ export function DocumentGrid({ files, onFilesReorder, onMerge, isProcessing }: D
           sensors={sensors}
           collisionDetection={closestCenter}
           onDragEnd={handleDragEnd}
-          modifiers={[restrictToVerticalAxis]}
         >
           <SortableContext items={documents.map(doc => doc.id)} strategy={verticalListSortingStrategy}>
             <div className="space-y-4">
