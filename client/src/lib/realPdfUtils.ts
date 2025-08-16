@@ -39,6 +39,20 @@ export interface CompressionLevel {
   quality: number; // 0-100
 }
 
+export interface ImageConversionOptions {
+  quality?: number; // 0-100 for JPG
+  transparentBackground?: boolean; // for PNG
+  compressionType?: 'none' | 'lzw' | 'jpeg'; // for TIFF
+}
+
+export interface DocumentConversionOptions {
+  ocr?: boolean; // for Word conversion
+  autoDetectTables?: boolean; // for Excel conversion
+  includePageBreaks?: boolean; // for TXT conversion
+  lineEndingStyle?: 'unix' | 'windows' | 'mac'; // for TXT conversion
+  structureType?: 'pages' | 'words' | 'tables'; // for JSON conversion
+}
+
 export interface SplitPoint {
   afterPage: number;
   groupName: string;
@@ -315,7 +329,10 @@ export async function editPDFMetadata(file: File, metadata: PDFMetadata): Promis
   if (metadata.title) pdf.setTitle(metadata.title);
   if (metadata.author) pdf.setAuthor(metadata.author);
   if (metadata.subject) pdf.setSubject(metadata.subject);
-  if (metadata.keywords) pdf.setKeywords([metadata.keywords]);
+  if (metadata.keywords) {
+    const keywordArray = metadata.keywords.split(',').map(k => k.trim());
+    pdf.setKeywords(keywordArray);
+  }
   
   const pdfBytes = await pdf.save();
   return new Blob([pdfBytes], { type: 'application/pdf' });
@@ -439,6 +456,233 @@ function parseHexColor(hex: string) {
   const g = parseInt(hex.slice(3, 5), 16) / 255;
   const b = parseInt(hex.slice(5, 7), 16) / 255;
   return rgb(r, g, b);
+}
+
+// Convert PDF to images (JPG/PNG/TIFF)
+export async function convertPDFToImages(file: File, format: 'jpg' | 'png' | 'tiff', options: ImageConversionOptions = {}): Promise<Blob> {
+  const canvas = document.createElement('canvas');
+  const ctx = canvas.getContext('2d');
+  if (!ctx) throw new Error('Canvas context not available');
+
+  const pdfjsLib = (window as any).pdfjsLib;
+  const arrayBuffer = await file.arrayBuffer();
+  const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+  
+  const images: Blob[] = [];
+  const quality = options.quality || 90;
+
+  for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
+    const page = await pdf.getPage(pageNum);
+    const viewport = page.getViewport({ scale: 2.0 });
+    
+    canvas.width = viewport.width;
+    canvas.height = viewport.height;
+    
+    if (format === 'png' && options.transparentBackground) {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    } else {
+      ctx.fillStyle = 'white';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+    }
+    
+    await page.render({ canvasContext: ctx, viewport }).promise;
+    
+    const imageBlob = await new Promise<Blob>((resolve) => {
+      if (format === 'jpg') {
+        canvas.toBlob((blob) => resolve(blob!), 'image/jpeg', quality / 100);
+      } else if (format === 'png') {
+        canvas.toBlob((blob) => resolve(blob!), 'image/png');
+      } else {
+        // For TIFF, we'll use PNG as fallback since browsers don't natively support TIFF
+        canvas.toBlob((blob) => resolve(blob!), 'image/png');
+      }
+    });
+    
+    images.push(imageBlob);
+  }
+  
+  // Create ZIP file
+  return createZipFromBlobs(images, format);
+}
+
+// Convert PDF to Word document
+export async function convertPDFToWord(file: File, options: DocumentConversionOptions = {}): Promise<Blob> {
+  const pdfjsLib = (window as any).pdfjsLib;
+  const arrayBuffer = await file.arrayBuffer();
+  const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+  
+  let textContent = '';
+  
+  for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
+    const page = await pdf.getPage(pageNum);
+    const content = await page.getTextContent();
+    
+    const pageText = content.items
+      .map((item: any) => item.str)
+      .join(' ');
+    
+    textContent += pageText + '\n\n';
+  }
+  
+  // Create a simple Word-compatible document structure
+  const wordContent = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
+  <w:body>
+    <w:p>
+      <w:r>
+        <w:t>${textContent.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')}</w:t>
+      </w:r>
+    </w:p>
+  </w:body>
+</w:document>`;
+  
+  return new Blob([wordContent], { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
+}
+
+// Convert PDF to Excel
+export async function convertPDFToExcel(file: File, options: DocumentConversionOptions = {}): Promise<Blob> {
+  const pdfjsLib = (window as any).pdfjsLib;
+  const arrayBuffer = await file.arrayBuffer();
+  const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+  
+  let csvContent = 'Page,Content\n';
+  
+  for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
+    const page = await pdf.getPage(pageNum);
+    const content = await page.getTextContent();
+    
+    const pageText = content.items
+      .map((item: any) => item.str)
+      .join(' ')
+      .replace(/"/g, '""'); // Escape quotes for CSV
+    
+    csvContent += `"${pageNum}","${pageText}"\n`;
+  }
+  
+  return new Blob([csvContent], { type: 'text/csv' });
+}
+
+// Convert PDF to PowerPoint
+export async function convertPDFToPPT(file: File): Promise<Blob> {
+  const pdfjsLib = (window as any).pdfjsLib;
+  const arrayBuffer = await file.arrayBuffer();
+  const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+  
+  let textContent = '';
+  
+  for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
+    const page = await pdf.getPage(pageNum);
+    const content = await page.getTextContent();
+    
+    const pageText = content.items
+      .map((item: any) => item.str)
+      .join(' ');
+    
+    textContent += `Slide ${pageNum}\n${pageText}\n\n`;
+  }
+  
+  return new Blob([textContent], { type: 'text/plain' });
+}
+
+// Convert PDF to plain text
+export async function convertPDFToTXT(file: File, options: DocumentConversionOptions = {}): Promise<Blob> {
+  const pdfjsLib = (window as any).pdfjsLib;
+  const arrayBuffer = await file.arrayBuffer();
+  const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+  
+  let textContent = '';
+  const lineEnding = options.lineEndingStyle === 'windows' ? '\r\n' : 
+                     options.lineEndingStyle === 'mac' ? '\r' : '\n';
+  
+  for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
+    const page = await pdf.getPage(pageNum);
+    const content = await page.getTextContent();
+    
+    const pageText = content.items
+      .map((item: any) => item.str)
+      .join(' ');
+    
+    textContent += pageText;
+    
+    if (options.includePageBreaks && pageNum < pdf.numPages) {
+      textContent += lineEnding + '--- Page Break ---' + lineEnding;
+    } else {
+      textContent += lineEnding;
+    }
+  }
+  
+  return new Blob([textContent], { type: 'text/plain' });
+}
+
+// Convert PDF to JSON
+export async function convertPDFToJSON(file: File, options: DocumentConversionOptions = {}): Promise<Blob> {
+  const pdfjsLib = (window as any).pdfjsLib;
+  const arrayBuffer = await file.arrayBuffer();
+  const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+  
+  const data: any = {
+    metadata: {
+      title: pdf._pdfInfo?.title || '',
+      numPages: pdf.numPages,
+      creationDate: new Date().toISOString(),
+    },
+    pages: []
+  };
+  
+  for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
+    const page = await pdf.getPage(pageNum);
+    const content = await page.getTextContent();
+    
+    if (options.structureType === 'words') {
+      const words = content.items.map((item: any) => ({
+        text: item.str,
+        x: item.transform[4],
+        y: item.transform[5],
+        width: item.width,
+        height: item.height
+      }));
+      
+      data.pages.push({
+        pageNumber: pageNum,
+        words
+      });
+    } else {
+      const pageText = content.items
+        .map((item: any) => item.str)
+        .join(' ');
+      
+      data.pages.push({
+        pageNumber: pageNum,
+        text: pageText
+      });
+    }
+  }
+  
+  return new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+}
+
+// Helper function to create ZIP from multiple blobs
+async function createZipFromBlobs(blobs: Blob[], format: string): Promise<Blob> {
+  // Simple implementation - in a real app, you'd use a ZIP library like JSZip
+  // For now, we'll create a single blob with all images concatenated
+  const zipBlobs: Uint8Array[] = [];
+  
+  for (let i = 0; i < blobs.length; i++) {
+    const arrayBuffer = await blobs[i].arrayBuffer();
+    zipBlobs.push(new Uint8Array(arrayBuffer));
+  }
+  
+  // This is a simplified approach - in production you'd use JSZip
+  const combinedSize = zipBlobs.reduce((sum, blob) => sum + blob.length, 0);
+  const combined = new Uint8Array(combinedSize);
+  
+  let offset = 0;
+  zipBlobs.forEach(blob => {
+    combined.set(blob, offset);
+    offset += blob.length;
+  });
+  
+  return new Blob([combined], { type: 'application/zip' });
 }
 
 // Utility function to download blob

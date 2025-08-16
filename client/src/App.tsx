@@ -17,6 +17,14 @@ import WatermarkPDF from "@/pages/WatermarkPDF";
 import LockPDF from "@/pages/LockPDF";
 import UnlockPDF from "@/pages/UnlockPDF";
 import CompressPDF from "@/pages/CompressPDF";
+import PDFToJPG from "@/pages/PDFToJPG";
+import PDFToPNG from "@/pages/PDFToPNG";
+import PDFToTIFF from "@/pages/PDFToTIFF";
+import PDFToWord from "@/pages/PDFToWord";
+import PDFToExcel from "@/pages/PDFToExcel";
+import PDFToPPT from "@/pages/PDFToPPT";
+import PDFToTXT from "@/pages/PDFToTXT";
+import PDFToJSON from "@/pages/PDFToJSON";
 import PDFPreviewDemo from "@/pages/PDFPreviewDemo";
 import NotFound from "@/pages/not-found";
 
@@ -35,6 +43,14 @@ function Router() {
       <Route path="/lock-pdf" component={LockPDF} />
       <Route path="/unlock-pdf" component={UnlockPDF} />
       <Route path="/compress-pdf" component={CompressPDF} />
+      <Route path="/pdf-to-jpg" component={PDFToJPG} />
+      <Route path="/pdf-to-png" component={PDFToPNG} />
+      <Route path="/pdf-to-tiff" component={PDFToTIFF} />
+      <Route path="/pdf-to-word" component={PDFToWord} />
+      <Route path="/pdf-to-excel" component={PDFToExcel} />
+      <Route path="/pdf-to-ppt" component={PDFToPPT} />
+      <Route path="/pdf-to-txt" component={PDFToTXT} />
+      <Route path="/pdf-to-json" component={PDFToJSON} />
       <Route path="/pdf-preview-demo" component={PDFPreviewDemo} />
       <Route component={NotFound} />
     </Switch>

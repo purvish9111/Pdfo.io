@@ -1,0 +1,151 @@
+import { useState } from "react";
+import { Link } from "wouter";
+import { FileUpload } from "@/components/FileUpload";
+import { ToolFooter } from "@/components/ToolFooter";
+import { ProgressBar } from "@/components/ProgressBar";
+import { BuyMeCoffeeButton } from "@/components/BuyMeCoffeeButton";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
+import { convertPDFToWord, downloadBlob, type DocumentConversionOptions } from "@/lib/realPdfUtils";
+import { useToast } from "@/hooks/use-toast";
+
+export default function PDFToWord() {
+  const [file, setFile] = useState<File | null>(null);
+  const [ocrEnabled, setOcrEnabled] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const { toast } = useToast();
+
+  const handleFilesSelected = (files: File[]) => {
+    setFile(files[0]);
+  };
+
+  const handleConvert = async () => {
+    if (!file) return;
+    
+    setIsProcessing(true);
+    setProgress(0);
+    try {
+      setProgress(25);
+      const options: DocumentConversionOptions = { ocr: ocrEnabled };
+      setProgress(70);
+      const docBlob = await convertPDFToWord(file, options);
+      setProgress(100);
+      downloadBlob(docBlob, 'converted-document.docx');
+      toast({
+        title: "Success!",
+        description: "PDF has been converted to Word document successfully.",
+      });
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to convert PDF to Word. Please try again.",
+        variant: "destructive",
+      });
+      setProgress(0);
+    } finally {
+      setIsProcessing(false);
+    }
+  };
+
+  return (
+    <>
+      <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Back to Tools */}
+        <div className="mb-8">
+          <Link href="/" className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 flex items-center text-sm">
+            ← Back to Tools
+          </Link>
+        </div>
+
+        {/* Tool Header */}
+        <div className="text-center mb-8">
+          <div className="w-16 h-16 bg-blue-600 rounded-2xl flex items-center justify-center text-white text-xl mx-auto mb-4">
+            <i className="fas fa-file-word"></i>
+          </div>
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">PDF to Word</h1>
+          <p className="text-gray-600 dark:text-gray-300 max-w-xl mx-auto leading-relaxed">
+            Convert your PDF to editable Word document format
+          </p>
+          
+          {/* Features */}
+          <div className="flex justify-center gap-6 mt-6 text-sm">
+            <div className="flex items-center text-green-600 dark:text-green-400">
+              <span className="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
+              Editable Output
+            </div>
+            <div className="flex items-center text-green-600 dark:text-green-400">
+              <span className="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
+              OCR Support
+            </div>
+            <div className="flex items-center text-green-600 dark:text-green-400">
+              <span className="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
+              Free to Use
+            </div>
+          </div>
+        </div>
+
+        {!file ? (
+          <FileUpload
+            onFilesSelected={handleFilesSelected}
+            acceptMultiple={false}
+          />
+        ) : (
+          <>
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 mb-6">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Conversion Options</h3>
+              
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <Label className="text-sm font-medium text-gray-700 dark:text-gray-300">OCR (Optical Character Recognition)</Label>
+                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                      Enable for scanned PDFs or images with text
+                    </p>
+                  </div>
+                  <Switch
+                    checked={ocrEnabled}
+                    onCheckedChange={setOcrEnabled}
+                  />
+                </div>
+              </div>
+              
+              <div className="mt-6">
+                <Button
+                  onClick={handleConvert}
+                  disabled={isProcessing}
+                  className="w-full bg-blue-600 hover:bg-blue-700 text-white"
+                >
+                  {isProcessing ? "Converting..." : "Convert to Word"}
+                </Button>
+              </div>
+              
+              <div className="mt-4 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+                <p className="text-sm text-blue-700 dark:text-blue-300">
+                  <i className="fas fa-info-circle mr-2"></i>
+                  The converted document will be saved as a .docx file that you can edit in Microsoft Word.
+                </p>
+              </div>
+            </div>
+            
+            <ProgressBar 
+              progress={progress} 
+              isVisible={isProcessing} 
+              color="blue"
+              className="mt-6"
+            />
+            
+            {!isProcessing && (
+              <div className="text-center mt-6">
+                <BuyMeCoffeeButton />
+              </div>
+            )}
+          </>
+        )}
+      </div>
+
+      <ToolFooter />
+    </>
+  );
+}

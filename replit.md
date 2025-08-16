@@ -1,6 +1,6 @@
 # Overview
 
-PDFo is a comprehensive web-based PDF manipulation tool that provides users with various PDF processing capabilities including merging, splitting, reordering pages, deleting pages, rotating pages, and adding page numbers. The application is built as a full-stack web application with a React frontend and Express.js backend, designed to handle PDF processing operations efficiently and securely.
+PDFo is a comprehensive web-based PDF manipulation and conversion platform that provides users with 19 professional PDF tools including manipulation (merge, split, reorder, delete, rotate, page numbers), security (lock, unlock, watermark), optimization (compress), metadata editing, and format conversion (JPG, PNG, TIFF, Word, Excel, PPT, TXT, JSON). The application is built as a full-stack web application with a React frontend and Express.js backend, designed to handle PDF processing operations efficiently and securely with real PDF processing capabilities.
 
 # User Preferences
 

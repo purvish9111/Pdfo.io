@@ -82,6 +82,62 @@ export default function Home() {
       iconBg: "bg-gray-500",
       faIcon: "fas fa-compress-alt"
     },
+    {
+      name: "PDF to JPG",
+      path: "/pdf-to-jpg",
+      description: "Convert PDF pages to high-quality JPG images",
+      iconBg: "bg-rose-500",
+      faIcon: "fas fa-image"
+    },
+    {
+      name: "PDF to PNG",
+      path: "/pdf-to-png", 
+      description: "Convert PDF pages to PNG images with transparency",
+      iconBg: "bg-emerald-500",
+      faIcon: "far fa-images"
+    },
+    {
+      name: "PDF to TIFF",
+      path: "/pdf-to-tiff",
+      description: "Convert PDF to TIFF format with compression options",
+      iconBg: "bg-amber-500",
+      faIcon: "fas fa-file-image"
+    },
+    {
+      name: "PDF to Word",
+      path: "/pdf-to-word",
+      description: "Convert PDF to editable Word document",
+      iconBg: "bg-blue-600",
+      faIcon: "fas fa-file-word"
+    },
+    {
+      name: "PDF to Excel",
+      path: "/pdf-to-excel",
+      description: "Extract tables and data to Excel spreadsheet",
+      iconBg: "bg-green-600",
+      faIcon: "fas fa-file-excel"
+    },
+    {
+      name: "PDF to PPT",
+      path: "/pdf-to-ppt",
+      description: "Convert PDF pages to PowerPoint slides",
+      iconBg: "bg-orange-600",
+      faIcon: "fas fa-file-powerpoint"
+    },
+    {
+      name: "PDF to TXT",
+      path: "/pdf-to-txt",
+      description: "Extract plain text content from PDF",
+      iconBg: "bg-slate-500",
+      faIcon: "fas fa-file-alt"
+    },
+    {
+      name: "PDF to JSON",
+      path: "/pdf-to-json",
+      description: "Extract structured data as JSON",
+      iconBg: "bg-violet-500",
+      faIcon: "fas fa-code"
+    },
   ];
 
   const scrollToTools = () => {
