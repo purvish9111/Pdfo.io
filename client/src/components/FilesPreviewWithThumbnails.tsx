@@ -16,7 +16,7 @@ import {
   arrayMove,
   SortableContext,
   sortableKeyboardCoordinates,
-  verticalListSortingStrategy,
+  rectSortingStrategy,
 } from '@dnd-kit/sortable';
 import {
   useSortable,
@@ -88,7 +88,10 @@ function SortableFileCard({
         variant="destructive"
         size="sm"
         className="absolute -top-2 -right-2 h-6 w-6 rounded-full p-0 opacity-0 group-hover:opacity-100 transition-opacity z-10"
-        onClick={() => onRemove(index)}
+        onClick={(e) => {
+          e.stopPropagation();
+          onRemove(index);
+        }}
       >
         <Trash2 className="h-3 w-3" />
       </Button>
@@ -137,7 +140,11 @@ export function FilesPreviewWithThumbnails({
   };
 
   const sensors = useSensors(
-    useSensor(PointerSensor),
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 8,
+      },
+    }),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
     })
@@ -146,12 +153,14 @@ export function FilesPreviewWithThumbnails({
   function handleDragEnd(event: any) {
     const { active, over } = event;
 
-    if (active.id !== over.id) {
+    if (active.id !== over?.id) {
       const oldIndex = files.findIndex((file, index) => `file-${index}` === active.id);
-      const newIndex = files.findIndex((file, index) => `file-${index}` === over.id);
+      const newIndex = files.findIndex((file, index) => `file-${index}` === over?.id);
       
-      const reorderedFiles = arrayMove(files, oldIndex, newIndex);
-      onFilesChange?.(reorderedFiles);
+      if (oldIndex !== -1 && newIndex !== -1) {
+        const reorderedFiles = arrayMove(files, oldIndex, newIndex);
+        onFilesChange?.(reorderedFiles);
+      }
     }
   }
 
@@ -187,6 +196,16 @@ export function FilesPreviewWithThumbnails({
         )}
       </div>
 
+      {/* Drag Instructions */}
+      {allowReorder && files.length > 1 && (
+        <div className="bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-800 rounded-lg p-3 mb-4">
+          <div className="flex items-center gap-2 text-blue-700 dark:text-blue-300">
+            <GripVertical className="h-4 w-4" />
+            <span className="text-sm font-medium">Click and drag any file card to reorder your PDFs</span>
+          </div>
+        </div>
+      )}
+
       {/* Files Grid */}
       {allowReorder && onFilesChange ? (
         <DndContext
@@ -196,7 +215,7 @@ export function FilesPreviewWithThumbnails({
         >
           <SortableContext
             items={files.map((_, index) => `file-${index}`)}
-            strategy={verticalListSortingStrategy}
+            strategy={rectSortingStrategy}
           >
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
               {files.map((file, index) => (
