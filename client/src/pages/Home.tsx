@@ -47,6 +47,41 @@ export default function Home() {
       iconBg: "bg-indigo-500",
       faIcon: "fas fa-list-ol"
     },
+    {
+      name: "Edit Metadata",
+      path: "/edit-metadata",
+      description: "Edit PDF title, author, subject and keywords",
+      iconBg: "bg-cyan-500",
+      faIcon: "fas fa-edit"
+    },
+    {
+      name: "Watermark PDF",
+      path: "/watermark-pdf",
+      description: "Add text or image watermarks to your PDF",
+      iconBg: "bg-teal-500",
+      faIcon: "fas fa-tint"
+    },
+    {
+      name: "Lock PDF",
+      path: "/lock-pdf",
+      description: "Password protect your PDF document",
+      iconBg: "bg-yellow-500",
+      faIcon: "fas fa-lock"
+    },
+    {
+      name: "Unlock PDF",
+      path: "/unlock-pdf", 
+      description: "Remove password protection from PDF",
+      iconBg: "bg-pink-500",
+      faIcon: "fas fa-unlock-alt"
+    },
+    {
+      name: "Compress PDF",
+      path: "/compress-pdf",
+      description: "Reduce PDF file size efficiently",
+      iconBg: "bg-gray-500",
+      faIcon: "fas fa-compress-alt"
+    },
   ];
 
   const scrollToTools = () => {

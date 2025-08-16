@@ -12,6 +12,11 @@ import ReorderPages from "@/pages/ReorderPages";
 import DeletePages from "@/pages/DeletePages";
 import RotatePDF from "@/pages/RotatePDF";
 import PageNumbers from "@/pages/PageNumbers";
+import EditMetadata from "@/pages/EditMetadata";
+import WatermarkPDF from "@/pages/WatermarkPDF";
+import LockPDF from "@/pages/LockPDF";
+import UnlockPDF from "@/pages/UnlockPDF";
+import CompressPDF from "@/pages/CompressPDF";
 import PDFPreviewDemo from "@/pages/PDFPreviewDemo";
 import NotFound from "@/pages/not-found";
 
@@ -25,6 +30,11 @@ function Router() {
       <Route path="/delete" component={DeletePages} />
       <Route path="/rotate" component={RotatePDF} />
       <Route path="/page-numbers" component={PageNumbers} />
+      <Route path="/edit-metadata" component={EditMetadata} />
+      <Route path="/watermark-pdf" component={WatermarkPDF} />
+      <Route path="/lock-pdf" component={LockPDF} />
+      <Route path="/unlock-pdf" component={UnlockPDF} />
+      <Route path="/compress-pdf" component={CompressPDF} />
       <Route path="/pdf-preview-demo" component={PDFPreviewDemo} />
       <Route component={NotFound} />
     </Switch>
