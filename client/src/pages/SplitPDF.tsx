@@ -1,16 +1,19 @@
 import { useState } from "react";
 import { Link } from "wouter";
 import { FileUpload } from "@/components/FileUpload";
-import { PDFPreview } from "@/components/PDFPreview";
+import { SplitPDFGrid } from "@/components/SplitPDFGrid";
 import { ToolFooter } from "@/components/ToolFooter";
-import { splitPDF, downloadBlob, generatePages } from "@/lib/pdfUtils";
+import { splitPDF, downloadBlob } from "@/lib/pdfUtils";
 import { useToast } from "@/hooks/use-toast";
 
 interface PDFPage {
   id: string;
   pageNumber: number;
-  rotation: number;
-  deleted: boolean;
+}
+
+interface SplitPoint {
+  id: string;
+  afterPage: number;
 }
 
 export default function SplitPDF() {
@@ -23,23 +26,55 @@ export default function SplitPDF() {
     const selectedFile = files[0];
     setFile(selectedFile);
     // Generate mock pages (assume 8 pages for demo)
-    setPages(generatePages(8));
+    const mockPages: PDFPage[] = Array.from({ length: 8 }, (_, index) => ({
+      id: `page-${index + 1}-${Date.now()}`,
+      pageNumber: index + 1,
+    }));
+    setPages(mockPages);
   };
 
-  const handleDownload = async () => {
+  const handleSplit = async (splitPoints: SplitPoint[]) => {
     if (!file) return;
     
     setIsProcessing(true);
     try {
-      // For split, we'll create individual page downloads
-      const visiblePages = pages.filter(p => !p.deleted);
-      const pageRanges = visiblePages.map(p => [p.pageNumber, p.pageNumber]);
+      // Create page groups based on split points
+      const groups: PDFPage[][] = [];
+      let currentGroup: PDFPage[] = [];
+      
+      for (const page of pages) {
+        currentGroup.push(page);
+        
+        // Check if there's a split point after this page
+        const hasSplit = splitPoints.some(sp => sp.afterPage === page.pageNumber);
+        if (hasSplit) {
+          groups.push(currentGroup);
+          currentGroup = [];
+        }
+      }
+      
+      // Add the last group if it has pages
+      if (currentGroup.length > 0) {
+        groups.push(currentGroup);
+      }
+
+      // Create page ranges for each group
+      const pageRanges = groups.map(group => [
+        group[0].pageNumber,
+        group[group.length - 1].pageNumber
+      ]);
       
       const splitBlobs = await splitPDF(file, pageRanges);
       
       // Download each split as separate file
       splitBlobs.forEach((blob, index) => {
-        downloadBlob(blob, `split-page-${visiblePages[index].pageNumber}.pdf`);
+        const group = groups[index];
+        const startPage = group[0].pageNumber;
+        const endPage = group[group.length - 1].pageNumber;
+        const fileName = startPage === endPage 
+          ? `split-page-${startPage}.pdf`
+          : `split-pages-${startPage}-${endPage}.pdf`;
+        downloadBlob(blob, fileName);
       });
       
       toast({
@@ -57,11 +92,6 @@ export default function SplitPDF() {
     }
   };
 
-  const handleNewUpload = () => {
-    setFile(null);
-    setPages([]);
-  };
-
   return (
     <>
       <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -74,12 +104,12 @@ export default function SplitPDF() {
 
         {/* Tool Header */}
         <div className="text-center mb-8">
-          <div className="w-16 h-16 bg-emerald-500 rounded-2xl flex items-center justify-center text-white text-2xl font-bold mx-auto mb-4">
+          <div className="w-16 h-16 bg-green-500 rounded-2xl flex items-center justify-center text-white text-2xl font-bold mx-auto mb-4">
             ✂
           </div>
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">Split PDF</h1>
           <p className="text-gray-600 dark:text-gray-300 max-w-xl mx-auto leading-relaxed">
-            Extract specific pages or split your PDF into multiple separate files with precision control. Our free tool processes files securely in your browser without uploading to servers.
+            Split your PDF into separate documents
           </p>
           
           {/* Features */}
@@ -105,13 +135,11 @@ export default function SplitPDF() {
             acceptMultiple={false}
           />
         ) : (
-          <PDFPreview
+          <SplitPDFGrid
             file={file}
             pages={pages}
-            onPagesChange={setPages}
-            onDownload={handleDownload}
-            onNewUpload={handleNewUpload}
-            toolType="split"
+            onSplit={handleSplit}
+            isProcessing={isProcessing}
           />
         )}
       </div>

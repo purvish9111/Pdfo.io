@@ -1,15 +1,14 @@
 import { useState } from "react";
 import { Link } from "wouter";
 import { FileUpload } from "@/components/FileUpload";
-import { PDFPreview } from "@/components/PDFPreview";
+import { DeletePDFGrid } from "@/components/DeletePDFGrid";
 import { ToolFooter } from "@/components/ToolFooter";
-import { processPDFPages, downloadBlob, generatePages } from "@/lib/pdfUtils";
+import { processPDFPages, downloadBlob } from "@/lib/pdfUtils";
 import { useToast } from "@/hooks/use-toast";
 
 interface PDFPage {
   id: string;
   pageNumber: number;
-  rotation: number;
   deleted: boolean;
 }
 
@@ -23,13 +22,18 @@ export default function DeletePages() {
     const selectedFile = files[0];
     setFile(selectedFile);
     // Generate mock pages (assume 7 pages for demo)
-    setPages(generatePages(7));
+    const mockPages: PDFPage[] = Array.from({ length: 7 }, (_, index) => ({
+      id: `page-${index + 1}-${Date.now()}`,
+      pageNumber: index + 1,
+      deleted: false,
+    }));
+    setPages(mockPages);
   };
 
-  const handleDownload = async () => {
+  const handleDelete = async (updatedPages: PDFPage[]) => {
     if (!file) return;
     
-    const remainingPages = pages.filter(p => !p.deleted);
+    const remainingPages = updatedPages.filter(p => !p.deleted);
     if (remainingPages.length === 0) {
       toast({
         title: "Error",
@@ -41,7 +45,15 @@ export default function DeletePages() {
     
     setIsProcessing(true);
     try {
-      const processedBlob = await processPDFPages(file, pages);
+      // Convert PDFPage[] to the format expected by processPDFPages
+      const pagesWithFlags = updatedPages.map(page => ({
+        id: page.id,
+        pageNumber: page.pageNumber,
+        rotation: 0,
+        deleted: page.deleted,
+      }));
+      
+      const processedBlob = await processPDFPages(file, pagesWithFlags);
       downloadBlob(processedBlob, 'pages-deleted-document.pdf');
       toast({
         title: "Success!",
@@ -58,17 +70,9 @@ export default function DeletePages() {
     }
   };
 
-  const handleNewUpload = () => {
-    setFile(null);
-    setPages([]);
-  };
-
-  const deletedCount = pages.filter(p => p.deleted).length;
-  const remainingCount = pages.filter(p => !p.deleted).length;
-
   return (
     <>
-      <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Back to Tools */}
         <div className="mb-8">
           <Link href="/" className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 flex items-center text-sm">
@@ -83,7 +87,7 @@ export default function DeletePages() {
           </div>
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">Delete Pages</h1>
           <p className="text-gray-600 dark:text-gray-300 max-w-xl mx-auto leading-relaxed">
-            Remove unwanted pages from your PDF document. Simply click on pages to mark them for deletion and create a clean, focused document.
+            Remove unwanted pages from your PDF
           </p>
           
           {/* Features */}
@@ -109,23 +113,12 @@ export default function DeletePages() {
             acceptMultiple={false}
           />
         ) : (
-          <PDFPreview
+          <DeletePDFGrid
             file={file}
             pages={pages}
-            onPagesChange={setPages}
-            onDownload={handleDownload}
-            onNewUpload={handleNewUpload}
-            toolType="delete"
+            onDelete={handleDelete}
+            isProcessing={isProcessing}
           />
-        )}
-        
-        {file && pages.length > 0 && (
-          <div className="mt-4 p-4 bg-red-50 dark:bg-red-900/20 rounded-lg">
-            <p className="text-sm text-red-700 dark:text-red-300">
-              <strong>📊 Status:</strong> {remainingCount} pages will be kept, {deletedCount} pages will be deleted.
-              {remainingCount === 0 && " ⚠️ Warning: You must keep at least one page."}
-            </p>
-          </div>
         )}
       </div>
 

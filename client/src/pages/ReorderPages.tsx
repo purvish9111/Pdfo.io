@@ -1,16 +1,15 @@
 import { useState } from "react";
 import { Link } from "wouter";
 import { FileUpload } from "@/components/FileUpload";
-import { PDFPreview } from "@/components/PDFPreview";
+import { ReorderPDFGrid } from "@/components/ReorderPDFGrid";
 import { ToolFooter } from "@/components/ToolFooter";
-import { processPDFPages, downloadBlob, generatePages } from "@/lib/pdfUtils";
+import { processPDFPages, downloadBlob } from "@/lib/pdfUtils";
 import { useToast } from "@/hooks/use-toast";
 
 interface PDFPage {
   id: string;
   pageNumber: number;
-  rotation: number;
-  deleted: boolean;
+  originalIndex: number;
 }
 
 export default function ReorderPages() {
@@ -23,15 +22,28 @@ export default function ReorderPages() {
     const selectedFile = files[0];
     setFile(selectedFile);
     // Generate mock pages (assume 6 pages for demo)
-    setPages(generatePages(6));
+    const mockPages: PDFPage[] = Array.from({ length: 6 }, (_, index) => ({
+      id: `page-${index + 1}-${Date.now()}`,
+      pageNumber: index + 1,
+      originalIndex: index,
+    }));
+    setPages(mockPages);
   };
 
-  const handleDownload = async () => {
+  const handleReorder = async (reorderedPages: PDFPage[]) => {
     if (!file) return;
     
     setIsProcessing(true);
     try {
-      const processedBlob = await processPDFPages(file, pages);
+      // Convert PDFPage[] to the format expected by processPDFPages
+      const pagesWithFlags = reorderedPages.map(page => ({
+        id: page.id,
+        pageNumber: page.pageNumber,
+        rotation: 0,
+        deleted: false,
+      }));
+      
+      const processedBlob = await processPDFPages(file, pagesWithFlags);
       downloadBlob(processedBlob, 'reordered-document.pdf');
       toast({
         title: "Success!",
@@ -48,14 +60,9 @@ export default function ReorderPages() {
     }
   };
 
-  const handleNewUpload = () => {
-    setFile(null);
-    setPages([]);
-  };
-
   return (
     <>
-      <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Back to Tools */}
         <div className="mb-8">
           <Link href="/" className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 flex items-center text-sm">
@@ -65,12 +72,12 @@ export default function ReorderPages() {
 
         {/* Tool Header */}
         <div className="text-center mb-8">
-          <div className="w-16 h-16 bg-violet-500 rounded-2xl flex items-center justify-center text-white text-2xl font-bold mx-auto mb-4">
+          <div className="w-16 h-16 bg-purple-500 rounded-2xl flex items-center justify-center text-white text-2xl font-bold mx-auto mb-4">
             ↕
           </div>
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">Reorder Pages</h1>
           <p className="text-gray-600 dark:text-gray-300 max-w-xl mx-auto leading-relaxed">
-            Drag and drop to rearrange pages in your PDF document to achieve the perfect order. Our intuitive interface makes page organization quick and easy.
+            Drag and drop pages to reorder your PDF
           </p>
           
           {/* Features */}
@@ -96,13 +103,11 @@ export default function ReorderPages() {
             acceptMultiple={false}
           />
         ) : (
-          <PDFPreview
+          <ReorderPDFGrid
             file={file}
             pages={pages}
-            onPagesChange={setPages}
-            onDownload={handleDownload}
-            onNewUpload={handleNewUpload}
-            toolType="reorder"
+            onReorder={handleReorder}
+            isProcessing={isProcessing}
           />
         )}
         
