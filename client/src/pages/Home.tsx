@@ -124,6 +124,19 @@ export default function Home() {
               </Link>
             ))}
           </div>
+
+          {/* Demo Link */}
+          <div className="text-center mt-12">
+            <Link href="/pdf-preview-demo">
+              <div className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-300 shadow-lg hover:shadow-xl">
+                <span className="text-lg font-medium">Try PDF Preview Demo</span>
+                <span className="ml-2 text-xl">🔍</span>
+              </div>
+            </Link>
+            <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
+              See how our client-side PDF processing works
+            </p>
+          </div>
         </div>
       </section>
 

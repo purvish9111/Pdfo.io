@@ -12,6 +12,7 @@ import ReorderPages from "@/pages/ReorderPages";
 import DeletePages from "@/pages/DeletePages";
 import RotatePDF from "@/pages/RotatePDF";
 import PageNumbers from "@/pages/PageNumbers";
+import PDFPreviewDemo from "@/pages/PDFPreviewDemo";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -24,6 +25,7 @@ function Router() {
       <Route path="/delete" component={DeletePages} />
       <Route path="/rotate" component={RotatePDF} />
       <Route path="/page-numbers" component={PageNumbers} />
+      <Route path="/pdf-preview-demo" component={PDFPreviewDemo} />
       <Route component={NotFound} />
     </Switch>
   );
