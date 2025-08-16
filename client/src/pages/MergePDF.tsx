@@ -105,35 +105,10 @@ export default function MergePDF() {
         </div>
 
         {files.length === 0 ? (
-          <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-8 mb-8">
-            <div className="text-center">
-              <div className="w-16 h-16 bg-blue-500 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                <span className="text-white text-2xl">📁</span>
-              </div>
-              <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">Upload PDF Files</h3>
-              <p className="text-gray-600 dark:text-gray-400 mb-6">Select multiple PDF files to process them</p>
-              
-              <div className="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-xl p-12 mb-6">
-                <div className="text-center">
-                  <div className="text-gray-400 mb-4">
-                    <span className="text-4xl">📁</span>
-                  </div>
-                  <p className="text-gray-500 dark:text-gray-400 mb-2">Drop your PDF files here</p>
-                  <p className="text-gray-400 text-sm">or</p>
-                </div>
-              </div>
-              
-              <FileUpload
-                onFilesSelected={handleFilesSelected}
-                acceptMultiple={true}
-              />
-              
-              <p className="text-xs text-gray-400 mt-4">
-                Maximum file size: 15MB per file<br/>
-                Files are automatically deleted within 1 hour for your privacy
-              </p>
-            </div>
-          </div>
+          <FileUpload
+            onFilesSelected={handleFilesSelected}
+            acceptMultiple={true}
+          />
         ) : (
           <PDFPreview
             file={files[0]} // Primary file for display
