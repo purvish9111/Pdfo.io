@@ -3,7 +3,7 @@ import { Link } from "wouter";
 import { FileUpload } from "@/components/FileUpload";
 import { DocumentGrid } from "@/components/DocumentGrid";
 import { ToolFooter } from "@/components/ToolFooter";
-import { mergePDFs, downloadBlob } from "@/lib/pdfUtils";
+import { mergePDFs, downloadBlob } from "@/lib/realPdfUtils";
 import { useToast } from "@/hooks/use-toast";
 
 export default function MergePDF() {
@@ -53,8 +53,8 @@ export default function MergePDF() {
 
         {/* Tool Header */}
         <div className="text-center mb-8">
-          <div className="w-16 h-16 bg-blue-500 rounded-2xl flex items-center justify-center text-white text-2xl font-bold mx-auto mb-4">
-            ⊞
+          <div className="w-16 h-16 bg-blue-500 rounded-2xl flex items-center justify-center text-white text-xl mx-auto mb-4">
+            <i className="fas fa-layer-group"></i>
           </div>
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">Merge PDF</h1>
           <p className="text-gray-600 dark:text-gray-300 max-w-xl mx-auto leading-relaxed">

@@ -72,8 +72,8 @@ export default function RotatePDF() {
 
         {/* Tool Header */}
         <div className="text-center mb-8">
-          <div className="w-16 h-16 bg-orange-500 rounded-2xl flex items-center justify-center text-white text-2xl font-bold mx-auto mb-4">
-            ↻
+          <div className="w-16 h-16 bg-orange-500 rounded-2xl flex items-center justify-center text-white text-xl mx-auto mb-4">
+            <i className="fas fa-redo-alt"></i>
           </div>
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">Rotate PDF</h1>
           <p className="text-gray-600 dark:text-gray-300 max-w-xl mx-auto leading-relaxed">

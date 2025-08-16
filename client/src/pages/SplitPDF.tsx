@@ -3,7 +3,7 @@ import { Link } from "wouter";
 import { FileUpload } from "@/components/FileUpload";
 import { SplitPDFGrid } from "@/components/SplitPDFGrid";
 import { ToolFooter } from "@/components/ToolFooter";
-import { splitPDF, downloadBlob } from "@/lib/pdfUtils";
+import { splitPDF, downloadBlob, generateRealPDFPages } from "@/lib/realPdfUtils";
 import { useToast } from "@/hooks/use-toast";
 
 interface PDFPage {
@@ -22,15 +22,12 @@ export default function SplitPDF() {
   const [isProcessing, setIsProcessing] = useState(false);
   const { toast } = useToast();
 
-  const handleFilesSelected = (files: File[]) => {
+  const handleFilesSelected = async (files: File[]) => {
     const selectedFile = files[0];
     setFile(selectedFile);
-    // Generate mock pages (assume 8 pages for demo)
-    const mockPages: PDFPage[] = Array.from({ length: 8 }, (_, index) => ({
-      id: `page-${index + 1}-${Date.now()}`,
-      pageNumber: index + 1,
-    }));
-    setPages(mockPages);
+    // Generate real PDF pages from file
+    const realPages = await generateRealPDFPages(selectedFile);
+    setPages(realPages);
   };
 
   const handleSplit = async (splitPoints: SplitPoint[]) => {
@@ -104,8 +101,8 @@ export default function SplitPDF() {
 
         {/* Tool Header */}
         <div className="text-center mb-8">
-          <div className="w-16 h-16 bg-green-500 rounded-2xl flex items-center justify-center text-white text-2xl font-bold mx-auto mb-4">
-            ✂
+          <div className="w-16 h-16 bg-green-500 rounded-2xl flex items-center justify-center text-white text-xl mx-auto mb-4">
+            <i className="fas fa-cut"></i>
           </div>
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">Split PDF</h1>
           <p className="text-gray-600 dark:text-gray-300 max-w-xl mx-auto leading-relaxed">
