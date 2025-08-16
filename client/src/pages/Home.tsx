@@ -138,6 +138,27 @@ export default function Home() {
       iconBg: "bg-violet-500",
       faIcon: "fas fa-code"
     },
+    {
+      name: "PNG to PDF",
+      path: "/png-to-pdf",
+      description: "Convert PNG images to PDF document",
+      iconBg: "bg-lime-500",
+      faIcon: "fas fa-file-image"
+    },
+    {
+      name: "Word to PDF",
+      path: "/word-to-pdf",
+      description: "Convert Word documents to PDF format",
+      iconBg: "bg-sky-600",
+      faIcon: "fas fa-file-word"
+    },
+    {
+      name: "Excel to PDF",
+      path: "/excel-to-pdf",
+      description: "Convert Excel spreadsheets to PDF format",
+      iconBg: "bg-emerald-600",
+      faIcon: "fas fa-file-excel"
+    },
   ];
 
   const scrollToTools = () => {

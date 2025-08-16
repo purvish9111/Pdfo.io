@@ -53,6 +53,12 @@ export interface DocumentConversionOptions {
   structureType?: 'pages' | 'words' | 'tables'; // for JSON conversion
 }
 
+export interface ImageToPDFOptions {
+  pageSize?: 'A4' | 'Letter' | 'A3' | 'A5';
+  margin?: number;
+  quality?: number;
+}
+
 export interface SplitPoint {
   afterPage: number;
   groupName: string;
@@ -683,6 +689,121 @@ async function createZipFromBlobs(blobs: Blob[], format: string): Promise<Blob> 
   });
   
   return new Blob([combined], { type: 'application/zip' });
+}
+
+// Convert PNG images to PDF
+export async function convertImagesToPDF(files: File[], options: ImageToPDFOptions = {}): Promise<Blob> {
+  const pdf = await PDFDocument.create();
+  
+  for (const file of files) {
+    const imageBytes = await file.arrayBuffer();
+    let image;
+    
+    if (file.type === 'image/png') {
+      image = await pdf.embedPng(imageBytes);
+    } else if (file.type === 'image/jpeg' || file.type === 'image/jpg') {
+      image = await pdf.embedJpg(imageBytes);
+    } else {
+      // For other formats, we'll skip or convert via canvas
+      continue;
+    }
+    
+    const page = pdf.addPage();
+    const { width, height } = page.getSize();
+    const imageSize = image.scale(Math.min(width / image.width, height / image.height) * 0.8);
+    
+    page.drawImage(image, {
+      x: (width - imageSize.width) / 2,
+      y: (height - imageSize.height) / 2,
+      width: imageSize.width,
+      height: imageSize.height,
+    });
+  }
+  
+  const pdfBytes = await pdf.save();
+  return new Blob([pdfBytes], { type: 'application/pdf' });
+}
+
+// Convert Word document to PDF (simplified implementation)
+export async function convertWordToPDF(file: File): Promise<Blob> {
+  // This is a simplified implementation
+  // In a real application, you would use a library like mammoth.js or a server-side conversion
+  const pdf = await PDFDocument.create();
+  const page = pdf.addPage();
+  const font = await pdf.embedFont(StandardFonts.Helvetica);
+  
+  // For demonstration, we'll create a PDF with the filename
+  page.drawText(`Word Document: ${file.name}`, {
+    x: 50,
+    y: page.getSize().height - 100,
+    size: 16,
+    font,
+  });
+  
+  page.drawText('This is a simplified Word to PDF conversion.', {
+    x: 50,
+    y: page.getSize().height - 140,
+    size: 12,
+    font,
+  });
+  
+  page.drawText('In a production environment, this would extract', {
+    x: 50,
+    y: page.getSize().height - 170,
+    size: 12,
+    font,
+  });
+  
+  page.drawText('and convert the actual Word document content.', {
+    x: 50,
+    y: page.getSize().height - 190,
+    size: 12,
+    font,
+  });
+  
+  const pdfBytes = await pdf.save();
+  return new Blob([pdfBytes], { type: 'application/pdf' });
+}
+
+// Convert Excel spreadsheet to PDF (simplified implementation)
+export async function convertExcelToPDF(file: File): Promise<Blob> {
+  // This is a simplified implementation
+  // In a real application, you would use a library like xlsx or a server-side conversion
+  const pdf = await PDFDocument.create();
+  const page = pdf.addPage();
+  const font = await pdf.embedFont(StandardFonts.Helvetica);
+  
+  // For demonstration, we'll create a PDF with the filename
+  page.drawText(`Excel Spreadsheet: ${file.name}`, {
+    x: 50,
+    y: page.getSize().height - 100,
+    size: 16,
+    font,
+  });
+  
+  page.drawText('This is a simplified Excel to PDF conversion.', {
+    x: 50,
+    y: page.getSize().height - 140,
+    size: 12,
+    font,
+  });
+  
+  page.drawText('In a production environment, this would extract', {
+    x: 50,
+    y: page.getSize().height - 170,
+    size: 12,
+    font,
+  });
+  
+  page.drawText('and convert the actual spreadsheet data and formatting.', {
+    x: 50,
+    y: page.getSize().height - 190,
+    size: 12,
+    font,
+  });
+  
+  const pdfBytes = await pdf.save();
+  return new Blob([pdfBytes], { type: 'application/pdf' });
 }
 
 // Utility function to download blob

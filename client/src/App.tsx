@@ -25,6 +25,9 @@ import PDFToExcel from "@/pages/PDFToExcel";
 import PDFToPPT from "@/pages/PDFToPPT";
 import PDFToTXT from "@/pages/PDFToTXT";
 import PDFToJSON from "@/pages/PDFToJSON";
+import PNGToPDF from "@/pages/PNGToPDF";
+import WordToPDF from "@/pages/WordToPDF";
+import ExcelToPDF from "@/pages/ExcelToPDF";
 import PDFPreviewDemo from "@/pages/PDFPreviewDemo";
 import NotFound from "@/pages/not-found";
 
@@ -51,6 +54,9 @@ function Router() {
       <Route path="/pdf-to-ppt" component={PDFToPPT} />
       <Route path="/pdf-to-txt" component={PDFToTXT} />
       <Route path="/pdf-to-json" component={PDFToJSON} />
+      <Route path="/png-to-pdf" component={PNGToPDF} />
+      <Route path="/word-to-pdf" component={WordToPDF} />
+      <Route path="/excel-to-pdf" component={ExcelToPDF} />
       <Route path="/pdf-preview-demo" component={PDFPreviewDemo} />
       <Route component={NotFound} />
     </Switch>
