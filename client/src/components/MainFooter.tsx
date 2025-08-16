@@ -1,6 +1,7 @@
 import { Link } from "wouter";
 import { Coffee } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import logoUrl from "@assets/logo_1755359015395.png";
 
 export function MainFooter() {
   const tools = [
@@ -19,10 +20,11 @@ export function MainFooter() {
           {/* Brand Section */}
           <div className="col-span-1 md:col-span-2">
             <div className="flex items-center mb-4">
-              <div className="w-10 h-10 bg-gradient-to-br from-pdfo-blue to-pdfo-violet rounded-lg flex items-center justify-center text-white font-bold text-lg">
-                PDF
-              </div>
-              <span className="ml-2 text-xl font-bold">PDFo</span>
+              <img 
+                src={logoUrl} 
+                alt="PDFo Logo" 
+                className="h-10 w-auto filter brightness-0 invert"
+              />
             </div>
             <p className="text-gray-400 mb-6 max-w-md">
               Professional PDF tools for everyone. Fast, secure, and completely free. Transform your documents with ease.

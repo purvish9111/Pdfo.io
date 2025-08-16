@@ -98,6 +98,14 @@
     background: linear-gradient(135deg, var(--pdfo-blue), var(--pdfo-violet), var(--pdfo-emerald));
   }
   
+  .hero-bg {
+    background-color: #f0f7ff;
+  }
+  
+  .dark .hero-bg {
+    background-color: hsl(220 13% 18%);
+  }
+  
   .drag-active {
     @apply border-blue-500 bg-blue-50 dark:bg-blue-950;
   }
