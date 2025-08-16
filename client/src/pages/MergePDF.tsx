@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { Link } from "wouter";
 import { FileUpload } from "@/components/FileUpload";
-import { DocumentGrid } from "@/components/DocumentGrid";
+import { FilesPreviewWithThumbnails } from "@/components/FilesPreviewWithThumbnails";
+import { Button } from "@/components/ui/button";
 import { ToolFooter } from "@/components/ToolFooter";
 import { mergePDFs, downloadBlob } from "@/lib/realPdfUtils";
 import { useToast } from "@/hooks/use-toast";
@@ -84,12 +85,27 @@ export default function MergePDF() {
             acceptMultiple={true}
           />
         ) : (
-          <DocumentGrid
+          <FilesPreviewWithThumbnails
             files={files}
-            onFilesReorder={handleFilesReorder}
-            onMerge={handleMerge}
-            isProcessing={isProcessing}
-          />
+            onFilesChange={setFiles}
+            title="PDFs to Merge"
+          >
+            <Button
+              onClick={handleMerge}
+              disabled={files.length < 2 || isProcessing}
+              size="lg"
+              className="bg-blue-500 hover:bg-blue-600 text-white px-8"
+            >
+              {isProcessing ? (
+                <>
+                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                  Merging...
+                </>
+              ) : (
+                `Merge ${files.length} PDF${files.length !== 1 ? 's' : ''}`
+              )}
+            </Button>
+          </FilesPreviewWithThumbnails>
         )}
       </div>
 
