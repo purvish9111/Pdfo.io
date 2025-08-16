@@ -73,11 +73,14 @@ export function DocumentThumbnail({
           {/* Document Icon and Preview */}
           <div className="flex-shrink-0 mr-4">
             <div className="w-20 h-24 bg-white dark:bg-gray-800 rounded border border-gray-300 dark:border-gray-600 overflow-hidden relative">
+              <div className="absolute inset-0 flex items-center justify-center">
+                <FileText className="w-8 h-8 text-red-500" />
+              </div>
               <SimplePDFPreview 
                 file={file} 
-                className="w-full h-full object-cover"
+                className="w-full h-full absolute inset-0"
                 onError={() => {
-                  // Fallback to icon on error
+                  // Will show fallback icon when PDF fails to load
                 }}
               />
               {/* PDF badge */}
@@ -134,20 +137,8 @@ export function DocumentThumbnail({
                 key={page.id}
                 className="group/page relative bg-gray-100 dark:bg-gray-700 rounded-lg overflow-hidden aspect-[3/4] border-2 border-transparent hover:border-blue-300 dark:hover:border-blue-600 cursor-move transition-all duration-200"
               >
-                {/* Page Preview - could show specific page from PDF */}
-                <div className="absolute inset-0">
-                  <SimplePDFPreview 
-                    file={file} 
-                    pageNumber={page.pageNumber}
-                    className="w-full h-full object-cover"
-                    onError={() => {
-                      // Show fallback
-                    }}
-                  />
-                </div>
-                
-                {/* Fallback content - only shown when PDF fails to load */}
-                <div className="absolute inset-0 flex flex-col items-center justify-center text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-700" style={{ zIndex: -1 }}>
+                {/* Page Preview Placeholder - simplified for now */}
+                <div className="absolute inset-0 flex flex-col items-center justify-center text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-700">
                   <FileText className="w-8 h-8 mb-2" />
                   <span className="text-sm font-medium">{page.pageNumber}</span>
                 </div>

@@ -1,13 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import * as pdfjsLib from 'pdfjs-dist';
 
-// Configure PDF.js worker - use local fallback for better reliability
-try {
-  pdfjsLib.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjsLib.version}/build/pdf.worker.min.js`;
-} catch (error) {
-  // Fallback to disable worker for better compatibility
-  pdfjsLib.GlobalWorkerOptions.workerSrc = '';
-}
+// Configure PDF.js to work without external worker
+pdfjsLib.GlobalWorkerOptions.workerSrc = '';
 
 interface SimplePDFPreviewProps {
   file: File | null;
@@ -47,12 +42,12 @@ export function SimplePDFPreview({ file, pageNumber = 1, className = "", onError
         const context = canvas.getContext('2d');
         if (!context) return;
 
-        // Calculate scale to fit in container
+        // Calculate scale to fit in container with better sizing
         const viewport = page.getViewport({ scale: 1 });
-        const containerWidth = canvas.offsetWidth || 200;
-        const containerHeight = canvas.offsetHeight || 250;
-        const scale = Math.min(containerWidth / viewport.width, containerHeight / viewport.height);
-        const scaledViewport = page.getViewport({ scale });
+        const containerWidth = Math.max(canvas.parentElement?.offsetWidth || 200, 100);
+        const containerHeight = Math.max(canvas.parentElement?.offsetHeight || 250, 120);
+        const scale = Math.min((containerWidth - 20) / viewport.width, (containerHeight - 20) / viewport.height);
+        const scaledViewport = page.getViewport({ scale: Math.max(scale, 0.1) });
 
         // Set canvas dimensions
         canvas.height = scaledViewport.height;
@@ -67,7 +62,7 @@ export function SimplePDFPreview({ file, pageNumber = 1, className = "", onError
 
       } catch (err) {
         console.error('Error rendering PDF:', err);
-        const errorMsg = 'Failed to render PDF preview. Please make sure the file is a valid PDF.';
+        const errorMsg = 'PDF preview unavailable';
         setError(errorMsg);
         onError?.(errorMsg);
       } finally {
@@ -87,11 +82,8 @@ export function SimplePDFPreview({ file, pageNumber = 1, className = "", onError
       )}
       
       {error && (
-        <div className="absolute inset-0 flex items-center justify-center bg-red-50 dark:bg-red-900/20 p-2">
-          <div className="text-center">
-            <div className="w-8 h-8 text-red-500 mx-auto mb-1">📄</div>
-            <p className="text-red-700 dark:text-red-300 text-xs">Failed to load</p>
-          </div>
+        <div className="absolute inset-0 flex items-center justify-center bg-transparent p-2">
+          {/* Error state - let the fallback icon show through */}
         </div>
       )}
       
