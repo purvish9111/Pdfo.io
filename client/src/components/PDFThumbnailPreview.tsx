@@ -39,7 +39,12 @@ export function PDFThumbnailPreview({ files, onThumbnailsGenerated }: PDFThumbna
           t.error && (t.error.includes('GlobalWorkerOptions') || t.error.includes('worker'))
         );
 
-        console.log('Generated thumbnails:', generatedThumbnails);
+        console.log('Generated thumbnails:', generatedThumbnails.map(t => ({ 
+          fileName: t.file.name, 
+          hasThumb: !!t.thumbnailUrl, 
+          pageCount: t.pageCount,
+          error: t.error 
+        })));
         console.log('Has worker errors:', hasWorkerErrors);
 
         if (hasWorkerErrors) {

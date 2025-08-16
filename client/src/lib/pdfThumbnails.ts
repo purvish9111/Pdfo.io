@@ -1,40 +1,15 @@
 import * as pdfjsLib from 'pdfjs-dist';
 import type { PDFDocumentProxy } from 'pdfjs-dist';
 
-// Set up PDF.js worker - multiple fallbacks
-if (typeof window !== 'undefined') {
-  // Try different worker sources in order of preference
-  const workerSources = [
-    // Local build version
-    new URL('pdfjs-dist/build/pdf.worker.min.js', import.meta.url).toString(),
-    // CDN fallback
-    `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.js`,
-    // jsDelivr fallback
-    `https://cdn.jsdelivr.net/npm/pdfjs-dist@${pdfjsLib.version}/build/pdf.worker.min.js`,
-  ];
-  
-  // Use the local worker file from the Vite public directory
-  pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.js';
-  
-  // Enhanced logging
-  console.log('PDF.js version:', pdfjsLib.version);
-  console.log('PDF.js worker source:', pdfjsLib.GlobalWorkerOptions.workerSrc);
-  
-  // Test worker availability
-  fetch(pdfjsLib.GlobalWorkerOptions.workerSrc, { method: 'HEAD' })
-    .then(response => {
-      if (response.ok) {
-        console.log('✅ PDF.js worker is accessible');
-      } else {
-        console.error('❌ PDF.js worker not accessible:', response.status);
-        console.log('🔄 Falling back to simple previews');
-      }
-    })
-    .catch(err => {
-      console.error('❌ PDF.js worker test failed:', err.message);
-      console.log('🔄 Falling back to simple previews');
-    });
-}
+// Set up PDF.js worker immediately when module loads
+pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.js';
+
+// Enhanced logging
+console.log('PDF.js version:', pdfjsLib.version);
+console.log('PDF.js worker source:', pdfjsLib.GlobalWorkerOptions.workerSrc);
+
+// Import test functionality
+import './pdfTest';
 
 export interface PDFThumbnail {
   file: File;
