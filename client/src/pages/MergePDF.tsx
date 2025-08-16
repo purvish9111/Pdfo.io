@@ -1,46 +1,26 @@
 import { useState } from "react";
 import { Link } from "wouter";
 import { FileUpload } from "@/components/FileUpload";
-import { PDFPreview } from "@/components/PDFPreview";
+import { DocumentGrid } from "@/components/DocumentGrid";
 import { ToolFooter } from "@/components/ToolFooter";
-import { mergePDFs, downloadBlob, generatePages } from "@/lib/pdfUtils";
+import { mergePDFs, downloadBlob } from "@/lib/pdfUtils";
 import { useToast } from "@/hooks/use-toast";
-
-interface PDFPage {
-  id: string;
-  pageNumber: number;
-  rotation: number;
-  deleted: boolean;
-}
 
 export default function MergePDF() {
   const [files, setFiles] = useState<File[]>([]);
-  const [pages, setPages] = useState<PDFPage[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
   const { toast } = useToast();
 
-  const handleFilesSelected = (newFiles: File[]) => {
-    setFiles(newFiles);
-    // Generate mock pages for all files
-    let pageCounter = 1;
-    const allPages: PDFPage[] = [];
-    
-    newFiles.forEach((file, fileIndex) => {
-      // Mock: assume each PDF has 3-5 pages
-      const pageCount = 3 + (fileIndex % 3);
-      const filePages = generatePages(pageCount).map(page => ({
-        ...page,
-        id: `file-${fileIndex}-page-${page.pageNumber}`,
-        pageNumber: pageCounter++,
-      }));
-      allPages.push(...filePages);
-    });
-    
-    setPages(allPages);
+  const handleFilesSelected = (selectedFiles: File[]) => {
+    setFiles(selectedFiles);
   };
 
-  const handleDownload = async () => {
-    if (files.length === 0) return;
+  const handleFilesReorder = (reorderedFiles: File[]) => {
+    setFiles(reorderedFiles);
+  };
+
+  const handleMerge = async () => {
+    if (files.length < 2) return;
     
     setIsProcessing(true);
     try {
@@ -48,7 +28,7 @@ export default function MergePDF() {
       downloadBlob(mergedBlob, 'merged-document.pdf');
       toast({
         title: "Success!",
-        description: "Your PDF files have been merged successfully.",
+        description: `Your ${files.length} PDF files have been merged successfully.`,
       });
     } catch (error) {
       toast({
@@ -61,14 +41,9 @@ export default function MergePDF() {
     }
   };
 
-  const handleNewUpload = () => {
-    setFiles([]);
-    setPages([]);
-  };
-
   return (
     <>
-      <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Back to Tools */}
         <div className="mb-8">
           <Link href="/" className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 flex items-center text-sm">
@@ -109,22 +84,12 @@ export default function MergePDF() {
             acceptMultiple={true}
           />
         ) : (
-          <PDFPreview
-            file={files[0]} // Primary file for display
-            pages={pages}
-            onPagesChange={setPages}
-            onDownload={handleDownload}
-            onNewUpload={handleNewUpload}
-            toolType="merge"
+          <DocumentGrid
+            files={files}
+            onFilesReorder={handleFilesReorder}
+            onMerge={handleMerge}
+            isProcessing={isProcessing}
           />
-        )}
-
-        {files.length > 1 && (
-          <div className="mt-4 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
-            <p className="text-sm text-blue-700 dark:text-blue-300">
-              <strong>{files.length} files selected:</strong> {files.map(f => f.name).join(', ')}
-            </p>
-          </div>
         )}
       </div>
 
