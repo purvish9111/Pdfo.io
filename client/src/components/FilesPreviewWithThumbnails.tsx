@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { PDFThumbnailPreview } from "@/components/PDFThumbnailPreview";
+import { SinglePDFThumbnail } from "@/components/SinglePDFThumbnail";
 import { FileText, Trash2, RotateCcw, GripVertical } from "lucide-react";
 import {
   DndContext,
@@ -98,7 +98,7 @@ function SortableFileCard({
       {/* File Preview */}
       <div className="p-3">
         {showThumbnails ? (
-          <PDFThumbnailPreview file={file} />
+          <SinglePDFThumbnail file={file} />
         ) : (
           <div className="aspect-[3/4] bg-gray-100 dark:bg-gray-800 rounded-lg flex items-center justify-center mb-3">
             <FileText className="h-12 w-12 text-gray-400" />
@@ -238,7 +238,7 @@ export function FilesPreviewWithThumbnails({
               {/* File Preview */}
               <div className="p-3">
                 {showThumbnails ? (
-                  <PDFThumbnailPreview file={file} />
+                  <SinglePDFThumbnail file={file} />
                 ) : (
                   <div className="aspect-[3/4] bg-gray-100 dark:bg-gray-800 rounded-lg flex items-center justify-center mb-3">
                     <FileText className="h-12 w-12 text-gray-400" />
