@@ -64,7 +64,7 @@ export default function Home() {
   return (
     <>
       {/* Hero Section */}
-      <section className="bg-gray-50 dark:bg-gray-800 py-20 lg:py-32">
+      <section className="bg-gradient-to-b from-blue-50 to-white dark:from-gray-800 dark:to-gray-900 py-12 lg:py-16">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white mb-4">
             Professional PDF Tools
@@ -72,14 +72,14 @@ export default function Home() {
           <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-blue-500 mb-8">
             Made Simple
           </h2>
-          <p className="text-xl text-gray-600 dark:text-gray-300 mb-12 max-w-3xl mx-auto">
+          <p className="text-lg text-gray-600 dark:text-gray-300 mb-8 max-w-3xl mx-auto">
             Merge, split, convert, and edit your PDF files with our comprehensive suite of professional tools. Fast, secure, and completely free.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
             <Button 
               onClick={scrollToTools} 
               size="lg"
-              className="bg-blue-500 text-white hover:bg-blue-600 px-8 py-4 text-lg rounded-lg"
+              className="bg-blue-500 text-white hover:bg-blue-600 px-8 py-3 text-lg rounded-lg font-medium"
             >
               Explore Tools
             </Button>
@@ -87,7 +87,7 @@ export default function Home() {
               asChild
               size="lg"
               variant="outline"
-              className="border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 px-8 py-4 text-lg rounded-lg"
+              className="border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 px-8 py-3 text-lg rounded-lg font-medium"
             >
               <a 
                 href="https://buymeacoffee.com/pravaah" 
