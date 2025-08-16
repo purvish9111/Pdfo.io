@@ -11,6 +11,7 @@ interface FilesPreviewWithThumbnailsProps {
   showThumbnails?: boolean;
   title?: string;
   children?: React.ReactNode;
+  allowReorder?: boolean;
 }
 
 export function FilesPreviewWithThumbnails({
@@ -19,6 +20,7 @@ export function FilesPreviewWithThumbnails({
   showThumbnails = true,
   title = "Selected Files",
   children,
+  allowReorder = false,
 }: FilesPreviewWithThumbnailsProps) {
   if (files.length === 0) return null;
 

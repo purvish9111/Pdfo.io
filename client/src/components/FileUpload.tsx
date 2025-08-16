@@ -8,13 +8,19 @@ interface FileUploadProps {
   acceptMultiple?: boolean;
   acceptedTypes?: string;
   maxSize?: number;
+  variant?: 'dropzone' | 'button';
+  buttonText?: string;
+  className?: string;
 }
 
 export function FileUpload({ 
   onFilesSelected, 
   acceptMultiple = false, 
   acceptedTypes = ".pdf",
-  maxSize = 50 * 1024 * 1024 // 50MB default
+  maxSize = 50 * 1024 * 1024, // 50MB default
+  variant = 'dropzone',
+  buttonText = 'Select Files',
+  className = ''
 }: FileUploadProps) {
   const [isDragActive, setIsDragActive] = useState(false);
 
@@ -34,6 +40,23 @@ export function FileUpload({
     onDragLeave: () => setIsDragActive(false),
   });
 
+  if (variant === 'button') {
+    return (
+      <div className={className}>
+        <input {...getInputProps()} />
+        <Button
+          {...getRootProps()}
+          variant="outline"
+          size="lg"
+          className="px-6"
+        >
+          <Upload className="h-4 w-4 mr-2" />
+          {buttonText}
+        </Button>
+      </div>
+    );
+  }
+
   return (
     <div
       {...getRootProps()}
@@ -41,7 +64,7 @@ export function FileUpload({
         isDragActive
           ? "border-pdfo-blue dark:border-pdfo-blue bg-blue-50 dark:bg-blue-950"
           : "border-gray-300 dark:border-gray-600 hover:border-pdfo-blue dark:hover:border-pdfo-blue"
-      }`}
+      } ${className}`}
     >
       <input {...getInputProps()} />
       

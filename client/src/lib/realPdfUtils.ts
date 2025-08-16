@@ -21,16 +21,24 @@ export interface SplitPoint {
   groupName: string;
 }
 
-// Real PDF merging
-export async function mergePDFs(files: File[]): Promise<Blob> {
+// Real PDF merging with progress tracking
+export async function mergePDFs(
+  files: File[], 
+  onProgress?: (current: number, total: number) => void
+): Promise<Blob> {
   const mergedPdf = await PDFDocument.create();
   
-  for (const file of files) {
+  for (let i = 0; i < files.length; i++) {
+    const file = files[i];
+    onProgress?.(i, files.length);
+    
     const arrayBuffer = await file.arrayBuffer();
     const pdf = await PDFDocument.load(arrayBuffer);
     const copiedPages = await mergedPdf.copyPages(pdf, pdf.getPageIndices());
     copiedPages.forEach((page) => mergedPdf.addPage(page));
   }
+  
+  onProgress?.(files.length, files.length);
   
   const pdfBytes = await mergedPdf.save();
   return new Blob([pdfBytes], { type: 'application/pdf' });

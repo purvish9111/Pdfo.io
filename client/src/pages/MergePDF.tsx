@@ -4,16 +4,22 @@ import { FileUpload } from "@/components/FileUpload";
 import { FilesPreviewWithThumbnails } from "@/components/FilesPreviewWithThumbnails";
 import { Button } from "@/components/ui/button";
 import { ToolFooter } from "@/components/ToolFooter";
-import { mergePDFs, downloadBlob } from "@/lib/realPdfUtils";
+import { mergePDFs } from "@/lib/realPdfUtils";
 import { useToast } from "@/hooks/use-toast";
+import { Download, Coffee } from "lucide-react";
 
 export default function MergePDF() {
   const [files, setFiles] = useState<File[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [mergedPdfUrl, setMergedPdfUrl] = useState<string | null>(null);
+  const [progress, setProgress] = useState(0);
   const { toast } = useToast();
 
   const handleFilesSelected = (selectedFiles: File[]) => {
-    setFiles(selectedFiles);
+    // Allow adding more files to existing ones
+    setFiles(prev => [...prev, ...selectedFiles]);
+    // Clear any previous merge result
+    setMergedPdfUrl(null);
   };
 
   const handleFilesReorder = (reorderedFiles: File[]) => {
@@ -24,9 +30,27 @@ export default function MergePDF() {
     if (files.length < 2) return;
     
     setIsProcessing(true);
+    setProgress(0);
+    setMergedPdfUrl(null);
+    
     try {
-      const mergedBlob = await mergePDFs(files);
-      downloadBlob(mergedBlob, 'merged-document.pdf');
+      // Simulate progress updates during merge
+      setProgress(10);
+      
+      const mergedBlob = await mergePDFs(files, (current, total) => {
+        // Update progress based on files processed
+        const fileProgress = (current / total) * 80; // 80% for processing
+        setProgress(10 + fileProgress);
+      });
+      
+      setProgress(95);
+      
+      // Create download URL
+      const url = URL.createObjectURL(mergedBlob);
+      setMergedPdfUrl(url);
+      
+      setProgress(100);
+      
       toast({
         title: "Success!",
         description: `Your ${files.length} PDF files have been merged successfully.`,
@@ -37,9 +61,27 @@ export default function MergePDF() {
         description: "Failed to merge PDF files. Please try again.",
         variant: "destructive",
       });
+      setProgress(0);
     } finally {
       setIsProcessing(false);
     }
+  };
+
+  const handleDownload = () => {
+    if (mergedPdfUrl) {
+      const a = document.createElement('a');
+      a.href = mergedPdfUrl;
+      a.download = 'merged-document.pdf';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }
+  };
+
+  const clearFiles = () => {
+    setFiles([]);
+    setMergedPdfUrl(null);
+    setProgress(0);
   };
 
   return (
@@ -85,27 +127,107 @@ export default function MergePDF() {
             acceptMultiple={true}
           />
         ) : (
-          <FilesPreviewWithThumbnails
-            files={files}
-            onFilesChange={setFiles}
-            title="PDFs to Merge"
-          >
-            <Button
-              onClick={handleMerge}
-              disabled={files.length < 2 || isProcessing}
-              size="lg"
-              className="bg-blue-500 hover:bg-blue-600 text-white px-8"
-            >
-              {isProcessing ? (
+          <div className="space-y-6">
+            <FilesPreviewWithThumbnails
+              files={files}
+              onFilesChange={setFiles}
+              title="PDFs to Merge"
+              allowReorder={true}
+            />
+            
+            {/* Add More Files Button */}
+            <div className="flex justify-center">
+              <FileUpload
+                onFilesSelected={handleFilesSelected}
+                acceptMultiple={true}
+                variant="button"
+                buttonText="Add More Files"
+                className="mb-4"
+              />
+            </div>
+
+            {/* Progress Bar */}
+            {isProcessing && (
+              <div className="max-w-md mx-auto space-y-2">
+                <div className="flex justify-between text-sm text-gray-600 dark:text-gray-400">
+                  <span>Merging PDFs...</span>
+                  <span>{progress}%</span>
+                </div>
+                <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                  <div 
+                    className="bg-blue-500 h-2 rounded-full transition-all duration-300 ease-out"
+                    style={{ width: `${progress}%` }}
+                  ></div>
+                </div>
+              </div>
+            )}
+
+            {/* Action Buttons */}
+            <div className="flex justify-center space-x-4">
+              {!mergedPdfUrl ? (
                 <>
-                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                  Merging...
+                  <Button
+                    onClick={handleMerge}
+                    disabled={files.length < 2 || isProcessing}
+                    size="lg"
+                    className="bg-blue-500 hover:bg-blue-600 text-white px-8"
+                  >
+                    {isProcessing ? (
+                      <>
+                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                        Merging...
+                      </>
+                    ) : (
+                      `Merge ${files.length} PDF${files.length !== 1 ? 's' : ''}`
+                    )}
+                  </Button>
+                  
+                  <Button
+                    onClick={clearFiles}
+                    variant="outline"
+                    size="lg"
+                    className="px-8"
+                  >
+                    Clear All
+                  </Button>
                 </>
               ) : (
-                `Merge ${files.length} PDF${files.length !== 1 ? 's' : ''}`
+                <div className="text-center space-y-4">
+                  <Button
+                    onClick={handleDownload}
+                    size="lg"
+                    className="bg-green-500 hover:bg-green-600 text-white px-8"
+                  >
+                    <Download className="h-4 w-4 mr-2" />
+                    Download Merged PDF
+                  </Button>
+                  
+                  {/* Buy Me Coffee Button */}
+                  <div className="pt-2">
+                    <a
+                      href="https://buymeacoffee.com/pravaah"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center px-6 py-2 text-sm font-medium text-white bg-yellow-500 hover:bg-yellow-600 rounded-lg transition-colors"
+                    >
+                      <Coffee className="h-4 w-4 mr-2" />
+                      Buy me a coffee
+                    </a>
+                  </div>
+                  
+                  <div className="pt-2">
+                    <Button
+                      onClick={clearFiles}
+                      variant="outline"
+                      size="sm"
+                    >
+                      Start Over
+                    </Button>
+                  </div>
+                </div>
               )}
-            </Button>
-          </FilesPreviewWithThumbnails>
+            </div>
+          </div>
         )}
       </div>
 
