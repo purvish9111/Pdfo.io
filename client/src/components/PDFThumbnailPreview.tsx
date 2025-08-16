@@ -3,7 +3,8 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { generateMultiplePDFThumbnails, PDFThumbnail } from "@/lib/pdfThumbnails";
-import { FileText, AlertCircle } from "lucide-react";
+import { generateSimplePDFThumbnails, SimplePDFThumbnail } from "@/lib/simplePdfPreview";
+import { FileText, AlertCircle, Image } from "lucide-react";
 
 interface PDFThumbnailPreviewProps {
   files: File[];
@@ -14,6 +15,7 @@ export function PDFThumbnailPreview({ files, onThumbnailsGenerated }: PDFThumbna
   const [thumbnails, setThumbnails] = useState<PDFThumbnail[]>([]);
   const [loading, setLoading] = useState(false);
   const [progress, setProgress] = useState({ completed: 0, total: 0 });
+  const [useSimplePreview, setUseSimplePreview] = useState(false);
 
   useEffect(() => {
     if (files.length === 0) {
@@ -25,14 +27,58 @@ export function PDFThumbnailPreview({ files, onThumbnailsGenerated }: PDFThumbna
       setLoading(true);
       setProgress({ completed: 0, total: files.length });
 
-      const generatedThumbnails = await generateMultiplePDFThumbnails(
-        files,
-        (completed, total) => setProgress({ completed, total })
-      );
+      try {
+        // Try PDF.js first
+        const generatedThumbnails = await generateMultiplePDFThumbnails(
+          files,
+          (completed, total) => setProgress({ completed, total })
+        );
 
-      setThumbnails(generatedThumbnails);
+        // Check if any thumbnails failed due to worker issues
+        const hasWorkerErrors = generatedThumbnails.some(t => 
+          t.error && t.error.includes('GlobalWorkerOptions')
+        );
+
+        if (hasWorkerErrors) {
+          // Fall back to simple preview
+          setUseSimplePreview(true);
+          const simpleThumbnails = await generateSimplePDFThumbnails(
+            files,
+            (completed, total) => setProgress({ completed, total })
+          );
+          
+          // Convert to PDFThumbnail format
+          const convertedThumbnails = simpleThumbnails.map(t => ({
+            file: t.file,
+            thumbnailUrl: t.thumbnailUrl,
+            pageCount: t.pageCount,
+            error: t.error,
+          }));
+          
+          setThumbnails(convertedThumbnails);
+        } else {
+          setThumbnails(generatedThumbnails);
+        }
+      } catch (error) {
+        // Complete fallback to simple preview
+        setUseSimplePreview(true);
+        const simpleThumbnails = await generateSimplePDFThumbnails(
+          files,
+          (completed, total) => setProgress({ completed, total })
+        );
+        
+        const convertedThumbnails = simpleThumbnails.map(t => ({
+          file: t.file,
+          thumbnailUrl: t.thumbnailUrl,
+          pageCount: t.pageCount,
+          error: t.error,
+        }));
+        
+        setThumbnails(convertedThumbnails);
+      }
+
       setLoading(false);
-      onThumbnailsGenerated?.(generatedThumbnails);
+      onThumbnailsGenerated?.(thumbnails);
     };
 
     generateThumbnails();
@@ -48,11 +94,18 @@ export function PDFThumbnailPreview({ files, onThumbnailsGenerated }: PDFThumbna
         <div className="text-center text-sm text-gray-600 dark:text-gray-400">
           <div className="flex items-center justify-center gap-2 mb-2">
             <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-500"></div>
-            Generating PDF previews...
+            {useSimplePreview ? 'Creating file previews...' : 'Generating PDF previews...'}
           </div>
           <div className="text-xs">
             {progress.completed} of {progress.total} files processed
           </div>
+        </div>
+      )}
+
+      {useSimplePreview && !loading && (
+        <div className="text-center text-xs text-amber-600 dark:text-amber-400 mb-3 flex items-center justify-center gap-1">
+          <Image className="h-3 w-3" />
+          Using simple preview mode
         </div>
       )}
 
@@ -82,9 +135,12 @@ function ThumbnailCard({ thumbnail }: { thumbnail: PDFThumbnail }) {
     <Card className="p-3 hover:shadow-md transition-shadow">
       <div className="aspect-[3/4] mb-3 bg-gray-100 dark:bg-gray-800 rounded overflow-hidden">
         {error ? (
-          <div className="w-full h-full flex flex-col items-center justify-center text-red-500">
-            <AlertCircle className="h-8 w-8 mb-2" />
+          <div className="w-full h-full flex flex-col items-center justify-center text-red-500 p-2">
+            <AlertCircle className="h-6 w-6 mb-1" />
             <span className="text-xs text-center">Preview Error</span>
+            <span className="text-xs text-center text-gray-500 mt-1" title={error}>
+              {error.includes('GlobalWorkerOptions') ? 'Loading PDF...' : 'Invalid PDF'}
+            </span>
           </div>
         ) : thumbnailUrl ? (
           <img
@@ -115,7 +171,7 @@ function ThumbnailCard({ thumbnail }: { thumbnail: PDFThumbnail }) {
         
         {error && (
           <div className="text-xs text-red-500 truncate" title={error}>
-            {error}
+            {error.includes('GlobalWorkerOptions') ? 'Using fallback preview' : error}
           </div>
         )}
       </div>

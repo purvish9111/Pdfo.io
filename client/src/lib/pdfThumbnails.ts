@@ -1,8 +1,10 @@
 import * as pdfjsLib from 'pdfjs-dist';
 import type { PDFDocumentProxy } from 'pdfjs-dist';
 
-// Set up PDF.js worker
-pdfjsLib.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.js`;
+// Set up PDF.js worker with CDN fallback
+if (typeof window !== 'undefined') {
+  pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.js`;
+}
 
 export interface PDFThumbnail {
   file: File;
@@ -20,8 +22,14 @@ export async function generatePDFThumbnail(file: File): Promise<PDFThumbnail> {
     // Read file as array buffer
     const arrayBuffer = await file.arrayBuffer();
     
-    // Load PDF document
-    const pdf = await pdfjsLib.getDocument(arrayBuffer).promise;
+    // Load PDF document with error handling
+    const loadingTask = pdfjsLib.getDocument({
+      data: arrayBuffer,
+      disableFontFace: true,
+      disableRange: true,
+      disableStream: true,
+    });
+    const pdf = await loadingTask.promise;
     
     // Get the first page
     const page = await pdf.getPage(1);
@@ -88,7 +96,13 @@ export async function generateMultiplePDFThumbnails(
 export async function getPDFInfo(file: File): Promise<{ pageCount: number; title?: string }> {
   try {
     const arrayBuffer = await file.arrayBuffer();
-    const pdf = await pdfjsLib.getDocument(arrayBuffer).promise;
+    const loadingTask = pdfjsLib.getDocument({
+      data: arrayBuffer,
+      disableFontFace: true,
+      disableRange: true,
+      disableStream: true,
+    });
+    const pdf = await loadingTask.promise;
     const metadata = await pdf.getMetadata();
     
     return {
