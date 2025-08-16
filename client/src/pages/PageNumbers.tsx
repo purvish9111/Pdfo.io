@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Link } from "wouter";
 import { FileUpload } from "@/components/FileUpload";
-import { MainFooter } from "@/components/MainFooter";
 import { ToolFooter } from "@/components/ToolFooter";
 import { addPageNumbers, downloadBlob } from "@/lib/pdfUtils";
 import { useToast } from "@/hooks/use-toast";
@@ -220,7 +219,6 @@ export default function PageNumbers() {
       </div>
 
       <ToolFooter />
-      <MainFooter />
     </>
   );
 }

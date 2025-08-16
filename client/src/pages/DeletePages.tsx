@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Link } from "wouter";
 import { FileUpload } from "@/components/FileUpload";
 import { PDFPreview } from "@/components/PDFPreview";
-import { MainFooter } from "@/components/MainFooter";
 import { ToolFooter } from "@/components/ToolFooter";
 import { processPDFPages, downloadBlob, generatePages } from "@/lib/pdfUtils";
 import { useToast } from "@/hooks/use-toast";
@@ -131,7 +130,6 @@ export default function DeletePages() {
       </div>
 
       <ToolFooter />
-      <MainFooter />
     </>
   );
 }
