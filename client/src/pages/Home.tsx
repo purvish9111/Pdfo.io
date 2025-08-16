@@ -63,27 +63,31 @@ export default function Home() {
 
   return (
     <>
-      {/* Hero Section with Donation Button */}
-      <section className="pdfo-gradient py-20">
+      {/* Hero Section */}
+      <section className="bg-gray-50 dark:bg-gray-800 py-20 lg:py-32">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6">
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white mb-4">
             Professional PDF Tools
           </h1>
-          <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
-            Transform, merge, split, and manipulate your PDF files with our powerful online tools. Fast, secure, and completely free.
+          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-blue-500 mb-8">
+            Made Simple
+          </h2>
+          <p className="text-xl text-gray-600 dark:text-gray-300 mb-12 max-w-3xl mx-auto">
+            Merge, split, convert, and edit your PDF files with our comprehensive suite of professional tools. Fast, secure, and completely free.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
             <Button 
               onClick={scrollToTools} 
               size="lg"
-              className="bg-white text-pdfo-blue hover:bg-gray-50"
+              className="bg-blue-500 text-white hover:bg-blue-600 px-8 py-4 text-lg rounded-lg"
             >
-              Get Started Free
+              Explore Tools
             </Button>
             <Button 
               asChild
               size="lg"
-              className="bg-yellow-400 text-gray-900 hover:bg-yellow-300"
+              variant="outline"
+              className="border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 px-8 py-4 text-lg rounded-lg"
             >
               <a 
                 href="https://buymeacoffee.com/pravaah" 
@@ -91,8 +95,8 @@ export default function Home() {
                 rel="noopener noreferrer"
                 className="flex items-center"
               >
-                <Coffee className="mr-2 h-4 w-4" />
-                Buy me a coffee
+                <Coffee className="mr-2 h-5 w-5" />
+                Support Us
               </a>
             </Button>
           </div>
