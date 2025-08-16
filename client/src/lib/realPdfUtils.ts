@@ -144,23 +144,27 @@ export async function deletePDFPages(file: File, pagesToKeep: number[]): Promise
 }
 
 // Real PDF page rotation
-export async function rotatePDFPages(file: File, rotations: { [pageIndex: number]: number }): Promise<Blob> {
+export async function rotatePDFPages(file: File, rotations: Record<number, number>): Promise<Blob> {
   const arrayBuffer = await file.arrayBuffer();
   const pdf = await PDFDocument.load(arrayBuffer);
+  const pages = pdf.getPages();
   
-  // Apply rotations
+  // Apply rotations to specific pages
   Object.entries(rotations).forEach(([pageIndex, rotation]) => {
-    const page = pdf.getPage(parseInt(pageIndex));
-    const currentRotation = page.getRotation().angle;
-    page.setRotation(degrees(currentRotation + rotation));
+    const index = parseInt(pageIndex);
+    if (index >= 0 && index < pages.length) {
+      const page = pages[index];
+      const currentRotation = page.getRotation().angle;
+      page.setRotation(degrees(currentRotation + rotation));
+    }
   });
   
   const pdfBytes = await pdf.save();
   return new Blob([pdfBytes], { type: 'application/pdf' });
 }
 
-// Real PDF page numbering
-export async function addPageNumbersToPDF(file: File, settings: PageNumberSettings): Promise<Blob> {
+// Real PDF page numbering (alias for compatibility)
+export async function addPageNumbers(file: File, settings: PageNumberSettings): Promise<Blob> {
   const arrayBuffer = await file.arrayBuffer();
   const pdf = await PDFDocument.load(arrayBuffer);
   
@@ -276,6 +280,8 @@ export async function generateRealPDFPages(file: File): Promise<PDFPage[]> {
     deleted: false,
   }));
 }
+
+
 
 // Utility function to download blob
 export function downloadBlob(blob: Blob, filename: string): void {

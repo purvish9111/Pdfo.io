@@ -3,7 +3,9 @@ import { Link } from "wouter";
 import { FileUpload } from "@/components/FileUpload";
 import { PageNumbersGrid } from "@/components/PageNumbersGrid";
 import { ToolFooter } from "@/components/ToolFooter";
-import { addPageNumbers, downloadBlob } from "@/lib/pdfUtils";
+import { ProgressBar } from "@/components/ProgressBar";
+import { BuyMeCoffeeButton } from "@/components/BuyMeCoffeeButton";
+import { addPageNumbers, downloadBlob, generateRealPDFPages } from "@/lib/realPdfUtils";
 import { useToast } from "@/hooks/use-toast";
 
 interface PDFPage {
@@ -23,33 +25,27 @@ export default function PageNumbers() {
   const [file, setFile] = useState<File | null>(null);
   const [pages, setPages] = useState<PDFPage[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [progress, setProgress] = useState(0);
   const { toast } = useToast();
 
-  const handleFilesSelected = (files: File[]) => {
+  const handleFilesSelected = async (files: File[]) => {
     const selectedFile = files[0];
     setFile(selectedFile);
-    // Generate mock pages (assume 6 pages for demo)
-    const mockPages: PDFPage[] = Array.from({ length: 6 }, (_, index) => ({
-      id: `page-${index + 1}-${Date.now()}`,
-      pageNumber: index + 1,
-    }));
-    setPages(mockPages);
+    // Generate real PDF pages from file
+    const realPages = await generateRealPDFPages(selectedFile);
+    setPages(realPages);
   };
 
   const handleAddPageNumbers = async (settings: PageNumberSettings) => {
     if (!file) return;
     
     setIsProcessing(true);
+    setProgress(0);
     try {
-      // Convert settings to legacy format for compatibility
-      const options = {
-        position: settings.position.includes('top') ? 'top' as const : 'bottom' as const,
-        alignment: settings.position.includes('center') ? 'center' as const : 
-                  settings.position.includes('left') ? 'left' as const : 'right' as const,
-        startNumber: 1,
-      };
-      
-      const numberedBlob = await addPageNumbers(file, options);
+      setProgress(30);
+      setProgress(70);
+      const numberedBlob = await addPageNumbers(file, settings);
+      setProgress(100);
       downloadBlob(numberedBlob, 'numbered-document.pdf');
       toast({
         title: "Success!",
@@ -61,6 +57,7 @@ export default function PageNumbers() {
         description: "Failed to add page numbers. Please try again.",
         variant: "destructive",
       });
+      setProgress(0);
     } finally {
       setIsProcessing(false);
     }
@@ -109,12 +106,25 @@ export default function PageNumbers() {
             acceptMultiple={false}
           />
         ) : (
-          <PageNumbersGrid
-            file={file}
-            pages={pages}
-            onAddPageNumbers={handleAddPageNumbers}
-            isProcessing={isProcessing}
-          />
+          <>
+            <PageNumbersGrid
+              file={file}
+              pages={pages}
+              onAddPageNumbers={handleAddPageNumbers}
+              isProcessing={isProcessing}
+            />
+            <ProgressBar 
+              progress={progress} 
+              isVisible={isProcessing} 
+              color="purple"
+              className="mt-6"
+            />
+            {!isProcessing && (
+              <div className="text-center mt-6">
+                <BuyMeCoffeeButton />
+              </div>
+            )}
+          </>
         )}
       </div>
 

@@ -3,6 +3,8 @@ import { Link } from "wouter";
 import { FileUpload } from "@/components/FileUpload";
 import { DeletePDFGrid } from "@/components/DeletePDFGrid";
 import { ToolFooter } from "@/components/ToolFooter";
+import { ProgressBar } from "@/components/ProgressBar";
+import { BuyMeCoffeeButton } from "@/components/BuyMeCoffeeButton";
 import { deletePDFPages, downloadBlob, generateRealPDFPages } from "@/lib/realPdfUtils";
 import { useToast } from "@/hooks/use-toast";
 
@@ -16,6 +18,7 @@ export default function DeletePages() {
   const [file, setFile] = useState<File | null>(null);
   const [pages, setPages] = useState<PDFPage[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [progress, setProgress] = useState(0);
   const { toast } = useToast();
 
   const handleFilesSelected = async (files: File[]) => {
@@ -44,7 +47,9 @@ export default function DeletePages() {
     }
     
     setIsProcessing(true);
+    setProgress(0);
     try {
+      setProgress(25);
       // Get the page indices to keep (0-indexed for PDF processing)
       const pagesToKeep = updatedPages
         .filter(page => !page.deleted)

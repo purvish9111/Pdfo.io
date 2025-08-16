@@ -3,6 +3,8 @@ import { Link } from "wouter";
 import { FileUpload } from "@/components/FileUpload";
 import { ReorderPDFGrid } from "@/components/ReorderPDFGrid";
 import { ToolFooter } from "@/components/ToolFooter";
+import { ProgressBar } from "@/components/ProgressBar";
+import { BuyMeCoffeeButton } from "@/components/BuyMeCoffeeButton";
 import { reorderPDFPages, downloadBlob, generateRealPDFPages } from "@/lib/realPdfUtils";
 import { useToast } from "@/hooks/use-toast";
 
@@ -16,6 +18,7 @@ export default function ReorderPages() {
   const [file, setFile] = useState<File | null>(null);
   const [pages, setPages] = useState<PDFPage[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [progress, setProgress] = useState(0);
   const { toast } = useToast();
 
   const handleFilesSelected = async (files: File[]) => {
@@ -34,7 +37,9 @@ export default function ReorderPages() {
     if (!file) return;
     
     setIsProcessing(true);
+    setProgress(0);
     try {
+      setProgress(20);
       // Extract the new page order (0-indexed for PDF processing)
       const newOrder = reorderedPages.map(page => page.originalIndex);
       

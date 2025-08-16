@@ -3,6 +3,8 @@ import { Link } from "wouter";
 import { FileUpload } from "@/components/FileUpload";
 import { SplitPDFGrid } from "@/components/SplitPDFGrid";
 import { ToolFooter } from "@/components/ToolFooter";
+import { ProgressBar } from "@/components/ProgressBar";
+import { BuyMeCoffeeButton } from "@/components/BuyMeCoffeeButton";
 import { splitPDF, downloadBlob, generateRealPDFPages } from "@/lib/realPdfUtils";
 import { useToast } from "@/hooks/use-toast";
 
@@ -20,6 +22,7 @@ export default function SplitPDF() {
   const [file, setFile] = useState<File | null>(null);
   const [pages, setPages] = useState<PDFPage[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [progress, setProgress] = useState(0);
   const { toast } = useToast();
 
   const handleFilesSelected = async (files: File[]) => {
@@ -34,7 +37,9 @@ export default function SplitPDF() {
     if (!file) return;
     
     setIsProcessing(true);
+    setProgress(0);
     try {
+      setProgress(10);
       // Create page groups based on split points
       const groups: PDFPage[][] = [];
       let currentGroup: PDFPage[] = [];
@@ -61,7 +66,9 @@ export default function SplitPDF() {
         group[group.length - 1].pageNumber
       ]);
       
+      setProgress(50);
       const splitBlobs = await splitPDF(file, pageRanges);
+      setProgress(90);
       
       // Download each split as separate file
       splitBlobs.forEach((blob, index) => {
@@ -73,6 +80,8 @@ export default function SplitPDF() {
           : `split-pages-${startPage}-${endPage}.pdf`;
         downloadBlob(blob, fileName);
       });
+
+      setProgress(100);
       
       toast({
         title: "Success!",
@@ -132,12 +141,25 @@ export default function SplitPDF() {
             acceptMultiple={false}
           />
         ) : (
-          <SplitPDFGrid
-            file={file}
-            pages={pages}
-            onSplit={handleSplit}
-            isProcessing={isProcessing}
-          />
+          <>
+            <SplitPDFGrid
+              file={file}
+              pages={pages}
+              onSplit={handleSplit}
+              isProcessing={isProcessing}
+            />
+            <ProgressBar 
+              progress={progress} 
+              isVisible={isProcessing} 
+              color="green"
+              className="mt-6"
+            />
+            {!isProcessing && (
+              <div className="text-center mt-6">
+                <BuyMeCoffeeButton />
+              </div>
+            )}
+          </>
         )}
       </div>
 
