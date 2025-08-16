@@ -1,16 +1,15 @@
 import { useState } from "react";
 import { Link } from "wouter";
 import { FileUpload } from "@/components/FileUpload";
-import { PDFPreview } from "@/components/PDFPreview";
+import { RotatePDFGrid } from "@/components/RotatePDFGrid";
 import { ToolFooter } from "@/components/ToolFooter";
-import { processPDFPages, downloadBlob, generatePages } from "@/lib/pdfUtils";
+import { processPDFPages, downloadBlob } from "@/lib/pdfUtils";
 import { useToast } from "@/hooks/use-toast";
 
 interface PDFPage {
   id: string;
   pageNumber: number;
   rotation: number;
-  deleted: boolean;
 }
 
 export default function RotatePDF() {
@@ -23,15 +22,28 @@ export default function RotatePDF() {
     const selectedFile = files[0];
     setFile(selectedFile);
     // Generate mock pages (assume 5 pages for demo)
-    setPages(generatePages(5));
+    const mockPages: PDFPage[] = Array.from({ length: 5 }, (_, index) => ({
+      id: `page-${index + 1}-${Date.now()}`,
+      pageNumber: index + 1,
+      rotation: 0,
+    }));
+    setPages(mockPages);
   };
 
-  const handleDownload = async () => {
+  const handleRotate = async (updatedPages: PDFPage[]) => {
     if (!file) return;
     
     setIsProcessing(true);
     try {
-      const processedBlob = await processPDFPages(file, pages);
+      // Convert PDFPage[] to the format expected by processPDFPages
+      const pagesWithFlags = updatedPages.map(page => ({
+        id: page.id,
+        pageNumber: page.pageNumber,
+        rotation: page.rotation,
+        deleted: false,
+      }));
+      
+      const processedBlob = await processPDFPages(file, pagesWithFlags);
       downloadBlob(processedBlob, 'rotated-document.pdf');
       toast({
         title: "Success!",
@@ -48,16 +60,9 @@ export default function RotatePDF() {
     }
   };
 
-  const handleNewUpload = () => {
-    setFile(null);
-    setPages([]);
-  };
-
-  const rotatedPages = pages.filter(p => p.rotation !== 0);
-
   return (
     <>
-      <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Back to Tools */}
         <div className="mb-8">
           <Link href="/" className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 flex items-center text-sm">
@@ -72,7 +77,7 @@ export default function RotatePDF() {
           </div>
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">Rotate PDF</h1>
           <p className="text-gray-600 dark:text-gray-300 max-w-xl mx-auto leading-relaxed">
-            Rotate pages 90, 180, or 270 degrees to correct orientation and improve readability. Fix document orientation with precision control.
+            Rotate individual pages or all pages in your PDF
           </p>
           
           {/* Features */}
@@ -98,25 +103,12 @@ export default function RotatePDF() {
             acceptMultiple={false}
           />
         ) : (
-          <PDFPreview
+          <RotatePDFGrid
             file={file}
             pages={pages}
-            onPagesChange={setPages}
-            onDownload={handleDownload}
-            onNewUpload={handleNewUpload}
-            toolType="rotate"
+            onRotate={handleRotate}
+            isProcessing={isProcessing}
           />
-        )}
-        
-        {file && pages.length > 0 && (
-          <div className="mt-4 p-4 bg-orange-50 dark:bg-orange-900/20 rounded-lg">
-            <p className="text-sm text-orange-700 dark:text-orange-300">
-              <strong>🔄 Rotation Status:</strong> {rotatedPages.length > 0 
-                ? `${rotatedPages.length} pages will be rotated. Click on page thumbnails to rotate them.`
-                : "No pages rotated yet. Hover over pages and click the rotate button to adjust orientation."
-              }
-            </p>
-          </div>
         )}
       </div>
 
