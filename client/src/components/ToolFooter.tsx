@@ -11,11 +11,11 @@ export function ToolFooter() {
           
           {/* Navigation Links */}
           <div className="flex justify-center gap-8 mt-8 mb-6">
-            <Link href="/about">
-              <a className="text-gray-400 hover:text-white transition-colors text-sm">About</a>
+            <Link href="/about" className="text-gray-400 hover:text-white transition-colors text-sm">
+              About
             </Link>
-            <Link href="/company">
-              <a className="text-gray-400 hover:text-white transition-colors text-sm">Company Links</a>
+            <Link href="/company" className="text-gray-400 hover:text-white transition-colors text-sm">
+              Company Links
             </Link>
             <a 
               href="https://buymeacoffee.com/pravaah" 
