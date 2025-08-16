@@ -1,4 +1,5 @@
 import { PDFDocument, rgb, StandardFonts, degrees } from 'pdf-lib';
+import JSZip from 'jszip';
 
 // Real PDF processing utilities using pdf-lib
 export interface PDFPage {
@@ -415,10 +416,12 @@ export async function lockPDF(file: File, password: string): Promise<Blob> {
   const arrayBuffer = await file.arrayBuffer();
   const pdf = await PDFDocument.load(arrayBuffer);
   
-  // Note: pdf-lib doesn't support password protection directly
-  // This is a simplified implementation for demonstration
-  const pdfBytes = await pdf.save();
+  // pdf-lib doesn't support password protection natively
+  // In a real implementation, you would use a library like PDF-lib with encryption support
+  // or a server-side solution with libraries like PyPDF2, PDFtk, or similar
+  console.log('Password protection requested:', password);
   
+  const pdfBytes = await pdf.save();
   return new Blob([pdfBytes], { type: 'application/pdf' });
 }
 
@@ -426,10 +429,11 @@ export async function lockPDF(file: File, password: string): Promise<Blob> {
 export async function unlockPDF(file: File, password: string): Promise<Blob> {
   try {
     const arrayBuffer = await file.arrayBuffer();
-    // Note: pdf-lib doesn't support password-protected PDFs directly
-    // This is a simplified implementation for demonstration
-    const pdf = await PDFDocument.load(arrayBuffer);
+    // pdf-lib doesn't support password-protected PDFs natively
+    // In a real implementation, you would need a library that can handle encrypted PDFs
+    console.log('Password unlock requested:', password);
     
+    const pdf = await PDFDocument.load(arrayBuffer);
     const pdfBytes = await pdf.save();
     return new Blob([pdfBytes], { type: 'application/pdf' });
   } catch (error) {
@@ -669,26 +673,16 @@ export async function convertPDFToJSON(file: File, options: DocumentConversionOp
 
 // Helper function to create ZIP from multiple blobs
 async function createZipFromBlobs(blobs: Blob[], format: string): Promise<Blob> {
-  // Simple implementation - in a real app, you'd use a ZIP library like JSZip
-  // For now, we'll create a single blob with all images concatenated
-  const zipBlobs: Uint8Array[] = [];
+  const zip = new JSZip();
   
   for (let i = 0; i < blobs.length; i++) {
     const arrayBuffer = await blobs[i].arrayBuffer();
-    zipBlobs.push(new Uint8Array(arrayBuffer));
+    const filename = `page-${i + 1}.${format.toLowerCase()}`;
+    zip.file(filename, arrayBuffer);
   }
   
-  // This is a simplified approach - in production you'd use JSZip
-  const combinedSize = zipBlobs.reduce((sum, blob) => sum + blob.length, 0);
-  const combined = new Uint8Array(combinedSize);
-  
-  let offset = 0;
-  zipBlobs.forEach(blob => {
-    combined.set(blob, offset);
-    offset += blob.length;
-  });
-  
-  return new Blob([combined], { type: 'application/zip' });
+  const zipBlob = await zip.generateAsync({ type: 'blob' });
+  return zipBlob;
 }
 
 // Convert PNG images to PDF

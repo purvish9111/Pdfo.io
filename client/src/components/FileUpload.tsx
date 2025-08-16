@@ -6,21 +6,25 @@ import { Button } from "@/components/ui/button";
 interface FileUploadProps {
   onFilesSelected: (files: File[]) => void;
   acceptMultiple?: boolean;
-  acceptedTypes?: string;
+  accept?: string;
   maxSize?: number;
   variant?: 'dropzone' | 'button';
   buttonText?: string;
   className?: string;
+  title?: string;
+  subtitle?: string;
 }
 
 export function FileUpload({ 
   onFilesSelected, 
   acceptMultiple = false, 
-  acceptedTypes = ".pdf",
+  accept = ".pdf",
   maxSize = 50 * 1024 * 1024, // 50MB default
   variant = 'dropzone',
   buttonText = 'Select Files',
-  className = ''
+  className = '',
+  title = 'Drag and drop PDF files here',
+  subtitle = 'or click to select PDF files'
 }: FileUploadProps) {
   const [isDragActive, setIsDragActive] = useState(false);
 
@@ -29,11 +33,34 @@ export function FileUpload({
     onFilesSelected(acceptedFiles);
   }, [onFilesSelected]);
 
+  // Create accept object based on accept prop
+  const getAcceptObject = (acceptString: string) => {
+    if (acceptString.includes('.png') || acceptString.includes('image/png')) {
+      return {
+        'image/png': ['.png'],
+        'image/jpeg': ['.jpg', '.jpeg']
+      };
+    }
+    if (acceptString.includes('.docx') || acceptString.includes('wordprocessingml')) {
+      return {
+        'application/vnd.openxmlformats-officedocument.wordprocessingml.document': ['.docx'],
+        'application/msword': ['.doc']
+      };
+    }
+    if (acceptString.includes('.xlsx') || acceptString.includes('spreadsheetml')) {
+      return {
+        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': ['.xlsx'],
+        'application/vnd.ms-excel': ['.xls']
+      };
+    }
+    return {
+      'application/pdf': ['.pdf']
+    };
+  };
+
   const { getRootProps, getInputProps } = useDropzone({
     onDrop,
-    accept: {
-      'application/pdf': ['.pdf']
-    },
+    accept: getAcceptObject(accept),
     multiple: acceptMultiple,
     maxSize,
     onDragEnter: () => setIsDragActive(true),
@@ -77,13 +104,13 @@ export function FileUpload({
       </div>
       
       <h3 className="text-xl font-semibold text-gray-700 dark:text-gray-300 mb-2">
-        {isDragActive ? "Drop your PDF files here" : "Upload your PDF files"}
+        {isDragActive ? "Drop your files here" : title}
       </h3>
       
       <p className="text-gray-500 dark:text-gray-400 mb-4">
         {isDragActive 
           ? "Release to upload" 
-          : "Click to select files or drag and drop them here"
+          : subtitle
         }
       </p>
       

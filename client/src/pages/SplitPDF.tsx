@@ -19,22 +19,30 @@ interface SplitPoint {
 }
 
 export default function SplitPDF() {
-  const [file, setFile] = useState<File | null>(null);
+  const [files, setFiles] = useState<File[]>([]);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [pages, setPages] = useState<PDFPage[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
   const [progress, setProgress] = useState(0);
   const { toast } = useToast();
 
-  const handleFilesSelected = async (files: File[]) => {
-    const selectedFile = files[0];
-    setFile(selectedFile);
-    // Generate real PDF pages from file
-    const realPages = await generateRealPDFPages(selectedFile);
-    setPages(realPages);
+  const handleFilesSelected = async (selectedFiles: File[]) => {
+    // Allow multiple PDF files for batch splitting
+    setFiles(prev => [...prev, ...selectedFiles]);
+    if (selectedFiles.length > 0 && !selectedFile) {
+      const firstFile = selectedFiles[0];
+      setSelectedFile(firstFile);
+      const realPages = await generateRealPDFPages(firstFile);
+      setPages(realPages);
+    }
+  };
+
+  const handleFilesReorder = (reorderedFiles: File[]) => {
+    setFiles(reorderedFiles);
   };
 
   const handleSplit = async (splitPoints: SplitPoint[]) => {
-    if (!file) return;
+    if (!selectedFile) return;
     
     setIsProcessing(true);
     setProgress(0);
@@ -67,7 +75,7 @@ export default function SplitPDF() {
       ]);
       
       setProgress(50);
-      const splitBlobs = await splitPDF(file, pageRanges);
+      const splitBlobs = await splitPDF(selectedFile, pageRanges);
       setProgress(90);
       
       // Download each split as separate file
@@ -135,19 +143,26 @@ export default function SplitPDF() {
           </div>
         </div>
 
-        {!file ? (
+        {files.length === 0 ? (
           <FileUpload
             onFilesSelected={handleFilesSelected}
-            acceptMultiple={false}
+            acceptMultiple={true}
           />
         ) : (
           <>
-            <SplitPDFGrid
-              file={file}
-              pages={pages}
-              onSplit={handleSplit}
-              isProcessing={isProcessing}
+            <FilesPreviewWithThumbnails
+              files={files}
+              onReorder={handleFilesReorder}
+              onRemoveFile={(index) => setFiles(files.filter((_, i) => i !== index))}
             />
+            {selectedFile && pages.length > 0 && (
+              <SplitPDFGrid
+                file={selectedFile}
+                pages={pages}
+                onSplit={handleSplit}
+                isProcessing={isProcessing}
+              />
+            )}
             <ProgressBar 
               progress={progress} 
               isVisible={isProcessing} 
