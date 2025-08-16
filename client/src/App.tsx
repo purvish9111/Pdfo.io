@@ -29,7 +29,7 @@ import PNGToPDF from "@/pages/PNGToPDF";
 import WordToPDF from "@/pages/WordToPDF";
 import ExcelToPDF from "@/pages/ExcelToPDF";
 import About from "@/pages/About";
-import Company from "@/pages/Company";
+
 import Privacy from "@/pages/Privacy";
 import Terms from "@/pages/Terms";
 import Contact from "@/pages/Contact";
@@ -63,7 +63,7 @@ function Router() {
       <Route path="/word-to-pdf" component={WordToPDF} />
       <Route path="/excel-to-pdf" component={ExcelToPDF} />
       <Route path="/about" component={About} />
-      <Route path="/company" component={Company} />
+
       <Route path="/privacy" component={Privacy} />
       <Route path="/terms" component={Terms} />
       <Route path="/contact" component={Contact} />

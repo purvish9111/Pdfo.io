@@ -58,7 +58,7 @@ export default function About() {
                 </div>
                 <div className="text-center">
                   <div className="w-12 h-12 bg-purple-500 rounded-lg flex items-center justify-center text-white mb-3 mx-auto">
-                    <span className="text-xl font-bold">🔒</span>
+                    <i className="fas fa-lock text-lg"></i>
                   </div>
                   <h3 className="font-semibold text-gray-900 dark:text-white">Secure</h3>
                   <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">Client-side processing</p>
@@ -152,14 +152,15 @@ export default function About() {
                 Have feedback, suggestions, or just want to say hello?
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Link href="/company">
-                  <Button variant="secondary" size="lg" className="bg-white text-blue-600 hover:bg-gray-100">
-                    Company Links
+                <Link href="/contact">
+                  <Button size="lg" className="bg-white text-blue-600 hover:bg-gray-100 border-0 w-full sm:w-auto">
+                    <i className="fas fa-envelope mr-2"></i>
+                    Get in Touch
                   </Button>
                 </Link>
                 <a href="https://buymeacoffee.com/pravaah" target="_blank" rel="noopener noreferrer">
-                  <Button variant="outline" size="lg" className="border-white text-white hover:bg-white hover:text-blue-600">
-                    <Coffee className="h-4 w-4 mr-2" />
+                  <Button variant="outline" size="lg" className="border-2 border-white text-white hover:bg-white hover:text-blue-600 w-full sm:w-auto">
+                    <i className="fas fa-coffee mr-2"></i>
                     Buy Me a Coffee
                   </Button>
                 </a>

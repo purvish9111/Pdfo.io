@@ -9,22 +9,13 @@ export function ToolFooter() {
             PDFo is a free online PDF tool by Pravaah AI Tech. We respect your privacy—files are processed securely and automatically deleted after processing.
           </p>
           
-          {/* Navigation Links */}
-          <div className="flex justify-center gap-8 mt-8 mb-6">
-            <Link href="/about" className="text-gray-400 hover:text-white transition-colors text-sm">
-              About
-            </Link>
-            <Link href="/company" className="text-gray-400 hover:text-white transition-colors text-sm">
-              Company Links
-            </Link>
-            <a 
-              href="https://buymeacoffee.com/pravaah" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="text-gray-400 hover:text-white transition-colors text-sm"
-            >
-              Support Us
-            </a>
+          {/* Company Links */}
+          <div className="flex flex-wrap justify-center gap-6 mt-8 mb-6">
+            <Link href="/about" className="text-gray-400 hover:text-white transition-colors text-sm">About Us</Link>
+            <Link href="/privacy" className="text-gray-400 hover:text-white transition-colors text-sm">Privacy Policy</Link>
+            <Link href="/terms" className="text-gray-400 hover:text-white transition-colors text-sm">Terms of Service</Link>
+            <Link href="/contact" className="text-gray-400 hover:text-white transition-colors text-sm">Contact</Link>
+            <a href="https://buymeacoffee.com/pravaah" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors text-sm">Support Us</a>
           </div>
           
           <div className="mt-8">

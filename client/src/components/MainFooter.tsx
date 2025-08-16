@@ -67,6 +67,7 @@ export function MainFooter() {
               <li><Link href="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link></li>
               <li><Link href="/terms" className="hover:text-white transition-colors">Terms of Service</Link></li>
               <li><Link href="/contact" className="hover:text-white transition-colors">Contact</Link></li>
+              <li><a href="https://buymeacoffee.com/pravaah" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">Support Us</a></li>
             </ul>
           </div>
         </div>
