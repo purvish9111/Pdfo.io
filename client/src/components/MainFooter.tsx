@@ -26,7 +26,7 @@ export function MainFooter() {
                 className="h-10 w-auto filter brightness-0 invert"
               />
             </div>
-            <p className="text-gray-400 mb-6 max-w-md">
+            <p className="text-gray-400 mb-6 max-w-md leading-relaxed">
               Professional PDF tools for everyone. Fast, secure, and completely free. Transform your documents with ease.
             </p>
             <Button asChild className="bg-yellow-400 text-gray-900 hover:bg-yellow-300">

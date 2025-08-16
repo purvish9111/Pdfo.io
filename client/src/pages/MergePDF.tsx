@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "wouter";
 import { FileUpload } from "@/components/FileUpload";
 import { PDFPreview } from "@/components/PDFPreview";
 import { MainFooter } from "@/components/MainFooter";
@@ -68,20 +69,71 @@ export default function MergePDF() {
 
   return (
     <>
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Back to Tools */}
+        <div className="mb-8">
+          <Link href="/" className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 flex items-center text-sm">
+            ← Back to Tools
+          </Link>
+        </div>
+
         {/* Tool Header */}
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">Merge PDF Files</h1>
-          <p className="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-            Combine multiple PDF files into a single document. Simply upload your files and arrange them in the desired order.
+          <div className="w-16 h-16 bg-blue-500 rounded-2xl flex items-center justify-center text-white text-2xl font-bold mx-auto mb-4">
+            ⊞
+          </div>
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">Merge PDF</h1>
+          <p className="text-gray-600 dark:text-gray-300 max-w-xl mx-auto leading-relaxed">
+            Merge multiple PDF files into a single document with our free online PDF merger. Simply upload your PDF files, arrange them in the desired order, and download your combined PDF instantly. Our secure tool processes files locally without uploading to servers.
           </p>
+          
+          {/* Features */}
+          <div className="flex justify-center gap-6 mt-6 text-sm">
+            <div className="flex items-center text-green-600 dark:text-green-400">
+              <span className="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
+              Fast Processing
+            </div>
+            <div className="flex items-center text-green-600 dark:text-green-400">
+              <span className="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
+              Secure & Private
+            </div>
+            <div className="flex items-center text-green-600 dark:text-green-400">
+              <span className="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
+              Free to Use
+            </div>
+          </div>
         </div>
 
         {files.length === 0 ? (
-          <FileUpload
-            onFilesSelected={handleFilesSelected}
-            acceptMultiple={true}
-          />
+          <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-8 mb-8">
+            <div className="text-center">
+              <div className="w-16 h-16 bg-blue-500 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                <span className="text-white text-2xl">📁</span>
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">Upload PDF Files</h3>
+              <p className="text-gray-600 dark:text-gray-400 mb-6">Select multiple PDF files to process them</p>
+              
+              <div className="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-xl p-12 mb-6">
+                <div className="text-center">
+                  <div className="text-gray-400 mb-4">
+                    <span className="text-4xl">📁</span>
+                  </div>
+                  <p className="text-gray-500 dark:text-gray-400 mb-2">Drop your PDF files here</p>
+                  <p className="text-gray-400 text-sm">or</p>
+                </div>
+              </div>
+              
+              <FileUpload
+                onFilesSelected={handleFilesSelected}
+                acceptMultiple={true}
+              />
+              
+              <p className="text-xs text-gray-400 mt-4">
+                Maximum file size: 15MB per file<br/>
+                Files are automatically deleted within 1 hour for your privacy
+              </p>
+            </div>
+          </div>
         ) : (
           <PDFPreview
             file={files[0]} // Primary file for display

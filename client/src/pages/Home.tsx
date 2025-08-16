@@ -8,50 +8,44 @@ export default function Home() {
     {
       name: "Merge PDF",
       path: "/merge",
-      description: "Combine multiple PDF files into a single document with custom ordering.",
-      icon: "fas fa-layer-group",
-      gradient: "from-blue-500 to-blue-600",
-      color: "text-pdfo-blue"
+      description: "Combine multiple PDF files into one document",
+      iconBg: "bg-blue-500",
+      iconText: "⊞"
     },
     {
       name: "Split PDF",
-      path: "/split",
-      description: "Extract specific pages or split your PDF into multiple separate files.",
-      icon: "fas fa-cut",
-      gradient: "from-emerald-500 to-emerald-600",
-      color: "text-pdfo-emerald"
+      path: "/split", 
+      description: "Extract pages or split PDF into multiple files",
+      iconBg: "bg-green-500",
+      iconText: "✂"
     },
     {
       name: "Reorder Pages",
       path: "/reorder",
-      description: "Drag and drop to rearrange pages in your PDF document.",
-      icon: "fas fa-arrows-alt",
-      gradient: "from-violet-500 to-violet-600",
-      color: "text-pdfo-violet"
+      description: "Rearrange pages in your PDF document",
+      iconBg: "bg-purple-500", 
+      iconText: "↕"
     },
     {
       name: "Delete Pages",
       path: "/delete",
-      description: "Remove unwanted pages from your PDF with a simple click.",
-      icon: "fas fa-trash-alt",
-      gradient: "from-red-500 to-red-600",
-      color: "text-red-500"
+      description: "Remove unwanted pages from PDF",
+      iconBg: "bg-red-500",
+      iconText: "🗑"
     },
     {
       name: "Rotate PDF",
       path: "/rotate",
-      description: "Rotate pages 90, 180, or 270 degrees to correct orientation.",
-      icon: "fas fa-redo",
-      gradient: "from-orange-500 to-orange-600",
-      color: "text-orange-500"
+      description: "Rotate PDF pages by 90, 180, or 270 degrees",
+      iconBg: "bg-orange-500",
+      iconText: "↻"
     },
     {
       name: "Page Numbers",
       path: "/page-numbers",
-      description: "Add customizable page numbers to your PDF documents.",
-      icon: "fas fa-hashtag",
-      gradient: "from-teal-500 to-teal-600",
-      color: "text-teal-500"
+      description: "Add page numbers to your PDF document",
+      iconBg: "bg-indigo-500",
+      iconText: "#"
     },
   ];
 
@@ -113,17 +107,18 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 gap-4 max-w-md mx-auto">
             {tools.map((tool) => (
               <Link key={tool.path} href={tool.path}>
-                <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 p-6 border border-gray-200 dark:border-gray-700 cursor-pointer group">
-                  <div className={`w-12 h-12 bg-gradient-to-br ${tool.gradient} rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform`}>
-                    <i className={`${tool.icon} text-white text-xl`}></i>
-                  </div>
-                  <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">{tool.name}</h3>
-                  <p className="text-gray-600 dark:text-gray-300 mb-4">{tool.description}</p>
-                  <div className={`flex items-center ${tool.color} font-medium`}>
-                    Start {tool.name.toLowerCase()} <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 p-4 border border-gray-200 dark:border-gray-700 cursor-pointer group">
+                  <div className="flex items-center">
+                    <div className={`w-12 h-12 ${tool.iconBg} rounded-xl flex items-center justify-center text-white text-xl font-bold mr-4`}>
+                      {tool.iconText}
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-1">{tool.name}</h3>
+                      <p className="text-sm text-gray-600 dark:text-gray-300">{tool.description}</p>
+                    </div>
                   </div>
                 </div>
               </Link>
