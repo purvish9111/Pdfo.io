@@ -67,16 +67,14 @@ function SortableFileCard({
     <Card
       ref={setNodeRef}
       style={style}
+      {...attributes}
+      {...listeners}
       className={`relative group cursor-grab active:cursor-grabbing ${
         isDragging ? 'shadow-lg' : ''
       }`}
     >
-      {/* Drag Handle */}
-      <div
-        {...attributes}
-        {...listeners}
-        className="absolute top-2 right-2 p-1 rounded bg-gray-200 dark:bg-gray-700 opacity-0 group-hover:opacity-100 transition-opacity cursor-grab active:cursor-grabbing z-20"
-      >
+      {/* Drag Handle Visual Indicator */}
+      <div className="absolute top-2 right-2 p-1 rounded bg-gray-200 dark:bg-gray-700 opacity-0 group-hover:opacity-100 transition-opacity z-20 pointer-events-none">
         <GripVertical className="h-3 w-3 text-gray-600 dark:text-gray-400" />
       </div>
       
@@ -100,8 +98,8 @@ function SortableFileCard({
         {showThumbnails ? (
           <SinglePDFThumbnail file={file} />
         ) : (
-          <div className="aspect-[3/4] bg-gray-100 dark:bg-gray-800 rounded-lg flex items-center justify-center mb-3">
-            <FileText className="h-12 w-12 text-gray-400" />
+          <div className="aspect-[2/3] bg-gray-100 dark:bg-gray-800 rounded-lg flex items-center justify-center mb-3">
+            <FileText className="h-8 w-8 text-gray-400" />
           </div>
         )}
         
@@ -200,7 +198,7 @@ export function FilesPreviewWithThumbnails({
             items={files.map((_, index) => `file-${index}`)}
             strategy={verticalListSortingStrategy}
           >
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
               {files.map((file, index) => (
                 <SortableFileCard
                   key={`file-${index}`}
@@ -215,7 +213,7 @@ export function FilesPreviewWithThumbnails({
           </SortableContext>
         </DndContext>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
           {files.map((file, index) => (
             <Card key={`${file.name}-${index}`} className="relative group">
               {/* File Order Number */}
@@ -240,8 +238,8 @@ export function FilesPreviewWithThumbnails({
                 {showThumbnails ? (
                   <SinglePDFThumbnail file={file} />
                 ) : (
-                  <div className="aspect-[3/4] bg-gray-100 dark:bg-gray-800 rounded-lg flex items-center justify-center mb-3">
-                    <FileText className="h-12 w-12 text-gray-400" />
+                  <div className="aspect-[2/3] bg-gray-100 dark:bg-gray-800 rounded-lg flex items-center justify-center mb-3">
+                    <FileText className="h-8 w-8 text-gray-400" />
                   </div>
                 )}
                 

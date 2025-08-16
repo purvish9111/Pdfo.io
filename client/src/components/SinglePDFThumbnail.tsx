@@ -36,7 +36,7 @@ export function SinglePDFThumbnail({ file, className = "" }: SinglePDFThumbnailP
 
   if (loading) {
     return (
-      <div className={`aspect-[3/4] ${className}`}>
+      <div className={`aspect-[2/3] ${className}`}>
         <Skeleton className="w-full h-full rounded-lg" />
       </div>
     );
@@ -44,14 +44,11 @@ export function SinglePDFThumbnail({ file, className = "" }: SinglePDFThumbnailP
 
   if (thumbnail?.error || !thumbnail?.thumbnailUrl) {
     return (
-      <div className={`aspect-[3/4] bg-gray-100 dark:bg-gray-800 rounded-lg flex flex-col items-center justify-center p-4 ${className}`}>
-        <FileText className="h-8 w-8 text-gray-400 mb-2" />
+      <div className={`aspect-[2/3] bg-gray-100 dark:bg-gray-800 rounded-lg flex flex-col items-center justify-center p-2 ${className}`}>
+        <FileText className="h-6 w-6 text-gray-400 mb-1" />
         <div className="text-xs text-gray-500 text-center">
-          <div className="font-medium truncate max-w-full">
-            {file.name.split('.')[0]}
-          </div>
-          {thumbnail?.pageCount > 0 && (
-            <div className="text-xs text-gray-400 mt-1">
+          {thumbnail && thumbnail.pageCount > 0 && (
+            <div className="text-xs text-gray-400">
               {thumbnail.pageCount} page{thumbnail.pageCount !== 1 ? 's' : ''}
             </div>
           )}
@@ -61,7 +58,7 @@ export function SinglePDFThumbnail({ file, className = "" }: SinglePDFThumbnailP
   }
 
   return (
-    <div className={`aspect-[3/4] relative ${className}`}>
+    <div className={`aspect-[2/3] relative ${className}`}>
       <img
         src={thumbnail.thumbnailUrl}
         alt={`PDF thumbnail: ${file.name}`}
@@ -69,7 +66,7 @@ export function SinglePDFThumbnail({ file, className = "" }: SinglePDFThumbnailP
         onError={() => setThumbnail(prev => prev ? { ...prev, error: 'Image load failed' } : null)}
       />
       {thumbnail.pageCount > 0 && (
-        <div className="absolute bottom-1 right-1 bg-black/70 text-white text-xs px-1.5 py-0.5 rounded">
+        <div className="absolute bottom-1 right-1 bg-black/70 text-white text-xs px-1 py-0.5 rounded">
           {thumbnail.pageCount} page{thumbnail.pageCount !== 1 ? 's' : ''}
         </div>
       )}
