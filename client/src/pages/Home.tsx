@@ -107,17 +107,17 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 gap-4 max-w-md mx-auto">
+          <div className="grid grid-cols-1 gap-4 max-w-lg mx-auto">
             {tools.map((tool) => (
               <Link key={tool.path} href={tool.path}>
-                <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 p-4 border border-gray-200 dark:border-gray-700 cursor-pointer group">
+                <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 p-6 border border-gray-200 dark:border-gray-700 cursor-pointer group">
                   <div className="flex items-center">
-                    <div className={`w-12 h-12 ${tool.iconBg} rounded-xl flex items-center justify-center text-white text-xl font-bold mr-4`}>
+                    <div className={`w-14 h-14 ${tool.iconBg} rounded-xl flex items-center justify-center text-white text-2xl font-bold mr-5`}>
                       {tool.iconText}
                     </div>
                     <div className="flex-1">
-                      <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-1">{tool.name}</h3>
-                      <p className="text-sm text-gray-600 dark:text-gray-300">{tool.description}</p>
+                      <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">{tool.name}</h3>
+                      <p className="text-gray-600 dark:text-gray-300 leading-relaxed">{tool.description}</p>
                     </div>
                   </div>
                 </div>

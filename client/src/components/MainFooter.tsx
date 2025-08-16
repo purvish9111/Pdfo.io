@@ -23,7 +23,7 @@ export function MainFooter() {
               <img 
                 src={logoUrl} 
                 alt="PDFo Logo" 
-                className="h-10 w-auto filter brightness-0 invert"
+                className="h-10 w-auto"
               />
             </div>
             <p className="text-gray-400 mb-6 max-w-md leading-relaxed">
