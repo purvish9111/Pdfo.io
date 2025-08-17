@@ -53,15 +53,17 @@ function SortablePage({ page, index, file }: SortablePageProps) {
     <div
       ref={setNodeRef}
       style={style}
-      className={`group relative bg-gray-100 dark:bg-gray-700 rounded-xl overflow-hidden transition-all duration-300 cursor-move ${
+      className={`group relative bg-gray-100 dark:bg-gray-700 rounded-xl overflow-hidden transition-all duration-300 ${
         isDragging ? 'shadow-2xl ring-2 ring-blue-500 bg-blue-50 dark:bg-blue-900/20 z-50' : 'hover:shadow-lg hover:scale-105'
       }`}
       {...attributes}
-      {...listeners}
     >
-      {/* Drag Handle */}
-      <div className="absolute top-2 left-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-gray-800 dark:bg-gray-600 text-white rounded p-1">
-        <GripVertical className="w-3 h-3" />
+      {/* Drag Handle - ONLY THIS HAS LISTENERS */}
+      <div 
+        className="absolute top-2 left-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-gray-800 dark:bg-gray-600 text-white rounded p-2 cursor-grab active:cursor-grabbing z-10"
+        {...listeners}
+      >
+        <GripVertical className="w-4 h-4" />
       </div>
 
       {/* Page Number Badge */}
@@ -128,22 +130,28 @@ export function ReorderPDFGrid({ file, pages, onReorder, isProcessing }: Reorder
     const { active, over } = event;
     setActiveId(null);
     
-    console.log('🔄 ReorderPDFGrid drag end:', { active: active.id, over: over?.id });
+    console.log('🎯 ReorderPDFGrid drag end:', { 
+      active: active?.id, 
+      over: over?.id,
+      hasOver: !!over 
+    });
 
-    if (active.id !== over?.id && over) {
+    if (active && over && active.id !== over.id) {
       setCurrentPages((items) => {
         const oldIndex = items.findIndex((item) => item.id === active.id);
         const newIndex = items.findIndex((item) => item.id === over.id);
         
-        console.log('📋 ReorderPDFGrid indices:', { oldIndex, newIndex });
+        console.log('📋 ReorderPDFGrid indices:', { oldIndex, newIndex, itemsLength: items.length });
         
         if (oldIndex !== -1 && newIndex !== -1) {
           const reordered = arrayMove(items, oldIndex, newIndex);
-          console.log('✅ ReorderPDFGrid pages reordered successfully');
+          console.log('✅ ReorderPDFGrid pages reordered successfully:', reordered.map(p => p.pageNumber));
           return reordered;
         }
         return items;
       });
+    } else {
+      console.log('❌ ReorderPDFGrid drag cancelled: no valid drop target');
     }
   };
 
