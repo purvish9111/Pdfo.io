@@ -42,7 +42,7 @@ export const monitorMemoryUsage = () => {
 export const createRateLimiter = () => {
   const requests = new Map<string, { count: number; timestamp: number }>();
   const WINDOW_MS = 60000; // 1 minute
-  const MAX_REQUESTS = 100; // 100 requests per minute per IP
+  const MAX_REQUESTS = process.env.NODE_ENV === 'development' ? 1000 : 100; // Higher limit for development
   
   return (req: Request, res: Response, next: NextFunction) => {
     const ip = req.ip || req.connection.remoteAddress || 'unknown';

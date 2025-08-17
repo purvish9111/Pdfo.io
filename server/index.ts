@@ -17,7 +17,10 @@ const app = express();
 app.use(compression(compressionConfig));
 app.use(performanceMiddleware);
 app.use(setCacheHeaders);
-app.use(createRateLimiter());
+// Only apply rate limiting in production
+if (process.env.NODE_ENV === 'production') {
+  app.use(createRateLimiter());
+}
 
 // Standard middleware
 app.use(express.json({ limit: '50mb' })); // Increased limit for PDF uploads
