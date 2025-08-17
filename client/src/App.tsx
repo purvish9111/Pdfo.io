@@ -5,7 +5,13 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { Header } from "@/components/Header";
+import { AuthProvider } from "@/hooks/use-auth";
+import { useEffect } from "react";
+import { initGA } from "./lib/analytics";
+import { useAnalytics } from "./hooks/use-analytics";
 import Home from "@/pages/Home";
+import Login from "@/pages/Login";
+import SignUp from "@/pages/SignUp";
 import MergePDF from "@/pages/MergePDF";
 import SplitPDF from "@/pages/SplitPDF";
 import ReorderPages from "@/pages/ReorderPages";
@@ -37,20 +43,33 @@ import PDFPreviewDemo from "@/pages/PDFPreviewDemo";
 import NotFound from "@/pages/not-found";
 
 function Router() {
+  // Track page views when routes change
+  useAnalytics();
+  
   return (
     <Switch>
       <Route path="/" component={Home} />
+      
+      {/* Authentication Routes */}
+      <Route path="/login" component={Login} />
+      <Route path="/signup" component={SignUp} />
+      
+      {/* PDF Manipulation Tools */}
       <Route path="/merge" component={MergePDF} />
       <Route path="/split" component={SplitPDF} />
       <Route path="/reorder" component={ReorderPages} />
       <Route path="/delete" component={DeletePages} />
       <Route path="/rotate" component={RotatePDF} />
       <Route path="/page-numbers" component={PageNumbers} />
+      
+      {/* Advanced Tools */}
       <Route path="/edit-metadata" component={EditMetadata} />
       <Route path="/watermark-pdf" component={WatermarkPDF} />
       <Route path="/lock-pdf" component={LockPDF} />
       <Route path="/unlock-pdf" component={UnlockPDF} />
       <Route path="/compress-pdf" component={CompressPDF} />
+      
+      {/* PDF Conversion Tools */}
       <Route path="/pdf-to-jpg" component={PDFToJPG} />
       <Route path="/pdf-to-png" component={PDFToPNG} />
       <Route path="/pdf-to-tiff" component={PDFToTIFF} />
@@ -59,11 +78,14 @@ function Router() {
       <Route path="/pdf-to-ppt" component={PDFToPPT} />
       <Route path="/pdf-to-txt" component={PDFToTXT} />
       <Route path="/pdf-to-json" component={PDFToJSON} />
+      
+      {/* Reverse Conversion Tools */}
       <Route path="/png-to-pdf" component={PNGToPDF} />
       <Route path="/word-to-pdf" component={WordToPDF} />
       <Route path="/excel-to-pdf" component={ExcelToPDF} />
+      
+      {/* Company Pages */}
       <Route path="/about" component={About} />
-
       <Route path="/privacy" component={Privacy} />
       <Route path="/terms" component={Terms} />
       <Route path="/contact" component={Contact} />
@@ -74,19 +96,31 @@ function Router() {
 }
 
 function App() {
+  // Initialize Google Analytics when app loads
+  useEffect(() => {
+    // Verify required environment variable is present
+    if (!import.meta.env.VITE_GA_MEASUREMENT_ID) {
+      console.warn('Missing required Google Analytics key: VITE_GA_MEASUREMENT_ID');
+    } else {
+      initGA();
+    }
+  }, []);
+
   return (
     <QueryClientProvider client={queryClient}>
-      <ThemeProvider>
-        <TooltipProvider>
-          <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-            <Header />
-            <main>
-              <Router />
-            </main>
-          </div>
-          <Toaster />
-        </TooltipProvider>
-      </ThemeProvider>
+      <AuthProvider>
+        <ThemeProvider>
+          <TooltipProvider>
+            <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+              <Header />
+              <main>
+                <Router />
+              </main>
+            </div>
+            <Toaster />
+          </TooltipProvider>
+        </ThemeProvider>
+      </AuthProvider>
     </QueryClientProvider>
   );
 }
