@@ -44,8 +44,8 @@ export default function Privacy() {
                 <div className="w-16 h-16 bg-green-500 rounded-2xl flex items-center justify-center text-white mx-auto mb-4">
                   <Shield className="h-8 w-8" />
                 </div>
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">No File Storage</h3>
-                <p className="text-gray-600 dark:text-gray-300 text-sm">We never store your files on our servers</p>
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Temporary Storage Only</h3>
+                <p className="text-gray-600 dark:text-gray-300 text-sm">Files auto-deleted after 1 hour maximum</p>
               </div>
               <div className="text-center">
                 <div className="w-16 h-16 bg-purple-500 rounded-2xl flex items-center justify-center text-white mx-auto mb-4">
@@ -64,20 +64,60 @@ export default function Privacy() {
               <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Information We Collect</h2>
               <div className="space-y-4 text-gray-600 dark:text-gray-300">
                 <div className="bg-green-50 dark:bg-green-950 border border-green-200 dark:border-green-800 rounded-lg p-4">
-                  <h3 className="font-semibold text-green-800 dark:text-green-200 mb-2">What We DON'T Collect:</h3>
+                  <h3 className="font-semibold text-green-800 dark:text-green-200 mb-2">What We DON'T Permanently Store:</h3>
                   <ul className="list-disc list-inside space-y-1 text-green-700 dark:text-green-300">
-                    <li>Personal files or documents you process</li>
-                    <li>Names, email addresses, or contact information</li>
-                    <li>Account information (no registration required)</li>
-                    <li>File content or metadata</li>
+                    <li>File content or metadata beyond 1 hour</li>
+                    <li>Personal files or documents processed</li>
+                    <li>User account data (except for logged-in users)</li>
+                    <li>Detailed processing history</li>
+                  </ul>
+                </div>
+                <div className="bg-orange-50 dark:bg-orange-950 border border-orange-200 dark:border-orange-800 rounded-lg p-4">
+                  <h3 className="font-semibold text-orange-800 dark:text-orange-200 mb-2">Temporary File Storage (Logged-in Users Only):</h3>
+                  <ul className="list-disc list-inside space-y-1 text-orange-700 dark:text-orange-300">
+                    <li>Uploaded files are temporarily stored for convenience</li>
+                    <li>All files are automatically deleted after exactly 1 hour</li>
+                    <li>Files are encrypted during temporary storage</li>
+                    <li>You can manually delete files anytime from your dashboard</li>
+                    <li>No file content is analyzed or accessed by our system</li>
                   </ul>
                 </div>
                 <div className="bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
-                  <h3 className="font-semibold text-blue-800 dark:text-blue-200 mb-2">What We MAY Collect:</h3>
+                  <h3 className="font-semibold text-blue-800 dark:text-blue-200 mb-2">What We DO Collect (Minimal Data Only):</h3>
                   <ul className="list-disc list-inside space-y-1 text-blue-700 dark:text-blue-300">
-                    <li>Anonymous usage statistics (page views, tool usage)</li>
-                    <li>Technical information (browser type, device type)</li>
-                    <li>Error logs for debugging (no personal data included)</li>
+                    <li>Usage statistics for logged-in users (tool usage count, timestamps)</li>
+                    <li>Basic browser information for performance optimization</li>
+                    <li>Anonymous analytics for service improvement</li>
+                    <li>Authentication data from Firebase (for logged-in users)</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            {/* File Storage and Deletion Policy */}
+            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-8">
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">File Storage and Automatic Deletion Policy</h2>
+              <div className="space-y-4 text-gray-600 dark:text-gray-300">
+                <div className="bg-red-50 dark:bg-red-950 border border-red-200 dark:border-red-800 rounded-lg p-4">
+                  <h3 className="font-semibold text-red-800 dark:text-red-200 mb-2">⏰ Automatic File Deletion - 1 Hour Maximum Retention</h3>
+                  <ul className="list-disc list-inside space-y-1 text-red-700 dark:text-red-300">
+                    <li><strong>All uploaded files are automatically deleted after exactly 1 hour</strong></li>
+                    <li>This policy applies to all users, regardless of account status</li>
+                    <li>No exceptions are made for any file type or size</li>
+                    <li>Deletion occurs automatically and cannot be prevented or extended</li>
+                    <li>Users are responsible for downloading their processed files within this timeframe</li>
+                  </ul>
+                </div>
+                <p>
+                  This strict deletion policy ensures maximum privacy protection. We recommend downloading your processed files immediately after completion.
+                </p>
+                <div className="bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
+                  <h3 className="font-semibold text-blue-800 dark:text-blue-200 mb-2">File Storage Purpose:</h3>
+                  <ul className="list-disc list-inside space-y-1 text-blue-700 dark:text-blue-300">
+                    <li>Enable multi-step processing workflows</li>
+                    <li>Allow users to download processed files</li>
+                    <li>Provide file management through user dashboard</li>
+                    <li>Support batch operations on multiple files</li>
                   </ul>
                 </div>
               </div>
@@ -126,57 +166,23 @@ export default function Privacy() {
               </div>
             </div>
 
-            {/* Third-Party Services */}
+            {/* Contact Information */}
             <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-8">
-              <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Third-Party Services</h2>
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Contact Us</h2>
               <div className="space-y-4 text-gray-600 dark:text-gray-300">
-                <p>PDFo may use the following third-party services:</p>
-                <ul className="list-disc list-inside space-y-2">
-                  <li><strong>Hosting Platform:</strong> Replit - for hosting our application</li>
-                  <li><strong>Analytics:</strong> Basic web analytics for understanding usage patterns</li>
-                  <li><strong>Donations:</strong> Buy Me a Coffee - for supporting the project</li>
-                </ul>
-                <p className="text-sm">These services have their own privacy policies and do not have access to your PDF files.</p>
-              </div>
-            </div>
-
-            {/* Your Rights */}
-            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-8">
-              <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Your Rights</h2>
-              <div className="space-y-4 text-gray-600 dark:text-gray-300">
-                <p>Since we don't collect personal data, most data protection rights don't apply. However:</p>
-                <ul className="list-disc list-inside space-y-2">
-                  <li>You have full control over your files at all times</li>
-                  <li>You can use PDFo without providing any personal information</li>
-                  <li>You can contact us about this privacy policy</li>
-                  <li>You can request information about our data practices</li>
-                </ul>
-              </div>
-            </div>
-
-            {/* Contact */}
-            <div className="bg-gradient-to-r from-blue-500 to-green-500 rounded-2xl p-8 text-white">
-              <h2 className="text-2xl font-bold mb-4">Questions About Privacy?</h2>
-              <p className="mb-6 opacity-90">
-                If you have questions about this privacy policy or our data practices, feel free to contact us.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4">
-                <Link href="/contact">
-                  <Button size="lg" className="bg-white text-blue-600 hover:bg-gray-100 border-0">
-                    Contact Us
-                  </Button>
-                </Link>
-                <Link href="/about">
-                  <Button variant="outline" size="lg" className="border-2 border-white text-white hover:bg-white hover:text-blue-600">
-                    About PDFo
-                  </Button>
-                </Link>
+                <p>
+                  If you have any questions about this privacy policy, please contact us:
+                </p>
+                <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
+                  <p><strong>Email:</strong> privacy@pdfo.com</p>
+                  <p><strong>Company:</strong> Pravaah AI Tech</p>
+                  <p><strong>Location:</strong> Khambhat, Gujarat, India</p>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-
       <MainFooter />
     </>
   );

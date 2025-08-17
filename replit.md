@@ -2,6 +2,15 @@
 
 PDFo is a comprehensive web-based PDF manipulation and conversion platform that provides users with 22 professional PDF tools including manipulation (merge, split, reorder, delete, rotate, page numbers), security (lock, unlock, watermark), optimization (compress), metadata editing, format conversion FROM PDF (JPG, PNG, TIFF, Word, Excel, PPT, TXT, JSON), and format conversion TO PDF (PNG to PDF, Word to PDF, Excel to PDF). The application is built as a full-stack web application with a React frontend and Express.js backend, designed to handle PDF processing operations efficiently and securely with real PDF processing capabilities.
 
+## Recent Changes (August 17, 2025)
+- Simplified header navigation by removing logo and signup buttons (moved to mobile menu)
+- Removed tools dropdown from header navigation (tools accessible from homepage and mobile menu) 
+- Added comprehensive user dashboard with usage tracking and file management
+- Implemented 1-hour automatic file deletion policy for user privacy
+- Created user authentication with Firebase integration and dashboard access
+- Added usage statistics tracking for all PDF tools by category and frequency
+- Implemented temporary file storage system with automatic cleanup
+
 # User Preferences
 
 Preferred communication style: Simple, everyday language.
@@ -42,7 +51,10 @@ Uses Drizzle ORM with PostgreSQL for structured data management:
 
 - **Schema Definition**: Centralized schema definitions in the shared directory for type safety across frontend and backend
 - **Migration System**: Configured with Drizzle Kit for database schema migrations
-- **Logging**: Implements PDF processing logs table for tracking user activities and debugging
+- **User Management**: User profiles linked to Firebase authentication with usage tracking
+- **Tool Usage Tracking**: Comprehensive tracking of all PDF tool usage with timestamps and metadata
+- **File Management**: Temporary file storage with 1-hour automatic expiration for privacy
+- **Logging**: PDF processing logs table for tracking user activities and debugging
 
 ## Development Workflow
 

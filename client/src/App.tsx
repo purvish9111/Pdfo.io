@@ -138,6 +138,9 @@ function Router() {
       <Route path="/terms" component={Terms} />
       <Route path="/contact" component={Contact} />
       <Route path="/pdf-preview-demo" component={PDFPreviewDemo} />
+      <Route path="/dashboard">
+        <LazyRoute factory={() => import("@/pages/Dashboard")} />
+      </Route>
       <Route component={NotFound} />
     </Switch>
   );

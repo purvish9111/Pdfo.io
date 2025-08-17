@@ -60,7 +60,9 @@ export default function Terms() {
                   <li>Compress PDF files</li>
                 </ul>
                 <p>
-                  All processing is performed client-side in your browser for maximum privacy and security.
+                  All processing is performed client-side in your browser for maximum privacy and security. For logged-in users, 
+                  files may be temporarily stored on our servers for up to 1 hour to enable additional features, after which they 
+                  are automatically and permanently deleted.
                 </p>
               </div>
             </div>
@@ -142,61 +144,43 @@ export default function Terms() {
               </div>
             </div>
 
-            {/* Privacy and Data */}
-            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-8">
-              <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Privacy and Data</h2>
-              <div className="space-y-4 text-gray-600 dark:text-gray-300">
-                <p>
-                  Your privacy is important to us. Please review our Privacy Policy for details on how we handle data.
-                </p>
-                <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
-                  <p className="font-semibold text-gray-900 dark:text-white mb-2">Key Points:</p>
+            {/* File Retention Policy */}
+            <div className="bg-red-50 dark:bg-red-950 border border-red-200 dark:border-red-800 rounded-2xl p-8">
+              <h2 className="text-2xl font-bold text-red-900 dark:text-red-100 mb-6">File Retention and Deletion Policy</h2>
+              <div className="space-y-4 text-red-800 dark:text-red-200">
+                <div className="bg-red-100 dark:bg-red-900 rounded-lg p-4">
+                  <h3 className="font-semibold mb-2">⏰ 1-Hour Maximum File Retention</h3>
                   <ul className="list-disc list-inside space-y-1">
-                    <li>Files are processed entirely in your browser</li>
-                    <li>We do not store your files on our servers</li>
-                    <li>We do not collect personal information</li>
-                    <li>All file processing is client-side</li>
+                    <li>All uploaded files are automatically and permanently deleted after exactly 1 hour</li>
+                    <li>This policy applies universally - no exceptions for any user or file type</li>
+                    <li>Users must download their processed files within this timeframe</li>
+                    <li>Files cannot be recovered after automatic deletion</li>
                   </ul>
                 </div>
+                <p>
+                  By using PDFo, you acknowledge and agree to this strict file retention policy. We recommend downloading your processed files immediately upon completion.
+                </p>
               </div>
             </div>
 
-            {/* Changes to Terms */}
+            {/* Contact Information */}
             <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-8">
-              <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Changes to Terms</h2>
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Contact Information</h2>
               <div className="space-y-4 text-gray-600 dark:text-gray-300">
                 <p>
-                  We may update these Terms of Service from time to time. Changes will be effective immediately upon posting. Your continued use of PDFo after any changes constitutes acceptance of the new terms.
+                  If you have questions about these terms, please contact us:
                 </p>
-                <p>
-                  We encourage you to review these terms periodically for any updates.
-                </p>
-              </div>
-            </div>
-
-            {/* Contact */}
-            <div className="bg-gradient-to-r from-purple-500 to-blue-500 rounded-2xl p-8 text-white">
-              <h2 className="text-2xl font-bold mb-4">Questions About These Terms?</h2>
-              <p className="mb-6 opacity-90">
-                If you have questions about these Terms of Service, please contact us.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4">
-                <Link href="/contact">
-                  <Button size="lg" className="bg-white text-purple-600 hover:bg-gray-100 border-0">
-                    Contact Us
-                  </Button>
-                </Link>
-                <Link href="/privacy">
-                  <Button variant="outline" size="lg" className="border-2 border-white text-white hover:bg-white hover:text-purple-600">
-                    Privacy Policy
-                  </Button>
-                </Link>
+                <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
+                  <p><strong>Email:</strong> legal@pdfo.com</p>
+                  <p><strong>Company:</strong> Pravaah AI Tech</p>
+                  <p><strong>Founder:</strong> Purvish Patel</p>
+                  <p><strong>Location:</strong> Khambhat, Gujarat, India</p>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-
       <MainFooter />
     </>
   );
