@@ -9,11 +9,18 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
-import { addWatermarkToPDF, downloadBlob, type WatermarkSettings } from "@/lib/realPdfUtils";
+import { addWatermarkToPDF, downloadBlob, generateRealPDFPages, type WatermarkSettings } from "@/lib/realPdfUtils";
+import { SinglePDFThumbnail } from "@/components/SinglePDFThumbnail";
 import { useToast } from "@/hooks/use-toast";
+
+interface PDFPage {
+  id: string;
+  pageNumber: number;
+}
 
 export default function WatermarkPDF() {
   const [file, setFile] = useState<File | null>(null);
+  const [pages, setPages] = useState<PDFPage[]>([]);
   const [watermarkType, setWatermarkType] = useState<'text' | 'image'>('text');
   const [settings, setSettings] = useState<WatermarkSettings>({
     type: 'text',
@@ -29,9 +36,25 @@ export default function WatermarkPDF() {
   const [convertedFile, setConvertedFile] = useState<Blob | null>(null);
   const { toast } = useToast();
 
-  const handleFilesSelected = (files: File[]) => {
-    setFile(files[0]);
+  const handleFilesSelected = async (files: File[]) => {
+    const selectedFile = files[0];
+    console.log('Watermark - Selected file:', selectedFile.name, selectedFile.size);
+    setFile(selectedFile);
     setConvertedFile(null);
+    
+    try {
+      // Generate real PDF pages from file
+      const realPages = await generateRealPDFPages(selectedFile);
+      console.log('Watermark - Generated pages:', realPages.length);
+      setPages(realPages);
+    } catch (error) {
+      console.error('Watermark - Error generating PDF pages:', error);
+      toast({
+        title: "Error",
+        description: "Failed to load PDF pages. Please try again.",
+        variant: "destructive",
+      });
+    }
   };
 
   const handleDownload = () => {
@@ -217,9 +240,61 @@ export default function WatermarkPDF() {
             <div className="lg:col-span-2">
               <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Preview</h3>
-                <div className="aspect-[3/4] bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-center">
-                  <p className="text-gray-500 dark:text-gray-400">PDF preview with watermark will appear here</p>
-                </div>
+                {pages.length > 0 ? (
+                  <div className="space-y-4">
+                    <div className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                      Preview with watermark: "{settings.text}" at {Math.round(settings.opacity * 100)}% opacity
+                    </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-h-96 overflow-y-auto">
+                      {pages.slice(0, 4).map((page) => (
+                        <div key={page.id} className="relative bg-gray-100 dark:bg-gray-700 rounded-lg overflow-hidden">
+                          {/* Page Number Badge */}
+                          <div className="absolute top-2 left-2 bg-teal-500 text-white text-xs px-2 py-1 rounded-full font-semibold z-10">
+                            {page.pageNumber}
+                          </div>
+                          
+                          {/* Watermark Preview Overlay */}
+                          <div 
+                            className="absolute inset-0 flex items-center justify-center pointer-events-none z-10"
+                            style={{
+                              opacity: settings.opacity,
+                              transform: `rotate(${settings.rotation}deg)`,
+                            }}
+                          >
+                            <div 
+                              className="font-bold select-none"
+                              style={{ 
+                                color: settings.color, 
+                                fontSize: `${Math.max(settings.fontSize / 4, 8)}px`,
+                                textShadow: '1px 1px 2px rgba(0,0,0,0.3)'
+                              }}
+                            >
+                              {settings.text || 'WATERMARK'}
+                            </div>
+                          </div>
+                          
+                          {/* Page Content */}
+                          <div className="aspect-[3/4]">
+                            <SinglePDFThumbnail 
+                              file={file} 
+                              pageNumber={page.pageNumber}
+                              className="w-full h-full object-cover rounded"
+                            />
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                    {pages.length > 4 && (
+                      <div className="text-center text-sm text-gray-500 dark:text-gray-400">
+                        Showing first 4 pages. Watermark will be applied to all {pages.length} pages.
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <div className="aspect-[3/4] bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-center">
+                    <p className="text-gray-500 dark:text-gray-400">Upload a PDF to see preview with watermark</p>
+                  </div>
+                )}
               </div>
             </div>
           </div>
