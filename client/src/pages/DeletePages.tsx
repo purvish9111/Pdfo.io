@@ -49,14 +49,19 @@ export default function DeletePages() {
     setIsProcessing(true);
     setProgress(0);
     try {
-      setProgress(25);
+      setProgress(20);
       // Get the page indices to keep (0-indexed for PDF processing)
       const pagesToKeep = updatedPages
         .filter(page => !page.deleted)
         .map(page => page.pageNumber - 1);
       
+      setProgress(50);
       const processedBlob = await deletePDFPages(file, pagesToKeep);
+      setProgress(90);
+      
       downloadBlob(processedBlob, 'pages-deleted-document.pdf');
+      setProgress(100);
+      
       toast({
         title: "Success!",
         description: `PDF created with ${remainingPages.length} pages. Deleted pages removed successfully.`,
@@ -69,6 +74,7 @@ export default function DeletePages() {
       });
     } finally {
       setIsProcessing(false);
+      setProgress(0);
     }
   };
 
@@ -128,6 +134,22 @@ export default function DeletePages() {
               color="red"
               className="mt-6"
             />
+            
+            {file && !isProcessing && (
+              <div className="mt-4 flex justify-center">
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    setFile(null);
+                    setPages([]);
+                    setProgress(0);
+                  }}
+                  className="text-gray-600 dark:text-gray-300"
+                >
+                  Start Over
+                </Button>
+              </div>
+            )}
           </>
         )}
       </div>

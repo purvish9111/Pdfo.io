@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { FileText, Download, X, Trash2, RotateCcw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { SinglePDFThumbnail } from '@/components/SinglePDFThumbnail';
 
 interface PDFPage {
   id: string;
@@ -126,17 +127,12 @@ export function DeletePDFGrid({ file, pages, onDelete, isProcessing }: DeletePDF
               )}
 
               {/* Page Content */}
-              <div className="aspect-[3/4] p-4 flex flex-col items-center justify-center">
-                <FileText className={`w-8 h-8 mb-2 ${
-                  page.deleted ? 'text-red-400' : 'text-red-500'
-                }`} />
-                <div className={`text-sm font-semibold text-center ${
-                  page.deleted 
-                    ? 'text-red-600 dark:text-red-400 line-through' 
-                    : 'text-gray-700 dark:text-gray-300'
-                }`}>
-                  Page {page.pageNumber}
-                </div>
+              <div className="aspect-[3/4] p-2">
+                <SinglePDFThumbnail 
+                  file={file} 
+                  pageNumber={page.pageNumber}
+                  className="w-full h-full rounded border border-gray-300 dark:border-gray-600"
+                />
               </div>
             </div>
           ))}

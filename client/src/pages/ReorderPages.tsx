@@ -39,12 +39,17 @@ export default function ReorderPages() {
     setIsProcessing(true);
     setProgress(0);
     try {
-      setProgress(20);
+      setProgress(25);
       // Extract the new page order (0-indexed for PDF processing)
       const newOrder = reorderedPages.map(page => page.originalIndex);
       
+      setProgress(50);
       const processedBlob = await reorderPDFPages(file, newOrder);
+      setProgress(90);
+      
       downloadBlob(processedBlob, 'reordered-document.pdf');
+      setProgress(100);
+      
       toast({
         title: "Success!",
         description: "Your PDF pages have been reordered successfully.",
@@ -57,6 +62,7 @@ export default function ReorderPages() {
       });
     } finally {
       setIsProcessing(false);
+      setProgress(0);
     }
   };
 
@@ -120,10 +126,25 @@ export default function ReorderPages() {
         )}
         
         {file && !isProcessing && (
-          <div className="mt-4 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
-            <p className="text-sm text-blue-700 dark:text-blue-300">
-              <strong>💡 Tip:</strong> Drag and drop the page thumbnails to reorder them. Click the rotate button to adjust page orientation, or the delete button to remove unwanted pages.
-            </p>
+          <div className="mt-4 space-y-4">
+            <div className="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+              <p className="text-sm text-blue-700 dark:text-blue-300">
+                <strong>💡 Tip:</strong> Drag and drop the page thumbnails to reorder them. The page numbers show the current position and original position.
+              </p>
+            </div>
+            <div className="flex justify-center">
+              <Button
+                variant="outline"
+                onClick={() => {
+                  setFile(null);
+                  setPages([]);
+                  setProgress(0);
+                }}
+                className="text-gray-600 dark:text-gray-300"
+              >
+                Start Over
+              </Button>
+            </div>
           </div>
         )}
       </div>

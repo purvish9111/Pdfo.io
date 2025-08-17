@@ -5,6 +5,7 @@ import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { FileText, Download, GripVertical } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { SinglePDFThumbnail } from '@/components/SinglePDFThumbnail';
 
 interface PDFPage {
   id: string;
@@ -22,9 +23,10 @@ interface ReorderPDFGridProps {
 interface SortablePageProps {
   page: PDFPage;
   index: number;
+  file: File;
 }
 
-function SortablePage({ page, index }: SortablePageProps) {
+function SortablePage({ page, index, file }: SortablePageProps) {
   const {
     attributes,
     listeners,
@@ -74,11 +76,12 @@ function SortablePage({ page, index }: SortablePageProps) {
       )}
 
       {/* Page Content */}
-      <div className="aspect-[3/4] p-4 flex flex-col items-center justify-center">
-        <FileText className="w-8 h-8 text-red-500 mb-2" />
-        <div className="text-sm font-semibold text-gray-700 dark:text-gray-300 text-center">
-          Page {page.pageNumber}
-        </div>
+      <div className="aspect-[3/4] p-2">
+        <SinglePDFThumbnail 
+          file={file} 
+          pageNumber={page.pageNumber}
+          className="w-full h-full rounded border border-gray-300 dark:border-gray-600"
+        />
       </div>
 
       {/* Drag Overlay Effect */}
@@ -172,6 +175,7 @@ export function ReorderPDFGrid({ file, pages, onReorder, isProcessing }: Reorder
                   key={page.id}
                   page={page}
                   index={index}
+                  file={file}
                 />
               ))}
             </div>
