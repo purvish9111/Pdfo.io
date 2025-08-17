@@ -61,6 +61,7 @@ function Router() {
       {/* Authentication Routes */}
       <Route path="/login" component={Login} />
       <Route path="/signup" component={SignUp} />
+      <Route path="/auth" component={Login} />
       
       {/* PDF Manipulation Tools - Lazy Loaded */}
       <Route path="/merge">
