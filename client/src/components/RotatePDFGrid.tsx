@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { FileText, Download, RotateCw, RotateCcw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { SinglePDFThumbnail } from '@/components/SinglePDFThumbnail';
@@ -17,7 +17,16 @@ interface RotatePDFGridProps {
 }
 
 export function RotatePDFGrid({ file, pages, onRotate, isProcessing }: RotatePDFGridProps) {
-  const [currentPages, setCurrentPages] = useState<PDFPage[]>(pages);
+  const [currentPages, setCurrentPages] = useState<PDFPage[]>([]);
+
+  // Update currentPages when pages prop changes
+  useEffect(() => {
+    console.log('🔄 RotatePDFGrid: Pages prop changed:', pages.length);
+    if (pages.length > 0) {
+      setCurrentPages(pages);
+      console.log('✅ RotatePDFGrid: Current pages updated:', pages.length);
+    }
+  }, [pages]);
 
   const rotatePage = (pageId: string, degrees: number) => {
     const updatedPages = currentPages.map(page =>

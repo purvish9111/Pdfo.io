@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { FileText, Download, X, Trash2, RotateCcw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { SinglePDFThumbnail } from '@/components/SinglePDFThumbnail';
@@ -17,7 +17,16 @@ interface DeletePDFGridProps {
 }
 
 export function DeletePDFGrid({ file, pages, onDelete, isProcessing }: DeletePDFGridProps) {
-  const [currentPages, setCurrentPages] = useState<PDFPage[]>(pages);
+  const [currentPages, setCurrentPages] = useState<PDFPage[]>([]);
+
+  // Update currentPages when pages prop changes
+  useEffect(() => {
+    console.log('🔄 DeletePDFGrid: Pages prop changed:', pages.length);
+    if (pages.length > 0) {
+      setCurrentPages(pages);
+      console.log('✅ DeletePDFGrid: Current pages updated:', pages.length);
+    }
+  }, [pages]);
 
   const togglePageDeletion = (pageId: string) => {
     const updatedPages = currentPages.map(page =>
