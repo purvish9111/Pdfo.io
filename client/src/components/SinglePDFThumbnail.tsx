@@ -72,11 +72,9 @@ export function SinglePDFThumbnail({ file, className = "", pageNumber }: SingleP
         className="w-full h-full object-cover rounded-lg border border-gray-200 dark:border-gray-700"
         onError={() => setThumbnail(prev => prev ? { ...prev, error: 'Image load failed' } : null)}
       />
-      {thumbnail.pageCount > 0 && (
-        <div className="absolute bottom-1 right-1 bg-black/70 text-white text-xs px-1 py-0.5 rounded">
-          {thumbnail.pageCount} page{thumbnail.pageCount !== 1 ? 's' : ''}
-        </div>
-      )}
+      <div className="absolute bottom-1 right-1 bg-black/70 text-white text-xs px-1 py-0.5 rounded">
+        Page {pageNumber}
+      </div>
     </div>
   );
 }

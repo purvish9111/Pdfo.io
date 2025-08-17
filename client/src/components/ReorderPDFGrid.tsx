@@ -66,7 +66,7 @@ function SortablePage({ page, index, file }: SortablePageProps) {
 
       {/* Page Number Badge */}
       <div className="absolute top-2 right-2 bg-blue-500 text-white text-xs px-2 py-1 rounded-full font-semibold">
-        {index + 1}
+        {page.pageNumber}
       </div>
 
       {/* Original Position Indicator */}
@@ -111,7 +111,7 @@ export function ReorderPDFGrid({ file, pages, onReorder, isProcessing }: Reorder
   const sensors = useSensors(
     useSensor(PointerSensor, {
       activationConstraint: {
-        distance: 8,
+        distance: 5,
       },
     }),
     useSensor(KeyboardSensor, {
@@ -120,6 +120,7 @@ export function ReorderPDFGrid({ file, pages, onReorder, isProcessing }: Reorder
   );
 
   const handleDragStart = (event: any) => {
+    console.log('🚀 ReorderPDFGrid drag start:', event.active.id);
     setActiveId(event.active.id);
   };
 
