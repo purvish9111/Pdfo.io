@@ -43,7 +43,7 @@ import About from "@/pages/About";
 import Privacy from "@/pages/Privacy";
 import Terms from "@/pages/Terms";
 import Contact from "@/pages/Contact";
-import PDFPreviewDemo from "@/pages/PDFPreviewDemo";
+
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -137,7 +137,7 @@ function Router() {
       <Route path="/privacy" component={Privacy} />
       <Route path="/terms" component={Terms} />
       <Route path="/contact" component={Contact} />
-      <Route path="/pdf-preview-demo" component={PDFPreviewDemo} />
+
       <Route path="/dashboard">
         <LazyRoute factory={() => import("@/pages/Dashboard")} />
       </Route>
