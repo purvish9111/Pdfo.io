@@ -62,9 +62,10 @@ Uses Drizzle ORM with PostgreSQL for structured data management:
 
 ## Core Framework Dependencies
 - **React 18**: Frontend framework with hooks and modern React patterns
-- **Express.js**: Backend web framework for API endpoints
-- **Vite**: Build tool and development server with TypeScript support
+- **Express.js**: Backend web framework for API endpoints with performance optimizations
+- **Vite**: Build tool and development server with TypeScript support and code splitting
 - **TypeScript**: Static type checking across the entire codebase
+- **Compression**: Gzip compression middleware for better response times
 
 ## UI and Interaction Libraries
 - **Radix UI**: Comprehensive set of accessible UI primitives for components
@@ -87,6 +88,12 @@ Uses Drizzle ORM with PostgreSQL for structured data management:
 - **@tanstack/react-query**: Data fetching and state management for server state
 - **date-fns**: Date manipulation and formatting utilities
 - **nanoid**: Unique ID generation for component keys and identifiers
+
+## Performance Optimization Dependencies
+- **PDF.js Worker**: Optimized PDF rendering with web workers for non-blocking operations
+- **LazyRoute Components**: Code splitting and lazy loading for PDF tool pages
+- **Performance Monitoring**: Real-time Web Vitals tracking and memory usage monitoring
+- **Asset Optimization**: WebP image support, compression, and caching strategies
 
 ## Planned Integrations
 - **pdf-lib**: Client-side PDF manipulation library (to be integrated for actual PDF processing)

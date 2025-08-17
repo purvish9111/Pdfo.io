@@ -6,9 +6,13 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { Header } from "@/components/Header";
 import { AuthProvider } from "@/hooks/use-auth";
+import { LazyRoute } from "@/components/LazyRoute";
+import { PerformanceProvider } from "@/components/PerformanceProvider";
 import { useEffect } from "react";
 import { initGA } from "./lib/analytics";
 import { useAnalytics } from "./hooks/use-analytics";
+import { initializePDFJS } from "./lib/pdf-worker-config";
+import { initializePerformanceMonitoring } from "./lib/performance-monitor";
 import Home from "@/pages/Home";
 import Login from "@/pages/Login";
 import SignUp from "@/pages/SignUp";
@@ -54,35 +58,79 @@ function Router() {
       <Route path="/login" component={Login} />
       <Route path="/signup" component={SignUp} />
       
-      {/* PDF Manipulation Tools */}
-      <Route path="/merge" component={MergePDF} />
-      <Route path="/split" component={SplitPDF} />
-      <Route path="/reorder" component={ReorderPages} />
-      <Route path="/delete" component={DeletePages} />
-      <Route path="/rotate" component={RotatePDF} />
-      <Route path="/page-numbers" component={PageNumbers} />
+      {/* PDF Manipulation Tools - Lazy Loaded */}
+      <Route path="/merge">
+        <LazyRoute factory={() => import("@/pages/MergePDF")} />
+      </Route>
+      <Route path="/split">
+        <LazyRoute factory={() => import("@/pages/SplitPDF")} />
+      </Route>
+      <Route path="/reorder">
+        <LazyRoute factory={() => import("@/pages/ReorderPages")} />
+      </Route>
+      <Route path="/delete">
+        <LazyRoute factory={() => import("@/pages/DeletePages")} />
+      </Route>
+      <Route path="/rotate">
+        <LazyRoute factory={() => import("@/pages/RotatePDF")} />
+      </Route>
+      <Route path="/page-numbers">
+        <LazyRoute factory={() => import("@/pages/PageNumbers")} />
+      </Route>
       
-      {/* Advanced Tools */}
-      <Route path="/edit-metadata" component={EditMetadata} />
-      <Route path="/watermark-pdf" component={WatermarkPDF} />
-      <Route path="/lock-pdf" component={LockPDF} />
-      <Route path="/unlock-pdf" component={UnlockPDF} />
-      <Route path="/compress-pdf" component={CompressPDF} />
+      {/* Advanced Tools - Lazy Loaded */}
+      <Route path="/edit-metadata">
+        <LazyRoute factory={() => import("@/pages/EditMetadata")} />
+      </Route>
+      <Route path="/watermark-pdf">
+        <LazyRoute factory={() => import("@/pages/WatermarkPDF")} />
+      </Route>
+      <Route path="/lock-pdf">
+        <LazyRoute factory={() => import("@/pages/LockPDF")} />
+      </Route>
+      <Route path="/unlock-pdf">
+        <LazyRoute factory={() => import("@/pages/UnlockPDF")} />
+      </Route>
+      <Route path="/compress-pdf">
+        <LazyRoute factory={() => import("@/pages/CompressPDF")} />
+      </Route>
       
-      {/* PDF Conversion Tools */}
-      <Route path="/pdf-to-jpg" component={PDFToJPG} />
-      <Route path="/pdf-to-png" component={PDFToPNG} />
-      <Route path="/pdf-to-tiff" component={PDFToTIFF} />
-      <Route path="/pdf-to-word" component={PDFToWord} />
-      <Route path="/pdf-to-excel" component={PDFToExcel} />
-      <Route path="/pdf-to-ppt" component={PDFToPPT} />
-      <Route path="/pdf-to-txt" component={PDFToTXT} />
-      <Route path="/pdf-to-json" component={PDFToJSON} />
+      {/* PDF Conversion Tools - Lazy Loaded */}
+      <Route path="/pdf-to-jpg">
+        <LazyRoute factory={() => import("@/pages/PDFToJPG")} />
+      </Route>
+      <Route path="/pdf-to-png">
+        <LazyRoute factory={() => import("@/pages/PDFToPNG")} />
+      </Route>
+      <Route path="/pdf-to-tiff">
+        <LazyRoute factory={() => import("@/pages/PDFToTIFF")} />
+      </Route>
+      <Route path="/pdf-to-word">
+        <LazyRoute factory={() => import("@/pages/PDFToWord")} />
+      </Route>
+      <Route path="/pdf-to-excel">
+        <LazyRoute factory={() => import("@/pages/PDFToExcel")} />
+      </Route>
+      <Route path="/pdf-to-ppt">
+        <LazyRoute factory={() => import("@/pages/PDFToPPT")} />
+      </Route>
+      <Route path="/pdf-to-txt">
+        <LazyRoute factory={() => import("@/pages/PDFToTXT")} />
+      </Route>
+      <Route path="/pdf-to-json">
+        <LazyRoute factory={() => import("@/pages/PDFToJSON")} />
+      </Route>
       
-      {/* Reverse Conversion Tools */}
-      <Route path="/png-to-pdf" component={PNGToPDF} />
-      <Route path="/word-to-pdf" component={WordToPDF} />
-      <Route path="/excel-to-pdf" component={ExcelToPDF} />
+      {/* Reverse Conversion Tools - Lazy Loaded */}
+      <Route path="/png-to-pdf">
+        <LazyRoute factory={() => import("@/pages/PNGToPDF")} />
+      </Route>
+      <Route path="/word-to-pdf">
+        <LazyRoute factory={() => import("@/pages/WordToPDF")} />
+      </Route>
+      <Route path="/excel-to-pdf">
+        <LazyRoute factory={() => import("@/pages/ExcelToPDF")} />
+      </Route>
       
       {/* Company Pages */}
       <Route path="/about" component={About} />
@@ -96,9 +144,15 @@ function Router() {
 }
 
 function App() {
-  // Initialize Google Analytics when app loads
+  // Initialize all performance optimizations and analytics
   useEffect(() => {
-    // Verify required environment variable is present
+    // Initialize PDF.js worker for better performance
+    initializePDFJS();
+    
+    // Initialize performance monitoring
+    initializePerformanceMonitoring();
+    
+    // Initialize Google Analytics
     if (!import.meta.env.VITE_GA_MEASUREMENT_ID) {
       console.warn('Missing required Google Analytics key: VITE_GA_MEASUREMENT_ID');
     } else {
@@ -108,19 +162,21 @@ function App() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        <ThemeProvider>
-          <TooltipProvider>
-            <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-              <Header />
-              <main>
-                <Router />
-              </main>
-            </div>
-            <Toaster />
-          </TooltipProvider>
-        </ThemeProvider>
-      </AuthProvider>
+      <PerformanceProvider>
+        <AuthProvider>
+          <ThemeProvider>
+            <TooltipProvider>
+              <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+                <Header />
+                <main>
+                  <Router />
+                </main>
+              </div>
+              <Toaster />
+            </TooltipProvider>
+          </ThemeProvider>
+        </AuthProvider>
+      </PerformanceProvider>
     </QueryClientProvider>
   );
 }

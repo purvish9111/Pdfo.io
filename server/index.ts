@@ -1,10 +1,38 @@
 import express, { type Request, Response, NextFunction } from "express";
+import compression from "compression";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
+import {
+  performanceMiddleware,
+  createRateLimiter,
+  compressionConfig,
+  setCacheHeaders,
+  optimizedErrorHandler,
+  createHealthCheck,
+} from "./optimization";
 
 const app = express();
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+
+// Performance optimizations
+app.use(compression(compressionConfig));
+app.use(performanceMiddleware);
+app.use(setCacheHeaders);
+app.use(createRateLimiter());
+
+// Standard middleware
+app.use(express.json({ limit: '50mb' })); // Increased limit for PDF uploads
+app.use(express.urlencoded({ extended: false, limit: '50mb' }));
+
+// Security headers
+app.use((req, res, next) => {
+  res.set({
+    'X-Content-Type-Options': 'nosniff',
+    'X-Frame-Options': 'DENY',
+    'X-XSS-Protection': '1; mode=block',
+    'Referrer-Policy': 'strict-origin-when-cross-origin',
+  });
+  next();
+});
 
 app.use((req, res, next) => {
   const start = Date.now();
@@ -37,6 +65,9 @@ app.use((req, res, next) => {
 });
 
 (async () => {
+  // Health check endpoint
+  app.get('/health', createHealthCheck());
+  
   const server = await registerRoutes(app);
 
   app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {

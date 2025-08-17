@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDFo Performance Report</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .metric { margin: 10px 0; padding: 10px; border: 1px solid #ddd; border-radius: 5px; }
+        .good { background-color: #d4edda; }
+        .warning { background-color: #fff3cd; }
+        .error { background-color: #f8d7da; }
+        .loading { opacity: 0.5; }
+        #report { max-width: 800px; margin: 0 auto; }
+        h1 { text-align: center; color: #333; }
+        .score { font-size: 2em; font-weight: bold; text-align: center; margin: 20px 0; }
+        .details { margin-top: 20px; }
+        .recommendation { background-color: #e7f3ff; padding: 15px; margin: 10px 0; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <div id="report">
+        <h1>PDFo Performance Report</h1>
+        <div id="loading" class="loading">Analyzing performance...</div>
+        <div id="content" style="display: none;">
+            <div class="score">Performance Score: <span id="score">--</span>/100</div>
+            <div class="details">
+                <div class="metric" id="lcp">
+                    <h3>Largest Contentful Paint (LCP)</h3>
+                    <p id="lcp-value">Measuring...</p>
+                </div>
+                <div class="metric" id="fid">
+                    <h3>First Input Delay (FID)</h3>
+                    <p id="fid-value">Measuring...</p>
+                </div>
+                <div class="metric" id="cls">
+                    <h3>Cumulative Layout Shift (CLS)</h3>
+                    <p id="cls-value">Measuring...</p>
+                </div>
+                <div class="metric" id="bundle">
+                    <h3>Bundle Analysis</h3>
+                    <p id="bundle-value">Analyzing...</p>
+                </div>
+                <div class="metric" id="memory">
+                    <h3>Memory Usage</h3>
+                    <p id="memory-value">Monitoring...</p>
+                </div>
+            </div>
+            <div id="recommendations" class="details">
+                <h2>Optimization Recommendations</h2>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Performance monitoring script
+        let metrics = {
+            lcp: null,
+            fid: null,
+            cls: null,
+            bundle: {},
+            memory: null
+        };
+
+        // Measure LCP
+        new PerformanceObserver((list) => {
+            const entries = list.getEntries();
+            const lastEntry = entries[entries.length - 1];
+            metrics.lcp = lastEntry.startTime;
+            updateLCP();
+        }).observe({ type: 'largest-contentful-paint', buffered: true });
+
+        // Measure FID
+        new PerformanceObserver((list) => {
+            for (const entry of list.getEntries()) {
+                metrics.fid = entry.processingStart - entry.startTime;
+                updateFID();
+                break;
+            }
+        }).observe({ type: 'first-input', buffered: true });
+
+        // Measure CLS
+        let clsValue = 0;
+        let clsEntries = [];
+        new PerformanceObserver((list) => {
+            for (const entry of list.getEntries()) {
+                if (!entry.hadRecentInput) {
+                    clsEntries.push(entry);
+                    clsValue = clsEntries.reduce((sum, entry) => sum + entry.value, 0);
+                    metrics.cls = clsValue;
+                    updateCLS();
+                }
+            }
+        }).observe({ type: 'layout-shift', buffered: true });
+
+        // Monitor bundle sizes
+        new PerformanceObserver((list) => {
+            for (const entry of list.getEntries()) {
+                if (entry.name.includes('.js') || entry.name.includes('.css')) {
+                    const name = entry.name.split('/').pop();
+                    metrics.bundle[name] = {
+                        size: entry.transferSize,
+                        duration: entry.duration
+                    };
+                }
+            }
+            updateBundle();
+        }).observe({ type: 'resource', buffered: true });
+
+        // Monitor memory
+        function updateMemory() {
+            if ('memory' in performance) {
+                const memory = performance.memory;
+                metrics.memory = {
+                    used: memory.usedJSHeapSize,
+                    total: memory.totalJSHeapSize,
+                    limit: memory.jsHeapSizeLimit
+                };
+                document.getElementById('memory-value').innerHTML = `
+                    Used: ${(metrics.memory.used / 1048576).toFixed(2)} MB<br>
+                    Total: ${(metrics.memory.total / 1048576).toFixed(2)} MB<br>
+                    Limit: ${(metrics.memory.limit / 1048576).toFixed(2)} MB
+                `;
+                
+                const memoryElement = document.getElementById('memory');
+                const usage = (metrics.memory.used / metrics.memory.limit) * 100;
+                if (usage > 80) {
+                    memoryElement.className = 'metric error';
+                } else if (usage > 60) {
+                    memoryElement.className = 'metric warning';
+                } else {
+                    memoryElement.className = 'metric good';
+                }
+            }
+        }
+
+        function updateLCP() {
+            const lcpElement = document.getElementById('lcp');
+            const value = metrics.lcp;
+            document.getElementById('lcp-value').textContent = `${value.toFixed(2)}ms`;
+            
+            if (value <= 2500) {
+                lcpElement.className = 'metric good';
+            } else if (value <= 4000) {
+                lcpElement.className = 'metric warning';
+            } else {
+                lcpElement.className = 'metric error';
+            }
+        }
+
+        function updateFID() {
+            const fidElement = document.getElementById('fid');
+            const value = metrics.fid;
+            document.getElementById('fid-value').textContent = `${value.toFixed(2)}ms`;
+            
+            if (value <= 100) {
+                fidElement.className = 'metric good';
+            } else if (value <= 300) {
+                fidElement.className = 'metric warning';
+            } else {
+                fidElement.className = 'metric error';
+            }
+        }
+
+        function updateCLS() {
+            const clsElement = document.getElementById('cls');
+            const value = metrics.cls;
+            document.getElementById('cls-value').textContent = value.toFixed(3);
+            
+            if (value <= 0.1) {
+                clsElement.className = 'metric good';
+            } else if (value <= 0.25) {
+                clsElement.className = 'metric warning';
+            } else {
+                clsElement.className = 'metric error';
+            }
+        }
+
+        function updateBundle() {
+            const bundleElement = document.getElementById('bundle');
+            const totalSize = Object.values(metrics.bundle).reduce((sum, item) => sum + item.size, 0);
+            
+            document.getElementById('bundle-value').innerHTML = `
+                Total Size: ${(totalSize / 1024).toFixed(2)} KB<br>
+                Files: ${Object.keys(metrics.bundle).length}<br>
+                Largest: ${getLargestBundle()}
+            `;
+            
+            if (totalSize <= 500000) { // 500KB
+                bundleElement.className = 'metric good';
+            } else if (totalSize <= 1000000) { // 1MB
+                bundleElement.className = 'metric warning';
+            } else {
+                bundleElement.className = 'metric error';
+            }
+        }
+
+        function getLargestBundle() {
+            let largest = { name: 'N/A', size: 0 };
+            for (const [name, data] of Object.entries(metrics.bundle)) {
+                if (data.size > largest.size) {
+                    largest = { name, size: data.size };
+                }
+            }
+            return `${largest.name} (${(largest.size / 1024).toFixed(2)} KB)`;
+        }
+
+        function calculateScore() {
+            let score = 100;
+            
+            // LCP scoring
+            if (metrics.lcp > 4000) score -= 30;
+            else if (metrics.lcp > 2500) score -= 15;
+            
+            // FID scoring
+            if (metrics.fid > 300) score -= 25;
+            else if (metrics.fid > 100) score -= 10;
+            
+            // CLS scoring
+            if (metrics.cls > 0.25) score -= 20;
+            else if (metrics.cls > 0.1) score -= 10;
+            
+            // Memory scoring
+            if (metrics.memory) {
+                const usage = (metrics.memory.used / metrics.memory.limit) * 100;
+                if (usage > 80) score -= 15;
+                else if (usage > 60) score -= 5;
+            }
+            
+            // Bundle scoring
+            const totalSize = Object.values(metrics.bundle).reduce((sum, item) => sum + item.size, 0);
+            if (totalSize > 1000000) score -= 10;
+            else if (totalSize > 500000) score -= 5;
+            
+            return Math.max(0, score);
+        }
+
+        function generateRecommendations() {
+            const recommendations = [];
+            
+            if (metrics.lcp > 2500) {
+                recommendations.push("Optimize Largest Contentful Paint: Consider lazy loading images, optimizing critical CSS, and using a CDN.");
+            }
+            
+            if (metrics.fid > 100) {
+                recommendations.push("Improve First Input Delay: Break up long tasks, optimize JavaScript execution, and consider using web workers.");
+            }
+            
+            if (metrics.cls > 0.1) {
+                recommendations.push("Reduce Cumulative Layout Shift: Set explicit dimensions for images and videos, avoid inserting content above existing content.");
+            }
+            
+            if (metrics.memory && (metrics.memory.used / metrics.memory.limit) > 0.6) {
+                recommendations.push("Optimize Memory Usage: Clear unused variables, optimize PDF processing, and implement proper cleanup.");
+            }
+            
+            const totalSize = Object.values(metrics.bundle).reduce((sum, item) => sum + item.size, 0);
+            if (totalSize > 500000) {
+                recommendations.push("Optimize Bundle Size: Implement code splitting, tree shaking, and remove unused dependencies.");
+            }
+            
+            const recommendationsContainer = document.getElementById('recommendations');
+            recommendations.forEach(rec => {
+                const div = document.createElement('div');
+                div.className = 'recommendation';
+                div.textContent = rec;
+                recommendationsContainer.appendChild(div);
+            });
+        }
+
+        // Initialize report
+        setTimeout(() => {
+            updateMemory();
+            setInterval(updateMemory, 5000);
+            
+            setTimeout(() => {
+                const score = calculateScore();
+                document.getElementById('score').textContent = score;
+                
+                generateRecommendations();
+                
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('content').style.display = 'block';
+            }, 3000);
+        }, 1000);
+    </script>
+</body>
+</html>
