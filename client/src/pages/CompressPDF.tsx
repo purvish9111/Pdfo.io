@@ -23,9 +23,11 @@ export default function CompressPDF() {
 
   const handleFilesSelected = (files: File[]) => {
     const selectedFile = files[0];
+    console.log('Compress - Selected file:', selectedFile.name, selectedFile.size);
     setFile(selectedFile);
     setOriginalSize(selectedFile.size);
     setCompressedSize(null);
+    setCompressionLevel(null);
   };
 
   const formatFileSize = (bytes: number) => {
@@ -58,7 +60,7 @@ export default function CompressPDF() {
       setCompressionLevel(level);
       setProgress(100);
       
-      downloadBlob(compressedBlob, 'compressed-document.pdf');
+      downloadBlob(compressedBlob, `compressed-${file.name}`);
       
       toast({
         title: "Success!",
@@ -123,92 +125,165 @@ export default function CompressPDF() {
         {!file ? (
           <FileUpload
             onFilesSelected={handleFilesSelected}
+            accept=".pdf"
+            maxSize={10 * 1024 * 1024}
             acceptMultiple={false}
+            className="max-w-md mx-auto"
           />
         ) : (
           <>
+            {/* File Information Card */}
             <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 mb-6">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">File Information</h3>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                <div className="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
-                  <p className="text-sm text-blue-600 dark:text-blue-400">Original Size</p>
-                  <p className="text-lg font-semibold text-blue-800 dark:text-blue-200">
-                    {formatFileSize(originalSize)}
+              <div className="flex items-center mb-4">
+                <div className="w-12 h-12 bg-red-100 dark:bg-red-900/20 rounded-lg flex items-center justify-center mr-4">
+                  <i className="fas fa-file-pdf text-red-600 dark:text-red-400 text-xl"></i>
+                </div>
+                <div className="flex-1">
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white truncate">
+                    {file.name}
+                  </h3>
+                  <p className="text-sm text-gray-500 dark:text-gray-400">
+                    Original size: {formatFileSize(originalSize)}
                   </p>
                 </div>
-                
-                {compressedSize && (
-                  <div className="p-4 bg-green-50 dark:bg-green-900/20 rounded-lg">
-                    <p className="text-sm text-green-600 dark:text-green-400">Compressed Size</p>
-                    <p className="text-lg font-semibold text-green-800 dark:text-green-200">
-                      {formatFileSize(compressedSize)}
-                    </p>
-                    <p className="text-sm text-green-600 dark:text-green-400 mt-1">
-                      Reduced by {getReductionPercentage()}%
-                    </p>
-                  </div>
-                )}
               </div>
 
-              <h4 className="text-md font-medium text-gray-900 dark:text-white mb-4">Compression Level</h4>
+              {/* Compression Results */}
+              {compressedSize && (
+                <div className="bg-green-50 dark:bg-green-900/20 rounded-lg p-4 mb-6">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm font-medium text-green-800 dark:text-green-200">
+                        ✅ Compression Complete!
+                      </p>
+                      <p className="text-xs text-green-600 dark:text-green-400 mt-1">
+                        Size reduced from {formatFileSize(originalSize)} to {formatFileSize(compressedSize)}
+                      </p>
+                    </div>
+                    <div className="text-right">
+                      <p className="text-lg font-bold text-green-800 dark:text-green-200">
+                        -{getReductionPercentage()}%
+                      </p>
+                      <p className="text-xs text-green-600 dark:text-green-400">
+                        saved {formatFileSize(originalSize - compressedSize)}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              <h4 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+                Choose Compression Level
+              </h4>
               
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                <Button
+              <div className="space-y-3">
+                <button
                   onClick={() => handleCompress('low')}
                   disabled={isProcessing}
-                  variant={compressionLevel === 'low' ? 'default' : 'outline'}
-                  className="h-20 flex flex-col items-center justify-center"
+                  className={`w-full p-4 rounded-lg border-2 text-left transition-all ${
+                    compressionLevel === 'low' 
+                      ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20' 
+                      : 'border-gray-200 dark:border-gray-600 hover:border-blue-300 dark:hover:border-blue-500'
+                  } ${isProcessing ? 'opacity-50 cursor-not-allowed' : 'hover:shadow-md'}`}
                 >
-                  <span className="font-semibold">Low</span>
-                  <span className="text-xs mt-1">Best Quality</span>
-                  <span className="text-xs text-gray-500">~10-20% smaller</span>
-                </Button>
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h5 className="font-semibold text-gray-900 dark:text-white">Low Compression</h5>
+                      <p className="text-sm text-gray-600 dark:text-gray-400">Best quality, minimal size reduction</p>
+                    </div>
+                    <div className="text-right">
+                      <span className="text-lg font-bold text-blue-600 dark:text-blue-400">~10-20%</span>
+                      <p className="text-xs text-gray-500">smaller</p>
+                    </div>
+                  </div>
+                </button>
                 
-                <Button
+                <button
                   onClick={() => handleCompress('medium')}
                   disabled={isProcessing}
-                  variant={compressionLevel === 'medium' ? 'default' : 'outline'}
-                  className="h-20 flex flex-col items-center justify-center"
+                  className={`w-full p-4 rounded-lg border-2 text-left transition-all ${
+                    compressionLevel === 'medium' 
+                      ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20' 
+                      : 'border-gray-200 dark:border-gray-600 hover:border-blue-300 dark:hover:border-blue-500'
+                  } ${isProcessing ? 'opacity-50 cursor-not-allowed' : 'hover:shadow-md'}`}
                 >
-                  <span className="font-semibold">Medium</span>
-                  <span className="text-xs mt-1">Balanced</span>
-                  <span className="text-xs text-gray-500">~30-50% smaller</span>
-                </Button>
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h5 className="font-semibold text-gray-900 dark:text-white">Medium Compression</h5>
+                      <p className="text-sm text-gray-600 dark:text-gray-400">Balanced quality and size reduction</p>
+                    </div>
+                    <div className="text-right">
+                      <span className="text-lg font-bold text-orange-600 dark:text-orange-400">~30-50%</span>
+                      <p className="text-xs text-gray-500">smaller</p>
+                    </div>
+                  </div>
+                </button>
                 
-                <Button
+                <button
                   onClick={() => handleCompress('high')}
                   disabled={isProcessing}
-                  variant={compressionLevel === 'high' ? 'default' : 'outline'}
-                  className="h-20 flex flex-col items-center justify-center"
+                  className={`w-full p-4 rounded-lg border-2 text-left transition-all ${
+                    compressionLevel === 'high' 
+                      ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20' 
+                      : 'border-gray-200 dark:border-gray-600 hover:border-blue-300 dark:hover:border-blue-500'
+                  } ${isProcessing ? 'opacity-50 cursor-not-allowed' : 'hover:shadow-md'}`}
                 >
-                  <span className="font-semibold">High</span>
-                  <span className="text-xs mt-1">Smallest Size</span>
-                  <span className="text-xs text-gray-500">~50-70% smaller</span>
-                </Button>
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h5 className="font-semibold text-gray-900 dark:text-white">High Compression</h5>
+                      <p className="text-sm text-gray-600 dark:text-gray-400">Maximum size reduction, lower quality</p>
+                    </div>
+                    <div className="text-right">
+                      <span className="text-lg font-bold text-red-600 dark:text-red-400">~50-70%</span>
+                      <p className="text-xs text-gray-500">smaller</p>
+                    </div>
+                  </div>
+                </button>
               </div>
-              
-              <div className="mt-4 p-4 bg-amber-50 dark:bg-amber-900/20 rounded-lg">
-                <p className="text-sm text-amber-700 dark:text-amber-300">
-                  <i className="fas fa-info-circle mr-2"></i>
-                  Higher compression levels reduce file size more but may slightly affect image quality.
-                </p>
+
+              {/* Warning for high compression */}
+              <div className="mt-4 p-3 bg-amber-50 dark:bg-amber-900/20 rounded-lg border border-amber-200 dark:border-amber-700">
+                <div className="flex items-start">
+                  <i className="fas fa-exclamation-triangle text-amber-600 dark:text-amber-400 mt-0.5 mr-2"></i>
+                  <div>
+                    <p className="text-sm font-medium text-amber-800 dark:text-amber-200">
+                      Higher compression levels reduce file size more but may slightly affect image quality.
+                    </p>
+                  </div>
+                </div>
               </div>
             </div>
-            
-            <ProgressBar 
-              progress={progress} 
-              isVisible={isProcessing} 
-              color="blue"
-              className="mt-6"
-            />
-            
-            {!isProcessing && (
-              <div className="text-center mt-6">
-                <BuyMeCoffeeButton />
-              </div>
-            )}
+
+            {/* New File Button */}
+            <div className="text-center mb-6">
+              <Button
+                onClick={() => {
+                  setFile(null);
+                  setOriginalSize(0);
+                  setCompressedSize(null);
+                  setCompressionLevel(null);
+                }}
+                variant="outline"
+                className="mr-4"
+              >
+                <i className="fas fa-upload mr-2"></i>
+                Upload Different File
+              </Button>
+            </div>
           </>
+        )}
+
+        <ProgressBar 
+          progress={progress} 
+          isVisible={isProcessing} 
+          color="blue"
+          className="mt-6"
+        />
+        
+        {!isProcessing && (
+          <div className="text-center mt-6">
+            <BuyMeCoffeeButton />
+          </div>
         )}
       </div>
 

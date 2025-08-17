@@ -265,7 +265,7 @@ export default function WatermarkPDF() {
                               className="font-bold select-none"
                               style={{ 
                                 color: settings.color, 
-                                fontSize: `${Math.max(settings.fontSize / 4, 8)}px`,
+                                fontSize: `${Math.max((settings.fontSize || 36) / 4, 8)}px`,
                                 textShadow: '1px 1px 2px rgba(0,0,0,0.3)'
                               }}
                             >
