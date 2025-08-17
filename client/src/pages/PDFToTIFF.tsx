@@ -15,10 +15,17 @@ export default function PDFToTIFF() {
   const [compressionType, setCompressionType] = useState<'none' | 'lzw' | 'jpeg'>('none');
   const [isProcessing, setIsProcessing] = useState(false);
   const [progress, setProgress] = useState(0);
+  const [convertedFile, setConvertedFile] = useState<Blob | null>(null);
   const { toast } = useToast();
 
   const handleFilesSelected = (files: File[]) => {
     setFile(files[0]);
+    setConvertedFile(null);
+  };
+
+  const handleDownload = () => {
+    if (!convertedFile) return;
+    downloadBlob(convertedFile, 'pdf-tiff-images.zip');
   };
 
   const handleConvert = async () => {
@@ -32,6 +39,7 @@ export default function PDFToTIFF() {
       setProgress(70);
       const zipBlob = await convertPDFToImages(file, 'tiff', options);
       setProgress(100);
+      setConvertedFile(zipBlob);
       downloadBlob(zipBlob, 'pdf-tiff-images.zip');
       toast({
         title: "Success!",
@@ -140,7 +148,22 @@ export default function PDFToTIFF() {
               className="mt-6"
             />
             
-            {!isProcessing && (
+            {/* Download Button */}
+            {convertedFile && !isProcessing && (
+              <div className="text-center space-y-4 mt-6">
+                <Button
+                  onClick={handleDownload}
+                  size="lg"
+                  className="bg-green-500 hover:bg-green-600 text-white px-8"
+                >
+                  <i className="fas fa-download mr-2"></i>
+                  Download TIFF Images (ZIP)
+                </Button>
+                <BuyMeCoffeeButton />
+              </div>
+            )}
+            
+            {!convertedFile && !isProcessing && (
               <div className="text-center mt-6">
                 <BuyMeCoffeeButton />
               </div>

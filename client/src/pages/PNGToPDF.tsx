@@ -75,6 +75,7 @@ export default function PNGToPDF() {
   const [images, setImages] = useState<ImageFile[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
   const [progress, setProgress] = useState(0);
+  const [convertedFile, setConvertedFile] = useState<Blob | null>(null);
   const { toast } = useToast();
 
   const sensors = useSensors(
@@ -108,6 +109,7 @@ export default function PNGToPDF() {
     }
     
     setImages(imageFiles);
+    setConvertedFile(null);
   };
 
   const handleDragEnd = (event: any) => {
@@ -122,6 +124,11 @@ export default function PNGToPDF() {
     }
   };
 
+  const handleDownload = () => {
+    if (!convertedFile) return;
+    downloadBlob(convertedFile, 'images-to-pdf.pdf');
+  };
+
   const handleCreatePDF = async () => {
     if (images.length === 0) return;
     
@@ -134,6 +141,7 @@ export default function PNGToPDF() {
       setProgress(70);
       const pdfBlob = await convertImagesToPDF(files, options);
       setProgress(100);
+      setConvertedFile(pdfBlob);
       downloadBlob(pdfBlob, 'images-to-pdf.pdf');
       toast({
         title: "Success!",
@@ -239,7 +247,22 @@ export default function PNGToPDF() {
               className="mt-6"
             />
             
-            {!isProcessing && (
+            {/* Download Button */}
+            {convertedFile && !isProcessing && (
+              <div className="text-center space-y-4 mt-6">
+                <Button
+                  onClick={handleDownload}
+                  size="lg"
+                  className="bg-green-500 hover:bg-green-600 text-white px-8"
+                >
+                  <i className="fas fa-download mr-2"></i>
+                  Download PDF
+                </Button>
+                <BuyMeCoffeeButton />
+              </div>
+            )}
+            
+            {!convertedFile && !isProcessing && (
               <div className="text-center mt-6">
                 <BuyMeCoffeeButton />
               </div>

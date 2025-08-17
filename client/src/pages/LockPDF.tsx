@@ -16,10 +16,17 @@ export default function LockPDF() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
   const [progress, setProgress] = useState(0);
+  const [convertedFile, setConvertedFile] = useState<Blob | null>(null);
   const { toast } = useToast();
 
   const handleFilesSelected = (files: File[]) => {
     setFile(files[0]);
+    setConvertedFile(null);
+  };
+
+  const handleDownload = () => {
+    if (!convertedFile) return;
+    downloadBlob(convertedFile, 'password-protected.pdf');
   };
 
   const passwordsMatch = password === confirmPassword && password.length > 0;
@@ -34,6 +41,7 @@ export default function LockPDF() {
       setProgress(25);
       const lockedBlob = await lockPDF(file, password);
       setProgress(100);
+      setConvertedFile(lockedBlob);
       downloadBlob(lockedBlob, 'password-protected.pdf');
       toast({
         title: "Success!",
@@ -156,7 +164,22 @@ export default function LockPDF() {
               className="mt-6"
             />
             
-            {!isProcessing && (
+            {/* Download Button */}
+            {convertedFile && !isProcessing && (
+              <div className="text-center space-y-4 mt-6">
+                <Button
+                  onClick={handleDownload}
+                  size="lg"
+                  className="bg-green-500 hover:bg-green-600 text-white px-8"
+                >
+                  <i className="fas fa-download mr-2"></i>
+                  Download Protected PDF
+                </Button>
+                <BuyMeCoffeeButton />
+              </div>
+            )}
+            
+            {!convertedFile && !isProcessing && (
               <div className="text-center mt-6">
                 <BuyMeCoffeeButton />
               </div>

@@ -12,10 +12,17 @@ export default function PDFToPPT() {
   const [file, setFile] = useState<File | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [progress, setProgress] = useState(0);
+  const [convertedFile, setConvertedFile] = useState<Blob | null>(null);
   const { toast } = useToast();
 
   const handleFilesSelected = (files: File[]) => {
     setFile(files[0]);
+    setConvertedFile(null);
+  };
+
+  const handleDownload = () => {
+    if (!convertedFile) return;
+    downloadBlob(convertedFile, 'converted-presentation.pptx');
   };
 
   const handleConvert = async () => {
@@ -28,6 +35,7 @@ export default function PDFToPPT() {
       setProgress(70);
       const pptBlob = await convertPDFToPPT(file);
       setProgress(100);
+      setConvertedFile(pptBlob);
       downloadBlob(pptBlob, 'converted-presentation.pptx');
       toast({
         title: "Success!",
@@ -126,7 +134,22 @@ export default function PDFToPPT() {
               className="mt-6"
             />
             
-            {!isProcessing && (
+            {/* Download Button */}
+            {convertedFile && !isProcessing && (
+              <div className="text-center space-y-4 mt-6">
+                <Button
+                  onClick={handleDownload}
+                  size="lg"
+                  className="bg-green-500 hover:bg-green-600 text-white px-8"
+                >
+                  <i className="fas fa-download mr-2"></i>
+                  Download PowerPoint Presentation
+                </Button>
+                <BuyMeCoffeeButton />
+              </div>
+            )}
+            
+            {!convertedFile && !isProcessing && (
               <div className="text-center mt-6">
                 <BuyMeCoffeeButton />
               </div>

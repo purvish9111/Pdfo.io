@@ -17,10 +17,17 @@ export default function PDFToTXT() {
   const [lineEndingStyle, setLineEndingStyle] = useState<'unix' | 'windows' | 'mac'>('unix');
   const [isProcessing, setIsProcessing] = useState(false);
   const [progress, setProgress] = useState(0);
+  const [convertedFile, setConvertedFile] = useState<Blob | null>(null);
   const { toast } = useToast();
 
   const handleFilesSelected = (files: File[]) => {
     setFile(files[0]);
+    setConvertedFile(null);
+  };
+
+  const handleDownload = () => {
+    if (!convertedFile) return;
+    downloadBlob(convertedFile, 'converted-text.txt');
   };
 
   const handleConvert = async () => {
@@ -34,6 +41,7 @@ export default function PDFToTXT() {
       setProgress(70);
       const txtBlob = await convertPDFToTXT(file, options);
       setProgress(100);
+      setConvertedFile(txtBlob);
       downloadBlob(txtBlob, 'converted-text.txt');
       toast({
         title: "Success!",
@@ -155,7 +163,22 @@ export default function PDFToTXT() {
               className="mt-6"
             />
             
-            {!isProcessing && (
+            {/* Download Button */}
+            {convertedFile && !isProcessing && (
+              <div className="text-center space-y-4 mt-6">
+                <Button
+                  onClick={handleDownload}
+                  size="lg"
+                  className="bg-green-500 hover:bg-green-600 text-white px-8"
+                >
+                  <i className="fas fa-download mr-2"></i>
+                  Download Text File
+                </Button>
+                <BuyMeCoffeeButton />
+              </div>
+            )}
+            
+            {!convertedFile && !isProcessing && (
               <div className="text-center mt-6">
                 <BuyMeCoffeeButton />
               </div>

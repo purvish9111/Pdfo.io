@@ -12,12 +12,14 @@ export default function ExcelToPDF() {
   const [file, setFile] = useState<File | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [progress, setProgress] = useState(0);
+  const [convertedFile, setConvertedFile] = useState<Blob | null>(null);
   const { toast } = useToast();
 
   const handleFilesSelected = (files: File[]) => {
     const selectedFile = files[0];
     if (selectedFile && (selectedFile.name.endsWith('.xlsx') || selectedFile.name.endsWith('.xls'))) {
       setFile(selectedFile);
+      setConvertedFile(null);
     } else {
       toast({
         title: "Invalid file format",
@@ -25,6 +27,11 @@ export default function ExcelToPDF() {
         variant: "destructive",
       });
     }
+  };
+
+  const handleDownload = () => {
+    if (!convertedFile) return;
+    downloadBlob(convertedFile, 'converted-from-excel.pdf');
   };
 
   const handleConvert = async () => {
@@ -37,6 +44,7 @@ export default function ExcelToPDF() {
       setProgress(70);
       const pdfBlob = await convertExcelToPDF(file);
       setProgress(100);
+      setConvertedFile(pdfBlob);
       downloadBlob(pdfBlob, 'converted-from-excel.pdf');
       toast({
         title: "Success!",
@@ -145,7 +153,22 @@ export default function ExcelToPDF() {
               className="mt-6"
             />
             
-            {!isProcessing && (
+            {/* Download Button */}
+            {convertedFile && !isProcessing && (
+              <div className="text-center space-y-4 mt-6">
+                <Button
+                  onClick={handleDownload}
+                  size="lg"
+                  className="bg-green-500 hover:bg-green-600 text-white px-8"
+                >
+                  <i className="fas fa-download mr-2"></i>
+                  Download PDF
+                </Button>
+                <BuyMeCoffeeButton />
+              </div>
+            )}
+            
+            {!convertedFile && !isProcessing && (
               <div className="text-center mt-6">
                 <BuyMeCoffeeButton />
               </div>

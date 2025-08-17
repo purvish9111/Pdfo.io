@@ -15,10 +15,17 @@ export default function PDFToJPG() {
   const [quality, setQuality] = useState(90);
   const [isProcessing, setIsProcessing] = useState(false);
   const [progress, setProgress] = useState(0);
+  const [convertedFile, setConvertedFile] = useState<Blob | null>(null);
   const { toast } = useToast();
 
   const handleFilesSelected = (files: File[]) => {
     setFile(files[0]);
+    setConvertedFile(null);
+  };
+
+  const handleDownload = () => {
+    if (!convertedFile) return;
+    downloadBlob(convertedFile, 'pdf-images.zip');
   };
 
   const handleConvert = async () => {
@@ -32,6 +39,7 @@ export default function PDFToJPG() {
       setProgress(70);
       const zipBlob = await convertPDFToImages(file, 'jpg', options);
       setProgress(100);
+      setConvertedFile(zipBlob);
       downloadBlob(zipBlob, 'pdf-images.zip');
       toast({
         title: "Success!",
@@ -141,7 +149,22 @@ export default function PDFToJPG() {
               className="mt-6"
             />
             
-            {!isProcessing && (
+            {/* Download Button */}
+            {convertedFile && !isProcessing && (
+              <div className="text-center space-y-4 mt-6">
+                <Button
+                  onClick={handleDownload}
+                  size="lg"
+                  className="bg-green-500 hover:bg-green-600 text-white px-8"
+                >
+                  <i className="fas fa-download mr-2"></i>
+                  Download JPG Images (ZIP)
+                </Button>
+                <BuyMeCoffeeButton />
+              </div>
+            )}
+            
+            {!convertedFile && !isProcessing && (
               <div className="text-center mt-6">
                 <BuyMeCoffeeButton />
               </div>

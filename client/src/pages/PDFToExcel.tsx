@@ -15,10 +15,17 @@ export default function PDFToExcel() {
   const [autoDetectTables, setAutoDetectTables] = useState(true);
   const [isProcessing, setIsProcessing] = useState(false);
   const [progress, setProgress] = useState(0);
+  const [convertedFile, setConvertedFile] = useState<Blob | null>(null);
   const { toast } = useToast();
 
   const handleFilesSelected = (files: File[]) => {
     setFile(files[0]);
+    setConvertedFile(null);
+  };
+
+  const handleDownload = () => {
+    if (!convertedFile) return;
+    downloadBlob(convertedFile, 'converted-spreadsheet.xlsx');
   };
 
   const handleConvert = async () => {
@@ -32,6 +39,7 @@ export default function PDFToExcel() {
       setProgress(70);
       const excelBlob = await convertPDFToExcel(file, options);
       setProgress(100);
+      setConvertedFile(excelBlob);
       downloadBlob(excelBlob, 'converted-spreadsheet.xlsx');
       toast({
         title: "Success!",
@@ -136,7 +144,22 @@ export default function PDFToExcel() {
               className="mt-6"
             />
             
-            {!isProcessing && (
+            {/* Download Button */}
+            {convertedFile && !isProcessing && (
+              <div className="text-center space-y-4 mt-6">
+                <Button
+                  onClick={handleDownload}
+                  size="lg"
+                  className="bg-green-500 hover:bg-green-600 text-white px-8"
+                >
+                  <i className="fas fa-download mr-2"></i>
+                  Download Excel Spreadsheet
+                </Button>
+                <BuyMeCoffeeButton />
+              </div>
+            )}
+            
+            {!convertedFile && !isProcessing && (
               <div className="text-center mt-6">
                 <BuyMeCoffeeButton />
               </div>
