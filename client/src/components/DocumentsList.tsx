@@ -46,12 +46,13 @@ function SortableDocumentCard({ file, onRemove, showPages, allowPageReorder, ind
   };
 
   return (
-    <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
+    <div ref={setNodeRef} style={style} {...attributes}>
       <DocumentCard
         file={file}
         onRemove={onRemove}
         showPages={showPages}
         allowPageReorder={allowPageReorder}
+        dragListeners={listeners}
       />
     </div>
   );

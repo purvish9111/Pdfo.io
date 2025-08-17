@@ -9,6 +9,7 @@ interface DocumentCardProps {
   showPages?: boolean;
   allowPageReorder?: boolean;
   onPageReorder?: (pageOrder: number[]) => void;
+  dragListeners?: any;
 }
 
 export function DocumentCard({ 
@@ -16,7 +17,8 @@ export function DocumentCard({
   onRemove, 
   showPages = true, 
   allowPageReorder = false,
-  onPageReorder 
+  onPageReorder,
+  dragListeners
 }: DocumentCardProps) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [pageCount, setPageCount] = useState<number | null>(null);
@@ -33,7 +35,10 @@ export function DocumentCard({
     <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4 shadow-sm">
       <div className="flex items-center space-x-4">
         {/* Drag Handle */}
-        <div className="flex-shrink-0 cursor-move text-gray-400 hover:text-gray-600">
+        <div 
+          className="flex-shrink-0 cursor-move text-gray-400 hover:text-gray-600 touch-none"
+          {...dragListeners}
+        >
           <GripVertical className="h-5 w-5" />
         </div>
         
