@@ -20,6 +20,14 @@ PDFo is a comprehensive web-based PDF manipulation and conversion platform that 
 - **MERGE PDF ENHANCEMENT**: Added DocumentCard and DocumentsList components for better file management
 - **ACCESSIBILITY FIXES**: Added proper DialogTitle and DialogDescription for screen reader compliance
 - **PERFORMANCE**: Updated browserslist data for better build optimization
+- **ENHANCED TOOLS**: Completed 4 advanced tools with sophisticated interfaces:
+  - Extract Images: Visual preview grid with individual download icons and bulk ZIP download
+  - PDF Optimizer: 3-level optimization (Low/Medium/High) with size comparison and results display
+  - Remove Blank Pages: Automatic detection with visual highlighting and manual override capabilities
+  - Add Header & Footer: Live preview with font controls, positioning, and page range options
+- **UI FIXES**: Removed loading delays for direct tool access, fixed about page tool count to 26
+- **EMAIL INTEGRATION**: Updated all contact references to use info@pdfo.io as primary company email
+- **CONTACT IMPROVEMENTS**: Fixed white button visibility and updated founder contact to pravaah.purvish@gmail.com
 
 # User Preferences
 

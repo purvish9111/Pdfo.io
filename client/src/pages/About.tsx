@@ -36,7 +36,7 @@ export default function About() {
             <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">What is PDFo?</h2>
             <div className="space-y-4 text-gray-600 dark:text-gray-300 leading-relaxed">
               <p>
-                PDFo is a comprehensive web-based PDF manipulation and conversion platform that provides users with 22 professional PDF tools. Our mission is to make PDF processing accessible, secure, and completely free for everyone.
+                PDFo is a comprehensive web-based PDF manipulation and conversion platform that provides users with 26 professional PDF tools. Our mission is to make PDF processing accessible, secure, and completely free for everyone.
               </p>
               <p>
                 Whether you need to merge, split, convert, compress, or secure your PDF documents, PDFo has you covered. All processing happens directly in your browser, ensuring your documents never leave your device and remain completely private.
@@ -44,7 +44,7 @@ export default function About() {
               <div className="grid md:grid-cols-3 gap-6 mt-8">
                 <div className="text-center">
                   <div className="w-12 h-12 bg-blue-500 rounded-lg flex items-center justify-center text-white mb-3 mx-auto">
-                    <span className="text-xl font-bold">22</span>
+                    <span className="text-xl font-bold">26</span>
                   </div>
                   <h3 className="font-semibold text-gray-900 dark:text-white">PDF Tools</h3>
                   <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">Complete toolkit</p>

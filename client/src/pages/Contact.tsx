@@ -42,11 +42,11 @@ export default function Contact() {
                   For support, feedback, or business inquiries
                 </p>
                 <a 
-                  href="mailto:contact@pravaahaitech.com"
+                  href="mailto:info@pdfo.io"
                   className="inline-flex items-center px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors font-medium"
                 >
                   <Mail className="h-4 w-4 mr-2" />
-                  contact@pravaahaitech.com
+                  info@pdfo.io
                 </a>
               </div>
             </div>
@@ -139,7 +139,7 @@ export default function Contact() {
               Your input helps make PDFo better for everyone!
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <a href="mailto:contact@pravaahaitech.com">
+              <a href="mailto:info@pdfo.io">
                 <Button size="lg" className="bg-white text-green-600 hover:bg-gray-100 border-0">
                   <Mail className="h-4 w-4 mr-2" />
                   Send Email
