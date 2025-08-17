@@ -28,6 +28,7 @@ export default function SplitPDF() {
   const [pages, setPages] = useState<PDFPage[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
   const [progress, setProgress] = useState(0);
+  const [splitFiles, setSplitFiles] = useState<Blob[]>([]);
   const { toast } = useToast();
 
   const seoData = toolSEOData['/split'];
@@ -47,9 +48,12 @@ export default function SplitPDF() {
     setFiles(reorderedFiles);
   };
 
+  const [currentSplitPoints, setCurrentSplitPoints] = useState<SplitPoint[]>([]);
+
   const handleSplit = async (splitPoints: SplitPoint[]) => {
     if (!selectedFile) return;
     
+    setCurrentSplitPoints(splitPoints); // Store split points for download button logic
     setIsProcessing(true);
     setProgress(0);
     try {
@@ -84,22 +88,25 @@ export default function SplitPDF() {
       const splitBlobs = await splitPDF(selectedFile, pageRanges);
       setProgress(90);
       
-      // Download each split as separate file
-      splitBlobs.forEach((blob, index) => {
-        const group = groups[index];
+      // Store split files for download
+      setSplitFiles(splitBlobs);
+      
+      // Auto-download first file as convenience, store rest for manual download
+      if (splitBlobs.length > 0) {
+        const group = groups[0];
         const startPage = group[0].pageNumber;
         const endPage = group[group.length - 1].pageNumber;
         const fileName = startPage === endPage 
           ? `split-page-${startPage}.pdf`
           : `split-pages-${startPage}-${endPage}.pdf`;
-        downloadBlob(blob, fileName);
-      });
+        downloadBlob(splitBlobs[0], fileName);
+      }
 
       setProgress(100);
       
       toast({
         title: "Success!",
-        description: `PDF split into ${splitBlobs.length} separate files.`,
+        description: `PDF split into ${splitBlobs.length} separate files. Download buttons available below.`,
       });
     } catch (error) {
       toast({
@@ -184,6 +191,8 @@ export default function SplitPDF() {
                     setFiles([]);
                     setSelectedFile(null);
                     setPages([]);
+                    setSplitFiles([]);
+                    setCurrentSplitPoints([]);
                   }}
                   className="text-red-600 hover:text-red-700"
                 >
@@ -207,6 +216,60 @@ export default function SplitPDF() {
               color="green"
               className="mt-6"
             />
+            
+            {/* Download Split Files */}
+            {splitFiles.length > 0 && !isProcessing && (
+              <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6 mt-6">
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+                  Download Split Files ({splitFiles.length})
+                </h3>
+                <div className="grid gap-3">
+                  {splitFiles.map((blob, index) => {
+                    // Recreate groups using stored split points
+                    const groups: PDFPage[][] = [];
+                    let currentGroup: PDFPage[] = [];
+                    
+                    for (const page of pages) {
+                      currentGroup.push(page);
+                      
+                      // Check if there's a split point after this page
+                      const hasSplit = currentSplitPoints.some(sp => sp.afterPage === page.pageNumber);
+                      if (hasSplit) {
+                        groups.push(currentGroup);
+                        currentGroup = [];
+                      }
+                    }
+                    
+                    // Add the last group if it has pages
+                    if (currentGroup.length > 0) {
+                      groups.push(currentGroup);
+                    }
+                    
+                    const group = groups[index];
+                    if (!group) return null;
+                    
+                    const startPage = group[0].pageNumber;
+                    const endPage = group[group.length - 1].pageNumber;
+                    const fileName = startPage === endPage 
+                      ? `split-page-${startPage}.pdf`
+                      : `split-pages-${startPage}-${endPage}.pdf`;
+                    
+                    return (
+                      <Button
+                        key={index}
+                        onClick={() => downloadBlob(blob, fileName)}
+                        variant="outline"
+                        className="justify-start"
+                      >
+                        <i className="fas fa-download mr-2"></i>
+                        {fileName}
+                      </Button>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+            
             {!isProcessing && (
               <div className="text-center mt-6">
                 <BuyMeCoffeeButton />
