@@ -1,13 +1,15 @@
 import { useState } from "react";
 import { Link } from "wouter";
 import { FileUpload } from "@/components/FileUpload";
-import { FilesPreviewWithThumbnails } from "@/components/FilesPreviewWithThumbnails";
+import { DocumentsList } from "@/components/DocumentsList";
 import { Button } from "@/components/ui/button";
 import { ToolFooter } from "@/components/ToolFooter";
 import { mergePDFs } from "@/lib/realPdfUtils";
 import { useToast } from "@/hooks/use-toast";
 import { Download, Coffee } from "lucide-react";
 import { SEOHead } from "@/components/SEOHead";
+import { ProgressBar } from "@/components/ProgressBar";
+import { BuyMeCoffeeButton } from "@/components/BuyMeCoffeeButton";
 import { toolSEOData } from "@/lib/seo-data";
 
 export default function MergePDF() {
@@ -139,11 +141,11 @@ export default function MergePDF() {
           />
         ) : (
           <div className="space-y-6">
-            <FilesPreviewWithThumbnails
+            <DocumentsList
               files={files}
               onFilesChange={setFiles}
               title="PDFs to Merge"
-              allowReorder={true}
+              allowPageReorder={true}
             />
             
             {/* Add More Files Button */}
@@ -158,20 +160,12 @@ export default function MergePDF() {
             </div>
 
             {/* Progress Bar */}
-            {isProcessing && (
-              <div className="max-w-md mx-auto space-y-2">
-                <div className="flex justify-between text-sm text-gray-600 dark:text-gray-400">
-                  <span>Merging PDFs...</span>
-                  <span>{progress}%</span>
-                </div>
-                <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
-                  <div 
-                    className="bg-blue-500 h-2 rounded-full transition-all duration-300 ease-out"
-                    style={{ width: `${progress}%` }}
-                  ></div>
-                </div>
-              </div>
-            )}
+            <ProgressBar 
+              progress={progress} 
+              isVisible={isProcessing} 
+              color="blue"
+              className="mt-6"
+            />
 
             {/* Action Buttons */}
             <div className="flex justify-center space-x-4">

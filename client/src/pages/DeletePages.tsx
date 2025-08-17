@@ -115,12 +115,20 @@ export default function DeletePages() {
             acceptMultiple={false}
           />
         ) : (
-          <DeletePDFGrid
-            file={file}
-            pages={pages}
-            onDelete={handleDelete}
-            isProcessing={isProcessing}
-          />
+          <>
+            <DeletePDFGrid
+              file={file}
+              pages={pages}
+              onDelete={handleDelete}
+              isProcessing={isProcessing}
+            />
+            <ProgressBar 
+              progress={progress} 
+              isVisible={isProcessing} 
+              color="red"
+              className="mt-6"
+            />
+          </>
         )}
       </div>
 

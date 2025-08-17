@@ -103,15 +103,23 @@ export default function ReorderPages() {
             acceptMultiple={false}
           />
         ) : (
-          <ReorderPDFGrid
-            file={file}
-            pages={pages}
-            onReorder={handleReorder}
-            isProcessing={isProcessing}
-          />
+          <>
+            <ReorderPDFGrid
+              file={file}
+              pages={pages}
+              onReorder={handleReorder}
+              isProcessing={isProcessing}
+            />
+            <ProgressBar 
+              progress={progress} 
+              isVisible={isProcessing} 
+              color="purple"
+              className="mt-6"
+            />
+          </>
         )}
         
-        {file && (
+        {file && !isProcessing && (
           <div className="mt-4 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
             <p className="text-sm text-blue-700 dark:text-blue-300">
               <strong>💡 Tip:</strong> Drag and drop the page thumbnails to reorder them. Click the rotate button to adjust page orientation, or the delete button to remove unwanted pages.
