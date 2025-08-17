@@ -15,6 +15,11 @@ PDFo is a comprehensive web-based PDF manipulation and conversion platform that 
 - **REAL IMPLEMENTATIONS**: All format conversion tools now use PDF.js and pdf-lib for authentic processing
 - Enhanced password protection system with metadata-based simulation for client-side security
 - Updated homepage to display 26 total comprehensive PDF tools with proper routing
+- **ROUTING FIXES**: Fixed missing `/auth` route causing 404 errors
+- **PROGRESS BARS**: Completed systematic fix of all 26 tools with proper ProgressBar components
+- **MERGE PDF ENHANCEMENT**: Added DocumentCard and DocumentsList components for better file management
+- **ACCESSIBILITY FIXES**: Added proper DialogTitle and DialogDescription for screen reader compliance
+- **PERFORMANCE**: Updated browserslist data for better build optimization
 
 # User Preferences
 
