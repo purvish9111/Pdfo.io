@@ -7,7 +7,7 @@ import { BuyMeCoffeeButton } from "@/components/BuyMeCoffeeButton";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { convertPDFToImages, downloadBlob, type ImageConversionOptions } from "@/lib/realPdfUtils";
+import { convertPDFToTIFF, downloadBlob } from "@/lib/realPdfUtils";
 import { useToast } from "@/hooks/use-toast";
 
 export default function PDFToTIFF() {
@@ -35,9 +35,8 @@ export default function PDFToTIFF() {
     setProgress(0);
     try {
       setProgress(25);
-      const options: ImageConversionOptions = { compressionType };
       setProgress(70);
-      const zipBlob = await convertPDFToImages(file, 'tiff', options);
+      const zipBlob = await convertPDFToTIFF(file);
       setProgress(100);
       setConvertedFile(zipBlob);
       downloadBlob(zipBlob, 'pdf-tiff-images.zip');
