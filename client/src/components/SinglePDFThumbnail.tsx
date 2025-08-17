@@ -6,9 +6,10 @@ import { Skeleton } from "@/components/ui/skeleton";
 interface SinglePDFThumbnailProps {
   file: File;
   className?: string;
+  pageNumber?: number;
 }
 
-export function SinglePDFThumbnail({ file, className = "" }: SinglePDFThumbnailProps) {
+export function SinglePDFThumbnail({ file, className = "", pageNumber }: SinglePDFThumbnailProps) {
   const [thumbnail, setThumbnail] = useState<PDFThumbnail | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -16,7 +17,7 @@ export function SinglePDFThumbnail({ file, className = "" }: SinglePDFThumbnailP
     const generateThumbnail = async () => {
       setLoading(true);
       try {
-        const result = await generatePDFThumbnail(file);
+        const result = await generatePDFThumbnail(file, pageNumber);
         setThumbnail(result);
       } catch (error) {
         console.error('Thumbnail generation failed:', error);

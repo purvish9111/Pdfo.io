@@ -20,7 +20,7 @@ export interface PDFThumbnail {
  * Generate thumbnail preview for PDF files using PDF.js
  * This is completely client-side - no server upload required
  */
-export async function generatePDFThumbnail(file: File): Promise<PDFThumbnail> {
+export async function generatePDFThumbnail(file: File, pageNumber?: number): Promise<PDFThumbnail> {
   try {
     console.log('🖼️ Generating thumbnail for:', file.name);
     
@@ -52,9 +52,10 @@ export async function generatePDFThumbnail(file: File): Promise<PDFThumbnail> {
     const pdf = await loadingTask.promise;
     console.log('📚 PDF loaded successfully, pages:', pdf.numPages);
     
-    // Get the first page
-    const page = await pdf.getPage(1);
-    console.log('📄 Page 1 loaded');
+    // Get the specified page (default to first page)
+    const targetPage = pageNumber || 1;
+    const page = await pdf.getPage(targetPage);
+    console.log(`📄 Page ${targetPage} loaded`);
     
     // Calculate scale for thumbnail (max width: 200px, max height: 250px)
     const viewport = page.getViewport({ scale: 1 });
@@ -77,6 +78,7 @@ export async function generatePDFThumbnail(file: File): Promise<PDFThumbnail> {
     const renderContext = {
       canvasContext: context,
       viewport: scaledViewport,
+      canvas: canvas,
     };
     
     console.log('🎨 Starting render...');

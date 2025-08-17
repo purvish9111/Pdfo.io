@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { FileText, Scissors, Download } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { SinglePDFThumbnail } from '@/components/SinglePDFThumbnail';
 
 interface PDFPage {
   id: string;
@@ -110,10 +111,14 @@ export function SplitPDFGrid({ file, pages, onSplit, isProcessing }: SplitPDFGri
                 ) : null}
 
                 <div className="flex items-center">
-                  <div className="w-16 h-20 bg-white dark:bg-gray-800 rounded border border-gray-300 dark:border-gray-600 flex items-center justify-center mr-4">
-                    <div className="text-center">
-                      <FileText className="w-8 h-8 text-red-500 mx-auto mb-1" />
-                      <div className="text-xs font-semibold text-gray-700 dark:text-gray-300">{page.pageNumber}</div>
+                  <div className="w-20 h-28 mr-4 relative">
+                    <SinglePDFThumbnail 
+                      file={file} 
+                      pageNumber={page.pageNumber}
+                      className="w-full h-full rounded border border-gray-300 dark:border-gray-600"
+                    />
+                    <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 bg-blue-500 text-white text-xs px-2 py-1 rounded-full font-semibold">
+                      {page.pageNumber}
                     </div>
                   </div>
                   <div className="flex-1">

@@ -4,6 +4,7 @@ import { FileUpload } from "@/components/FileUpload";
 import { FilesPreviewWithThumbnails } from "@/components/FilesPreviewWithThumbnails";
 import { SplitPDFGrid } from "@/components/SplitPDFGrid";
 import { ToolFooter } from "@/components/ToolFooter";
+import { Button } from "@/components/ui/button";
 import { ProgressBar } from "@/components/ProgressBar";
 import { BuyMeCoffeeButton } from "@/components/BuyMeCoffeeButton";
 import { splitPDF, downloadBlob, generateRealPDFPages } from "@/lib/realPdfUtils";
@@ -147,14 +148,40 @@ export default function SplitPDF() {
         {files.length === 0 ? (
           <FileUpload
             onFilesSelected={handleFilesSelected}
-            acceptMultiple={true}
+            acceptMultiple={false}
           />
         ) : (
           <>
-            <FilesPreviewWithThumbnails
-              files={files}
-              onFilesChange={(updatedFiles: File[]) => setFiles(updatedFiles)}
-            />
+            {/* File Info */}
+            <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4 mb-6">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 bg-red-500 rounded-lg flex items-center justify-center text-white">
+                    <i className="fas fa-file-pdf text-lg"></i>
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-gray-900 dark:text-white">{selectedFile?.name}</h3>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">
+                      {((selectedFile?.size || 0) / (1024 * 1024)).toFixed(2)} MB • {pages.length} pages
+                    </p>
+                  </div>
+                </div>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => {
+                    setFiles([]);
+                    setSelectedFile(null);
+                    setPages([]);
+                  }}
+                  className="text-red-600 hover:text-red-700"
+                >
+                  <i className="fas fa-times mr-2"></i>
+                  Remove
+                </Button>
+              </div>
+            </div>
+
             {selectedFile && pages.length > 0 && (
               <SplitPDFGrid
                 file={selectedFile}
