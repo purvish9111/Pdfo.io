@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "wouter";
 import { FileUpload } from "@/components/FileUpload";
+import { FilesPreviewWithThumbnails } from "@/components/FilesPreviewWithThumbnails";
 import { SplitPDFGrid } from "@/components/SplitPDFGrid";
 import { ToolFooter } from "@/components/ToolFooter";
 import { ProgressBar } from "@/components/ProgressBar";
@@ -152,8 +153,7 @@ export default function SplitPDF() {
           <>
             <FilesPreviewWithThumbnails
               files={files}
-              onReorder={handleFilesReorder}
-              onRemoveFile={(index) => setFiles(files.filter((_, i) => i !== index))}
+              onFilesChange={(updatedFiles: File[]) => setFiles(updatedFiles)}
             />
             {selectedFile && pages.length > 0 && (
               <SplitPDFGrid
