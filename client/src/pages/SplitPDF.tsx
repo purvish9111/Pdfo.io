@@ -9,6 +9,8 @@ import { ProgressBar } from "@/components/ProgressBar";
 import { BuyMeCoffeeButton } from "@/components/BuyMeCoffeeButton";
 import { splitPDF, downloadBlob, generateRealPDFPages } from "@/lib/realPdfUtils";
 import { useToast } from "@/hooks/use-toast";
+import { SEOHead } from "@/components/SEOHead";
+import { toolSEOData } from "@/lib/seo-data";
 
 interface PDFPage {
   id: string;
@@ -27,6 +29,8 @@ export default function SplitPDF() {
   const [isProcessing, setIsProcessing] = useState(false);
   const [progress, setProgress] = useState(0);
   const { toast } = useToast();
+
+  const seoData = toolSEOData['/split'];
 
   const handleFilesSelected = async (selectedFiles: File[]) => {
     // Allow multiple PDF files for batch splitting
@@ -110,6 +114,13 @@ export default function SplitPDF() {
 
   return (
     <>
+      <SEOHead
+        title={seoData.title}
+        description={seoData.description}
+        keywords={seoData.keywords}
+        canonicalUrl={`${window.location.origin}/split`}
+        structuredData={seoData.structuredData}
+      />
       <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Back to Tools */}
         <div className="mb-8">
@@ -123,9 +134,9 @@ export default function SplitPDF() {
           <div className="w-16 h-16 bg-green-500 rounded-2xl flex items-center justify-center text-white text-xl mx-auto mb-4">
             <i className="fas fa-cut"></i>
           </div>
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">Split PDF</h1>
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">{seoData.h1}</h1>
           <p className="text-gray-600 dark:text-gray-300 max-w-xl mx-auto leading-relaxed">
-            Split your PDF into separate documents
+            {seoData.content}
           </p>
           
           {/* Features */}

@@ -7,6 +7,8 @@ import { BuyMeCoffeeButton } from "@/components/BuyMeCoffeeButton";
 import { Button } from "@/components/ui/button";
 import { compressPDF, downloadBlob, type CompressionLevel } from "@/lib/realPdfUtils";
 import { useToast } from "@/hooks/use-toast";
+import { SEOHead } from "@/components/SEOHead";
+import { toolSEOData } from "@/lib/seo-data";
 
 export default function CompressPDF() {
   const [file, setFile] = useState<File | null>(null);
@@ -16,6 +18,8 @@ export default function CompressPDF() {
   const [isProcessing, setIsProcessing] = useState(false);
   const [progress, setProgress] = useState(0);
   const { toast } = useToast();
+
+  const seoData = toolSEOData['/compress-pdf'];
 
   const handleFilesSelected = (files: File[]) => {
     const selectedFile = files[0];
@@ -74,6 +78,13 @@ export default function CompressPDF() {
 
   return (
     <>
+      <SEOHead
+        title={seoData.title}
+        description={seoData.description}
+        keywords={seoData.keywords}
+        canonicalUrl={`${window.location.origin}/compress-pdf`}
+        structuredData={seoData.structuredData}
+      />
       <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Back to Tools */}
         <div className="mb-8">
@@ -87,9 +98,9 @@ export default function CompressPDF() {
           <div className="w-16 h-16 bg-gray-500 rounded-2xl flex items-center justify-center text-white text-xl mx-auto mb-4">
             <i className="fas fa-compress-alt"></i>
           </div>
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">Compress PDF</h1>
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">{seoData.h1}</h1>
           <p className="text-gray-600 dark:text-gray-300 max-w-xl mx-auto leading-relaxed">
-            Reduce your PDF file size while maintaining quality
+            {seoData.content}
           </p>
           
           {/* Features */}

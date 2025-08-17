@@ -1,0 +1,20 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+
+# Sitemap
+Sitemap: https://your-domain.replit.app/sitemap.xml
+
+# Popular tool pages (hint for crawlers)
+Allow: /merge
+Allow: /split
+Allow: /compress-pdf
+Allow: /pdf-to-word
+Allow: /word-to-pdf
+Allow: /pdf-to-excel
+Allow: /excel-to-pdf
+Allow: /pdf-to-jpg
+Allow: /pdf-to-png
+
+# Crawl-delay to be respectful
+Crawl-delay: 1
