@@ -23,9 +23,11 @@ export default function ReorderPages() {
   const { toast } = useToast();
 
   const handleFilesSelected = async (files: File[]) => {
-    console.log('Files selected:', files);
+    console.log('📄 ReorderPages - Files selected:', files.map(f => f.name));
+    if (files.length === 0) return;
+    
     const selectedFile = files[0];
-    console.log('Selected file:', selectedFile.name, selectedFile.size);
+    console.log('📄 ReorderPages - Selected file:', selectedFile.name, selectedFile.size);
     setFile(selectedFile);
     
     try {

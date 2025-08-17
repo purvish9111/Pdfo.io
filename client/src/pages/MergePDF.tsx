@@ -22,6 +22,9 @@ export default function MergePDF() {
   const seoData = toolSEOData['/merge'];
 
   const handleFilesSelected = (selectedFiles: File[]) => {
+    console.log('📄 MergePDF - Files selected:', selectedFiles.map(f => f.name));
+    if (selectedFiles.length === 0) return;
+    
     // Allow adding more files to existing ones
     setFiles(prev => [...prev, ...selectedFiles]);
     // Clear any previous merge result
@@ -143,9 +146,9 @@ export default function MergePDF() {
           <div className="space-y-6">
             <DocumentsList
               files={files}
-              onFilesChange={setFiles}
+              onFilesChange={handleFilesReorder}
               title="PDFs to Merge"
-              allowPageReorder={true}
+              allowPageReorder={false}
             />
             
             {/* Add More Files Button */}

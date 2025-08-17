@@ -29,8 +29,11 @@ export function FileUpload({
   const [isDragActive, setIsDragActive] = useState(false);
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
+    console.log('📁 Files dropped:', acceptedFiles.map(f => f.name));
     setIsDragActive(false);
-    onFilesSelected(acceptedFiles);
+    if (acceptedFiles.length > 0) {
+      onFilesSelected(acceptedFiles);
+    }
   }, [onFilesSelected]);
 
   // Create accept object based on accept prop
