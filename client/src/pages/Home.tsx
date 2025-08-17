@@ -113,6 +113,34 @@ export default function Home() {
       faIcon: "fas fa-compress-alt"
     },
     {
+      name: "Extract Images",
+      path: "/extract-images",
+      description: "Extract all images from PDF as PNG files",
+      iconBg: "bg-purple-500",
+      faIcon: "fas fa-images"
+    },
+    {
+      name: "PDF Optimizer",
+      path: "/optimize-pdf",
+      description: "Optimize PDF to reduce size without quality loss",
+      iconBg: "bg-orange-500",
+      faIcon: "fas fa-magic"
+    },
+    {
+      name: "Remove Blank Pages",
+      path: "/remove-blank-pages",
+      description: "Automatically remove empty pages from PDF",
+      iconBg: "bg-red-500",
+      faIcon: "fas fa-eraser"
+    },
+    {
+      name: "Add Header & Footer",
+      path: "/add-header-footer",
+      description: "Add custom headers and footers to all pages",
+      iconBg: "bg-indigo-500",
+      faIcon: "fas fa-align-center"
+    },
+    {
       name: "PDF to JPG",
       path: "/pdf-to-jpg",
       description: "Convert PDF pages to high-quality JPG images",

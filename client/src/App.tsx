@@ -38,6 +38,10 @@ import PDFToJSON from "@/pages/PDFToJSON";
 import PNGToPDF from "@/pages/PNGToPDF";
 import WordToPDF from "@/pages/WordToPDF";
 import ExcelToPDF from "@/pages/ExcelToPDF";
+import ExtractImages from "@/pages/ExtractImages";
+import OptimizePDF from "@/pages/OptimizePDF";
+import RemoveBlankPages from "@/pages/RemoveBlankPages";
+import AddHeaderFooter from "@/pages/AddHeaderFooter";
 import About from "@/pages/About";
 
 import Privacy from "@/pages/Privacy";
@@ -93,6 +97,18 @@ function Router() {
       </Route>
       <Route path="/compress-pdf">
         <LazyRoute factory={() => import("@/pages/CompressPDF")} />
+      </Route>
+      <Route path="/extract-images">
+        <LazyRoute factory={() => import("@/pages/ExtractImages")} />
+      </Route>
+      <Route path="/optimize-pdf">
+        <LazyRoute factory={() => import("@/pages/OptimizePDF")} />
+      </Route>
+      <Route path="/remove-blank-pages">
+        <LazyRoute factory={() => import("@/pages/RemoveBlankPages")} />
+      </Route>
+      <Route path="/add-header-footer">
+        <LazyRoute factory={() => import("@/pages/AddHeaderFooter")} />
       </Route>
       
       {/* PDF Conversion Tools - Lazy Loaded */}
