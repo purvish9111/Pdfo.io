@@ -679,7 +679,7 @@ export async function convertPDFToExcel(file: File, options: DocumentConversionO
           y: Math.round(item.transform[5]),
           width: item.width,
           height: item.height
-        })).filter(item => item.text);
+        })).filter((item: any) => item.text);
         
         // Group items by Y position (rows)
         const rows: { [key: number]: any[] } = {};
@@ -789,7 +789,7 @@ export async function convertPDFToPPT(file: File): Promise<Blob> {
       
       // Group by Y position to identify lines/paragraphs
       const lines: { [key: number]: any[] } = {};
-      pageItems.forEach(item => {
+      pageItems.forEach((item: any) => {
         const yKey = Math.round(item.y / 10) * 10;
         if (!lines[yKey]) lines[yKey] = [];
         lines[yKey].push(item);
@@ -1015,36 +1015,7 @@ async function createZipFromBlobs(blobs: Blob[], format: string): Promise<Blob> 
   return zipBlob;
 }
 
-// Rotate PDF pages
-export async function rotatePDFPages(file: File, rotations: Record<number, number>): Promise<Blob> {
-  console.log('🔄 Rotating PDF pages:', Object.keys(rotations).length, 'pages to rotate');
-  
-  try {
-    const arrayBuffer = await file.arrayBuffer();
-    const pdf = await PDFDocument.load(arrayBuffer);
-    const pages = pdf.getPages();
-    
-    // Apply rotations to specified pages
-    Object.entries(rotations).forEach(([pageIndexStr, rotation]) => {
-      const pageIndex = parseInt(pageIndexStr);
-      if (pageIndex >= 0 && pageIndex < pages.length) {
-        const page = pages[pageIndex];
-        // Convert degrees to radians and apply rotation
-        const rotationRadians = (rotation * Math.PI) / 180;
-        page.setRotation(degrees(rotation));
-        console.log(`✅ Rotated page ${pageIndex + 1} by ${rotation} degrees`);
-      }
-    });
-    
-    const pdfBytes = await pdf.save();
-    console.log('✅ PDF rotation completed');
-    
-    return new Blob([pdfBytes], { type: 'application/pdf' });
-  } catch (error) {
-    console.error('❌ Error rotating PDF pages:', error);
-    throw new Error('Failed to rotate PDF pages');
-  }
-}
+// Duplicate function removed - using the one above at line 193
 
 // Convert PNG images to PDF
 export async function convertImagesToPDF(files: File[], options: ImageToPDFOptions = {}): Promise<Blob> {
