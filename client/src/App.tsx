@@ -63,91 +63,39 @@ function Router() {
       <Route path="/signup" component={SignUp} />
       <Route path="/auth" component={Login} />
       
-      {/* PDF Manipulation Tools - Lazy Loaded */}
-      <Route path="/merge">
-        <LazyRoute factory={() => import("@/pages/MergePDF")} />
-      </Route>
-      <Route path="/split">
-        <LazyRoute factory={() => import("@/pages/SplitPDF")} />
-      </Route>
-      <Route path="/reorder">
-        <LazyRoute factory={() => import("@/pages/ReorderPages")} />
-      </Route>
-      <Route path="/delete">
-        <LazyRoute factory={() => import("@/pages/DeletePages")} />
-      </Route>
-      <Route path="/rotate">
-        <LazyRoute factory={() => import("@/pages/RotatePDF")} />
-      </Route>
-      <Route path="/page-numbers">
-        <LazyRoute factory={() => import("@/pages/PageNumbers")} />
-      </Route>
+      {/* PDF Manipulation Tools - Direct Imports for Instant Loading */}
+      <Route path="/merge" component={MergePDF} />
+      <Route path="/split" component={SplitPDF} />
+      <Route path="/reorder" component={ReorderPages} />
+      <Route path="/delete" component={DeletePages} />
+      <Route path="/rotate" component={RotatePDF} />
+      <Route path="/page-numbers" component={PageNumbers} />
       
-      {/* Advanced Tools - Lazy Loaded */}
-      <Route path="/edit-metadata">
-        <LazyRoute factory={() => import("@/pages/EditMetadata")} />
-      </Route>
-      <Route path="/watermark-pdf">
-        <LazyRoute factory={() => import("@/pages/WatermarkPDF")} />
-      </Route>
-      <Route path="/lock-pdf">
-        <LazyRoute factory={() => import("@/pages/LockPDF")} />
-      </Route>
-      <Route path="/unlock-pdf">
-        <LazyRoute factory={() => import("@/pages/UnlockPDF")} />
-      </Route>
-      <Route path="/compress-pdf">
-        <LazyRoute factory={() => import("@/pages/CompressPDF")} />
-      </Route>
-      <Route path="/extract-images">
-        <LazyRoute factory={() => import("@/pages/ExtractImages")} />
-      </Route>
-      <Route path="/optimize-pdf">
-        <LazyRoute factory={() => import("@/pages/OptimizePDF")} />
-      </Route>
-      <Route path="/remove-blank-pages">
-        <LazyRoute factory={() => import("@/pages/RemoveBlankPages")} />
-      </Route>
-      <Route path="/add-header-footer">
-        <LazyRoute factory={() => import("@/pages/AddHeaderFooter")} />
-      </Route>
+      {/* Advanced Tools - Direct Imports for Instant Loading */}
+      <Route path="/edit-metadata" component={EditMetadata} />
+      <Route path="/watermark-pdf" component={WatermarkPDF} />
+      <Route path="/lock-pdf" component={LockPDF} />
+      <Route path="/unlock-pdf" component={UnlockPDF} />
+      <Route path="/compress-pdf" component={CompressPDF} />
+      <Route path="/extract-images" component={ExtractImages} />
+      <Route path="/optimize-pdf" component={OptimizePDF} />
+      <Route path="/remove-blank-pages" component={RemoveBlankPages} />
+      <Route path="/add-header-footer" component={AddHeaderFooter} />
       
-      {/* PDF Conversion Tools - Lazy Loaded */}
-      <Route path="/pdf-to-jpg">
-        <LazyRoute factory={() => import("@/pages/PDFToJPG")} />
-      </Route>
-      <Route path="/pdf-to-png">
-        <LazyRoute factory={() => import("@/pages/PDFToPNG")} />
-      </Route>
-      <Route path="/pdf-to-tiff">
-        <LazyRoute factory={() => import("@/pages/PDFToTIFF")} />
-      </Route>
-      <Route path="/pdf-to-word">
-        <LazyRoute factory={() => import("@/pages/PDFToWord")} />
-      </Route>
-      <Route path="/pdf-to-excel">
-        <LazyRoute factory={() => import("@/pages/PDFToExcel")} />
-      </Route>
-      <Route path="/pdf-to-ppt">
-        <LazyRoute factory={() => import("@/pages/PDFToPPT")} />
-      </Route>
-      <Route path="/pdf-to-txt">
-        <LazyRoute factory={() => import("@/pages/PDFToTXT")} />
-      </Route>
-      <Route path="/pdf-to-json">
-        <LazyRoute factory={() => import("@/pages/PDFToJSON")} />
-      </Route>
+      {/* PDF Conversion Tools - Direct Imports for Instant Loading */}
+      <Route path="/pdf-to-jpg" component={PDFToJPG} />
+      <Route path="/pdf-to-png" component={PDFToPNG} />
+      <Route path="/pdf-to-tiff" component={PDFToTIFF} />
+      <Route path="/pdf-to-word" component={PDFToWord} />
+      <Route path="/pdf-to-excel" component={PDFToExcel} />
+      <Route path="/pdf-to-ppt" component={PDFToPPT} />
+      <Route path="/pdf-to-txt" component={PDFToTXT} />
+      <Route path="/pdf-to-json" component={PDFToJSON} />
       
-      {/* Reverse Conversion Tools - Lazy Loaded */}
-      <Route path="/png-to-pdf">
-        <LazyRoute factory={() => import("@/pages/PNGToPDF")} />
-      </Route>
-      <Route path="/word-to-pdf">
-        <LazyRoute factory={() => import("@/pages/WordToPDF")} />
-      </Route>
-      <Route path="/excel-to-pdf">
-        <LazyRoute factory={() => import("@/pages/ExcelToPDF")} />
-      </Route>
+      {/* Reverse Conversion Tools - Direct Imports for Instant Loading */}
+      <Route path="/png-to-pdf" component={PNGToPDF} />
+      <Route path="/word-to-pdf" component={WordToPDF} />
+      <Route path="/excel-to-pdf" component={ExcelToPDF} />
       
       {/* Company Pages */}
       <Route path="/about" component={About} />

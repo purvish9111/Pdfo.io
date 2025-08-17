@@ -37,10 +37,14 @@ export function SinglePDFThumbnail({ file, className = "", pageNumber }: SingleP
     generateThumbnail();
   }, [file, pageNumber]);
 
+  // Removed loading skeleton for instant display
   if (loading) {
     return (
-      <div className={`aspect-[2/3] ${className}`}>
-        <Skeleton className="w-full h-full rounded-lg" />
+      <div className={`aspect-[2/3] bg-gray-100 dark:bg-gray-800 rounded-lg flex flex-col items-center justify-center p-2 ${className}`}>
+        <FileText className="h-6 w-6 text-gray-400 mb-1" />
+        <div className="text-xs text-gray-500 text-center">
+          Processing...
+        </div>
       </div>
     );
   }

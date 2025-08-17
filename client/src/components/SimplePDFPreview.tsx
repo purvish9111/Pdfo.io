@@ -77,7 +77,7 @@ export function SimplePDFPreview({ file, pageNumber = 1, className = "", onError
     <div className={`relative ${className}`}>
       {loading && (
         <div className="absolute inset-0 flex items-center justify-center bg-gray-100 dark:bg-gray-700">
-          <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-500"></div>
+          <FileText className="h-6 w-6 text-gray-400" />
         </div>
       )}
       
