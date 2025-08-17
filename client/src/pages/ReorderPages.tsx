@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "wouter";
 import { FileUpload } from "@/components/FileUpload";
-import { ReorderPDFGrid } from "@/components/ReorderPDFGrid";
+import { ReorderPDFGridNative } from "@/components/ReorderPDFGridNative";
 import { ToolFooter } from "@/components/ToolFooter";
 import { ProgressBar } from "@/components/ProgressBar";
 import { BuyMeCoffeeButton } from "@/components/BuyMeCoffeeButton";
@@ -127,7 +127,7 @@ export default function ReorderPages() {
           />
         ) : (
           <>
-            <ReorderPDFGrid
+            <ReorderPDFGridNative
               file={file}
               pages={pages}
               onReorder={handleReorder}
