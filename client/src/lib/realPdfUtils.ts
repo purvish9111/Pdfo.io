@@ -1,4 +1,6 @@
 import { PDFDocument, rgb, StandardFonts, degrees } from 'pdf-lib';
+import * as pdfjsLib from 'pdfjs-dist';
+import { ensurePDFWorker } from './pdfWorkerSetup';
 import JSZip from 'jszip';
 
 // Real PDF processing utilities using pdf-lib
@@ -302,27 +304,61 @@ export async function addPageNumbers(file: File, settings: PageNumberSettings): 
   return new Blob([pdfBytes], { type: 'application/pdf' });
 }
 
-// Get PDF page count
+// Get PDF page count using PDF.js for accuracy
 export async function getPDFPageCount(file: File): Promise<number> {
   try {
+    console.log('📊 Getting page count for:', file.name);
+    
+    // Ensure PDF.js worker is set up first
+    ensurePDFWorker();
+    
     const arrayBuffer = await file.arrayBuffer();
-    const pdf = await PDFDocument.load(arrayBuffer);
-    return pdf.getPageCount();
+    
+    // Use PDF.js for reliable page counting
+    const loadingTask = pdfjsLib.getDocument({ 
+      data: arrayBuffer,
+      verbosity: 0 
+    });
+    const pdf = await loadingTask.promise;
+    const pageCount = pdf.numPages;
+    
+    console.log('✅ Page count:', pageCount);
+    return pageCount;
   } catch (error) {
-    console.error('Error getting PDF page count:', error);
+    console.error('❌ Error getting PDF page count:', error);
     return 0;
   }
 }
 
-// Generate actual PDF pages array from file
+// Generate actual PDF pages array from file with thumbnails
 export async function generateRealPDFPages(file: File): Promise<PDFPage[]> {
-  const pageCount = await getPDFPageCount(file);
-  return Array.from({ length: pageCount }, (_, index) => ({
-    id: `page-${index + 1}-${Date.now()}`,
-    pageNumber: index + 1,
-    rotation: 0,
-    deleted: false,
-  }));
+  try {
+    console.log('🔄 Generating PDF pages for:', file.name);
+    
+    // Ensure PDF.js worker is set up first
+    ensurePDFWorker();
+    
+    const pageCount = await getPDFPageCount(file);
+    
+    if (pageCount === 0) {
+      console.warn('⚠️ No pages found in PDF');
+      return [];
+    }
+    
+    console.log('📄 Creating', pageCount, 'page objects');
+    const pages = Array.from({ length: pageCount }, (_, index) => ({
+      id: `page-${index + 1}-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+      pageNumber: index + 1,
+      rotation: 0,
+      deleted: false,
+    }));
+    
+    console.log('✅ Generated', pages.length, 'PDF pages');
+    return pages;
+  } catch (error) {
+    console.error('❌ Error generating PDF pages:', error);
+    return [];
+  }
 }
 
 

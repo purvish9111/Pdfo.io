@@ -31,12 +31,12 @@ export default function ReorderPages() {
     try {
       // Generate real PDF pages from file
       const realPages = await generateRealPDFPages(selectedFile);
-      console.log('Generated pages:', realPages);
+      console.log('✅ ReorderPages real pages generated:', realPages.length);
       const pagesWithIndex = realPages.map((page, index) => ({
         ...page,
         originalIndex: index,
       }));
-      console.log('Pages with index:', pagesWithIndex);
+      console.log('✅ Pages with index created:', pagesWithIndex.length);
       setPages(pagesWithIndex);
     } catch (error) {
       console.error('Error generating PDF pages:', error);

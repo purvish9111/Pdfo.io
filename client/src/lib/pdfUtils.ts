@@ -1,41 +1,36 @@
-// Note: pdf-lib is not in the current package.json, so we'll simulate PDF operations
-// In a real implementation, you would install pdf-lib and use it here
+// Real PDF processing functions that delegate to realPdfUtils.ts
+import { 
+  mergePDFs as realMergePDFs,
+  splitPDF as realSplitPDF,
+  reorderPDFPages as realReorderPDFPages,
+  rotatePDFPages as realRotatePDFPages,
+  compressPDF as realCompressPDF,
+  generateRealPDFPages,
+  type PDFPage,
+  type CompressionLevel
+} from './realPdfUtils';
 
-interface PDFPage {
-  id: string;
-  pageNumber: number;
-  rotation: number;
-  deleted: boolean;
-}
-
-export async function mergePDFs(files: File[]): Promise<Blob> {
-  // Simulate PDF merging
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      const mergedBlob = new Blob([files[0]], { type: 'application/pdf' });
-      resolve(mergedBlob);
-    }, 2000);
-  });
+export async function mergePDFs(
+  files: File[], 
+  onProgress?: (current: number, total: number) => void
+): Promise<Blob> {
+  console.log('🔄 mergePDFs delegating to realMergePDFs');
+  return realMergePDFs(files, onProgress);
 }
 
 export async function splitPDF(file: File, pageRanges: number[][]): Promise<Blob[]> {
-  // Simulate PDF splitting
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      const splits = pageRanges.map(() => new Blob([file], { type: 'application/pdf' }));
-      resolve(splits);
-    }, 2000);
-  });
+  console.log('🔄 splitPDF delegating to realSplitPDF');
+  return realSplitPDF(file, pageRanges);
 }
 
-export async function processPDFPages(file: File, pages: PDFPage[]): Promise<Blob> {
-  // Simulate PDF page processing (reorder, delete, rotate)
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      const processedBlob = new Blob([file], { type: 'application/pdf' });
-      resolve(processedBlob);
-    }, 2000);
-  });
+export async function reorderPDFPages(file: File, newOrder: number[]): Promise<Blob> {
+  console.log('🔄 reorderPDFPages delegating to realReorderPDFPages');
+  return realReorderPDFPages(file, newOrder);
+}
+
+export async function compressPDF(file: File, compressionLevel: CompressionLevel): Promise<Blob> {
+  console.log('🔄 compressPDF delegating to realCompressPDF');
+  return realCompressPDF(file, compressionLevel);
 }
 
 export async function addPageNumbers(file: File, options: {
@@ -63,11 +58,10 @@ export function downloadBlob(blob: Blob, filename: string) {
   URL.revokeObjectURL(url);
 }
 
-export function generatePages(pageCount: number): PDFPage[] {
-  return Array.from({ length: pageCount }, (_, i) => ({
-    id: `page-${i + 1}`,
-    pageNumber: i + 1,
-    rotation: 0,
-    deleted: false,
-  }));
+export async function generatePages(file: File): Promise<PDFPage[]> {
+  console.log('🔄 generatePages delegating to generateRealPDFPages');
+  return generateRealPDFPages(file);
 }
+
+// Export types
+export type { PDFPage, CompressionLevel };

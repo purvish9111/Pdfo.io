@@ -128,6 +128,31 @@ export function SplitPDFGrid({ file, pages, onSplit, isProcessing }: SplitPDFGri
                 </div>
               </div>
 
+              {/* Split Line Area - Clickable zone between pages */}
+              {index < pages.length - 1 && (
+                <div className="relative flex items-center justify-center py-4">
+                  <div 
+                    className="group flex items-center justify-center w-full h-8 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors duration-200 cursor-pointer"
+                    onClick={() => handleSplitHere(page.pageNumber)}
+                  >
+                    {/* Horizontal line */}
+                    <div className="flex-1 h-px bg-gray-300 dark:bg-gray-600 group-hover:bg-blue-400 dark:group-hover:bg-blue-500 transition-colors"></div>
+                    
+                    {/* Split button */}
+                    <div className={`mx-4 px-3 py-1 rounded-full text-xs font-medium transition-all ${
+                      splitPoints.some(sp => sp.afterPage === page.pageNumber)
+                        ? 'bg-blue-500 text-white'
+                        : 'bg-gray-200 dark:bg-gray-600 text-gray-600 dark:text-gray-300 group-hover:bg-blue-500 group-hover:text-white'
+                    }`}>
+                      {splitPoints.some(sp => sp.afterPage === page.pageNumber) ? 'Split Here ✓' : 'Split Here'}
+                    </div>
+                    
+                    {/* Horizontal line */}
+                    <div className="flex-1 h-px bg-gray-300 dark:bg-gray-600 group-hover:bg-blue-400 dark:group-hover:bg-blue-500 transition-colors"></div>
+                  </div>
+                </div>
+              )}
+
               {/* Split Separator Area */}
               {index < pages.length - 1 && (
                 <div 

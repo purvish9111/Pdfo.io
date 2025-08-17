@@ -114,13 +114,22 @@ export function ReorderPDFGrid({ file, pages, onReorder, isProcessing }: Reorder
   const handleDragEnd = (event: any) => {
     const { active, over } = event;
     setActiveId(null);
+    
+    console.log('🔄 ReorderPDFGrid drag end:', { active: active.id, over: over?.id });
 
-    if (active.id !== over?.id) {
+    if (active.id !== over?.id && over) {
       setCurrentPages((items) => {
         const oldIndex = items.findIndex((item) => item.id === active.id);
         const newIndex = items.findIndex((item) => item.id === over.id);
         
-        return arrayMove(items, oldIndex, newIndex);
+        console.log('📋 ReorderPDFGrid indices:', { oldIndex, newIndex });
+        
+        if (oldIndex !== -1 && newIndex !== -1) {
+          const reordered = arrayMove(items, oldIndex, newIndex);
+          console.log('✅ ReorderPDFGrid pages reordered successfully');
+          return reordered;
+        }
+        return items;
       });
     }
   };

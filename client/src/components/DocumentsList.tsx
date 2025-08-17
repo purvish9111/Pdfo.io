@@ -80,13 +80,18 @@ export function DocumentsList({
 
   const handleDragEnd = (event: any) => {
     const { active, over } = event;
+    
+    console.log('🔄 DocumentsList drag end:', { active: active.id, over: over?.id });
 
-    if (active.id !== over?.id) {
+    if (active.id !== over?.id && over) {
       const activeIndex = files.findIndex((file, index) => `${file.name}-${file.size}-${index}` === active.id);
       const overIndex = files.findIndex((file, index) => `${file.name}-${file.size}-${index}` === over.id);
       
+      console.log('📋 Found indices:', { activeIndex, overIndex });
+      
       if (activeIndex !== -1 && overIndex !== -1) {
         const newFiles = arrayMove(files, activeIndex, overIndex);
+        console.log('✅ Files reordered:', newFiles.map(f => f.name));
         onFilesChange(newFiles);
       }
     }

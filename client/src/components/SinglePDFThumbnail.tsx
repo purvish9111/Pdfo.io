@@ -17,10 +17,12 @@ export function SinglePDFThumbnail({ file, className = "", pageNumber }: SingleP
     const generateThumbnail = async () => {
       setLoading(true);
       try {
+        console.log('🖼️ SinglePDFThumbnail generating for:', file.name, 'page:', pageNumber);
         const result = await generatePDFThumbnail(file, pageNumber);
+        console.log('✅ SinglePDFThumbnail generated successfully:', result.thumbnailUrl ? 'SUCCESS' : 'FAILED');
         setThumbnail(result);
       } catch (error) {
-        console.error('Thumbnail generation failed:', error);
+        console.error('❌ SinglePDFThumbnail generation failed:', error);
         setThumbnail({
           file,
           thumbnailUrl: '',
@@ -33,7 +35,7 @@ export function SinglePDFThumbnail({ file, className = "", pageNumber }: SingleP
     };
 
     generateThumbnail();
-  }, [file]);
+  }, [file, pageNumber]);
 
   if (loading) {
     return (

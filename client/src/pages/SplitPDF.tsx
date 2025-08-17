@@ -40,6 +40,7 @@ export default function SplitPDF() {
       const firstFile = selectedFiles[0];
       setSelectedFile(firstFile);
       const realPages = await generateRealPDFPages(firstFile);
+      console.log('✅ SplitPDF real pages generated:', realPages.length);
       setPages(realPages);
     }
   };
