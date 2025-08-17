@@ -5,6 +5,7 @@ import { DeletePDFGrid } from "@/components/DeletePDFGrid";
 import { ToolFooter } from "@/components/ToolFooter";
 import { ProgressBar } from "@/components/ProgressBar";
 import { BuyMeCoffeeButton } from "@/components/BuyMeCoffeeButton";
+import { Button } from "@/components/ui/button";
 import { deletePDFPages, downloadBlob, generateRealPDFPages } from "@/lib/realPdfUtils";
 import { useToast } from "@/hooks/use-toast";
 

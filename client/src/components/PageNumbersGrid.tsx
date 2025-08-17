@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { SinglePDFThumbnail } from '@/components/SinglePDFThumbnail';
 
 interface PDFPage {
   id: string;
@@ -211,11 +212,12 @@ export function PageNumbersGrid({ file, pages, onAddPageNumbers, isProcessing }:
                   className="relative bg-gray-100 dark:bg-gray-700 rounded-xl overflow-hidden aspect-[3/4] transition-all duration-300 hover:scale-105 hover:shadow-lg"
                 >
                   {/* Page Content */}
-                  <div className="h-full p-4 flex flex-col items-center justify-center">
-                    <FileText className="w-8 h-8 text-red-500 mb-2" />
-                    <div className="text-sm font-semibold text-gray-700 dark:text-gray-300 text-center">
-                      Page {page.pageNumber}
-                    </div>
+                  <div className="h-full p-2">
+                    <SinglePDFThumbnail 
+                      file={file} 
+                      pageNumber={page.pageNumber}
+                      className="w-full h-full rounded border border-gray-300 dark:border-gray-600"
+                    />
                   </div>
 
                   {/* Live Page Number Preview */}

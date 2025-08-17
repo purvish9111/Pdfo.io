@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { FileText, Download, RotateCw, RotateCcw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { SinglePDFThumbnail } from '@/components/SinglePDFThumbnail';
 
 interface PDFPage {
   id: string;
@@ -133,12 +134,13 @@ export function RotatePDFGrid({ file, pages, onRotate, isProcessing }: RotatePDF
               )}
 
               {/* Page Content with Rotation */}
-              <div className="aspect-[3/4] p-4 flex flex-col items-center justify-center">
-                <div style={getRotationStyle(page.rotation)}>
-                  <FileText className="w-8 h-8 text-red-500 mb-2" />
-                  <div className="text-sm font-semibold text-gray-700 dark:text-gray-300 text-center">
-                    Page {page.pageNumber}
-                  </div>
+              <div className="aspect-[3/4] p-2">
+                <div style={getRotationStyle(page.rotation)} className="w-full h-full">
+                  <SinglePDFThumbnail 
+                    file={file} 
+                    pageNumber={page.pageNumber}
+                    className="w-full h-full rounded border border-gray-300 dark:border-gray-600"
+                  />
                 </div>
               </div>
 

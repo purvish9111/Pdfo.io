@@ -5,6 +5,7 @@ import { ReorderPDFGrid } from "@/components/ReorderPDFGrid";
 import { ToolFooter } from "@/components/ToolFooter";
 import { ProgressBar } from "@/components/ProgressBar";
 import { BuyMeCoffeeButton } from "@/components/BuyMeCoffeeButton";
+import { Button } from "@/components/ui/button";
 import { reorderPDFPages, downloadBlob, generateRealPDFPages } from "@/lib/realPdfUtils";
 import { useToast } from "@/hooks/use-toast";
 
