@@ -45,6 +45,24 @@ function SortablePage({
     setIsDragging(true);
     e.dataTransfer.setData('text/plain', index.toString());
     e.dataTransfer.effectAllowed = 'move';
+    
+    // Create a custom drag image for smoother dragging
+    const dragImage = document.createElement('div');
+    dragImage.style.background = 'rgba(59, 130, 246, 0.9)';
+    dragImage.style.color = 'white';
+    dragImage.style.padding = '8px 16px';
+    dragImage.style.borderRadius = '8px';
+    dragImage.style.fontSize = '14px';
+    dragImage.style.fontWeight = 'bold';
+    dragImage.style.position = 'absolute';
+    dragImage.style.top = '-1000px';
+    dragImage.textContent = `Page ${page.pageNumber}`;
+    document.body.appendChild(dragImage);
+    e.dataTransfer.setDragImage(dragImage, 50, 20);
+    
+    // Clean up drag image after drag starts
+    setTimeout(() => document.body.removeChild(dragImage), 100);
+    
     onDragStart(index);
   };
 
@@ -68,20 +86,21 @@ function SortablePage({
 
   return (
     <div
-      className={`group relative bg-gray-100 dark:bg-gray-700 rounded-xl overflow-hidden transition-all duration-300 ${
-        isDragging ? 'opacity-50 scale-95' : ''
+      className={`group relative bg-gray-100 dark:bg-gray-700 rounded-xl overflow-hidden transition-all duration-200 ${
+        isDragging ? 'opacity-30 scale-95 rotate-2' : ''
       } ${
-        isDraggedOver ? 'ring-2 ring-blue-500 bg-blue-50 dark:bg-blue-900/20' : 'hover:shadow-lg hover:scale-105'
+        isDraggedOver ? 'ring-2 ring-blue-500 bg-blue-50 dark:bg-blue-900/20 scale-105' : 'hover:shadow-lg hover:scale-102'
       }`}
       onDragOver={handleDragOver}
       onDrop={handleDrop}
     >
       {/* Drag Handle */}
       <div 
-        className="absolute top-2 left-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-gray-800 dark:bg-gray-600 text-white rounded p-2 cursor-grab active:cursor-grabbing z-10"
+        className="absolute top-2 left-2 opacity-0 group-hover:opacity-100 transition-all duration-200 bg-blue-600 hover:bg-blue-700 text-white rounded-lg p-2 cursor-grab active:cursor-grabbing z-10 shadow-lg hover:shadow-xl transform hover:scale-110"
         draggable="true"
         onDragStart={handleDragStart}
         onDragEnd={handleDragEnd}
+        title="Drag to reorder"
       >
         <GripVertical className="w-4 h-4" />
       </div>

@@ -56,24 +56,19 @@ export default function ReorderPages() {
     console.log('🔄 Starting PDF reorder process...', reorderedPages.map(p => `Page ${p.pageNumber} (orig: ${p.originalIndex})`));
     
     setIsProcessing(true);
-    setProgress(0);
     try {
-      setProgress(25);
       // Extract the new page order (0-indexed for PDF processing)
       const newOrder = reorderedPages.map(page => page.originalIndex);
       console.log('📋 New page order:', newOrder);
       
-      setProgress(50);
       const processedBlob = await reorderPDFPages(file, newOrder);
-      setProgress(90);
       
       console.log('💾 Starting download...');
       downloadBlob(processedBlob, 'reordered-document.pdf');
-      setProgress(100);
       
       toast({
         title: "Success!",
-        description: "Your PDF pages have been reordered successfully.",
+        description: "Your PDF has been downloaded with reordered pages.",
       });
     } catch (error) {
       console.error('❌ Reorder error:', error);
@@ -84,7 +79,6 @@ export default function ReorderPages() {
       });
     } finally {
       setIsProcessing(false);
-      setProgress(0);
     }
   };
 
@@ -138,12 +132,18 @@ export default function ReorderPages() {
               onReorder={handleReorder}
               isProcessing={isProcessing}
             />
-            <ProgressBar 
-              progress={progress} 
-              isVisible={isProcessing} 
-              color="purple"
-              className="mt-6"
-            />
+            {isProcessing && (
+              <div className="mt-6 flex justify-center">
+                <div className="bg-purple-50 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-800 rounded-lg p-4">
+                  <div className="flex items-center space-x-3">
+                    <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-purple-600"></div>
+                    <span className="text-purple-700 dark:text-purple-300 font-medium">
+                      Processing PDF reorder...
+                    </span>
+                  </div>
+                </div>
+              </div>
+            )}
           </>
         )}
         
