@@ -57,8 +57,8 @@ export default function About() {
                   <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">Always free to use</p>
                 </div>
                 <div className="text-center">
-                  <div className="w-12 h-12 bg-purple-500 rounded-lg flex items-center justify-center text-white mb-3 mx-auto">
-                    <i className="fas fa-lock text-lg"></i>
+                  <div className="w-12 h-12 bg-purple-500 rounded-lg flex items-center justify-center text-white mb-3 mx-auto" role="img" aria-label="Security feature">
+                    <i className="fas fa-lock text-lg" aria-hidden="true"></i>
                   </div>
                   <h3 className="font-semibold text-gray-900 dark:text-white">Secure</h3>
                   <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">Client-side processing</p>
@@ -153,8 +153,8 @@ export default function About() {
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link href="/contact">
-                  <button className="inline-flex items-center px-6 py-3 bg-white text-blue-600 hover:bg-gray-100 transition-colors font-medium rounded-lg text-lg w-full sm:w-auto justify-center">
-                    <i className="fas fa-envelope mr-2"></i>
+                  <button className="inline-flex items-center px-6 py-3 bg-white text-blue-600 hover:bg-gray-100 transition-colors font-medium rounded-lg text-lg w-full sm:w-auto justify-center" aria-label="Send email to get in touch">
+                    <i className="fas fa-envelope mr-2" aria-hidden="true"></i>
                     Get in Touch
                   </button>
                 </Link>

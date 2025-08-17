@@ -64,8 +64,8 @@ export default function UnlockPDF() {
 
         {/* Tool Header */}
         <div className="text-center mb-8">
-          <div className="w-16 h-16 bg-pink-500 rounded-2xl flex items-center justify-center text-white text-xl mx-auto mb-4">
-            <i className="fas fa-unlock-alt"></i>
+          <div className="w-16 h-16 bg-pink-500 rounded-2xl flex items-center justify-center text-white text-xl mx-auto mb-4" role="img" aria-label="Unlock PDF tool">
+            <i className="fas fa-unlock-alt" aria-hidden="true"></i>
           </div>
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">Unlock PDF</h1>
           <p className="text-gray-600 dark:text-gray-300 max-w-xl mx-auto leading-relaxed">

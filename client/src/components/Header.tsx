@@ -9,7 +9,7 @@ import {
   DropdownMenuTrigger,
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetTrigger, SheetTitle, SheetDescription } from "@/components/ui/sheet";
 import { useAuth } from "@/hooks/use-auth";
 import { signOutUser } from "@/lib/firebase";
 
@@ -32,7 +32,7 @@ export function Header() {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <Link href="/" className="flex items-center">
-            <img src="/logo.png" alt="PDFo" className="h-8 w-auto" />
+            <img src="/logo.png" alt="PDFo - Free Online PDF Tools Home" className="h-8 w-auto" />
           </Link>
 
           {/* Desktop Navigation */}
@@ -73,6 +73,7 @@ export function Header() {
               size="icon"
               onClick={toggleTheme}
               className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400"
+              aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
             >
               {theme === "dark" ? (
                 <Sun className="h-5 w-5" />
@@ -85,7 +86,12 @@ export function Header() {
             {user && (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="sm" className="flex items-center space-x-2">
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    className="flex items-center space-x-2"
+                    aria-label="User account menu"
+                  >
                     <User className="h-4 w-4" />
                     <span className="hidden sm:inline">{user.displayName || user.email}</span>
                   </Button>
@@ -113,12 +119,17 @@ export function Header() {
                   variant="ghost"
                   size="icon"
                   className="md:hidden text-gray-600 dark:text-gray-300"
+                  aria-label="Open navigation menu"
                 >
                   <Menu className="h-5 w-5" />
                 </Button>
               </SheetTrigger>
               <SheetContent side="right" className="w-80">
-                <div className="flex flex-col space-y-4 mt-8">
+                <SheetTitle>Navigation Menu</SheetTitle>
+                <SheetDescription>
+                  Access all pages and user account options
+                </SheetDescription>
+                <div className="flex flex-col space-y-4 mt-4">
                   <Link 
                     href="/" 
                     className="text-lg font-medium text-gray-900 dark:text-gray-100 hover:text-blue-600 dark:hover:text-blue-400"
