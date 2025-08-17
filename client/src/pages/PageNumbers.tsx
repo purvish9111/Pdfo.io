@@ -29,11 +29,24 @@ export default function PageNumbers() {
   const { toast } = useToast();
 
   const handleFilesSelected = async (files: File[]) => {
+    console.log('PageNumbers - Files selected:', files);
     const selectedFile = files[0];
+    console.log('PageNumbers - Selected file:', selectedFile.name, selectedFile.size);
     setFile(selectedFile);
-    // Generate real PDF pages from file
-    const realPages = await generateRealPDFPages(selectedFile);
-    setPages(realPages);
+    
+    try {
+      // Generate real PDF pages from file
+      const realPages = await generateRealPDFPages(selectedFile);
+      console.log('PageNumbers - Generated pages:', realPages);
+      setPages(realPages);
+    } catch (error) {
+      console.error('PageNumbers - Error generating PDF pages:', error);
+      toast({
+        title: "Error",
+        description: "Failed to load PDF pages. Please try again.",
+        variant: "destructive",
+      });
+    }
   };
 
   const handleAddPageNumbers = async (settings: PageNumberSettings) => {

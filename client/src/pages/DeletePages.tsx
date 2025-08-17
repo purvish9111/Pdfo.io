@@ -23,15 +23,29 @@ export default function DeletePages() {
   const { toast } = useToast();
 
   const handleFilesSelected = async (files: File[]) => {
+    console.log('Delete - Files selected:', files);
     const selectedFile = files[0];
+    console.log('Delete - Selected file:', selectedFile.name, selectedFile.size);
     setFile(selectedFile);
-    // Generate real PDF pages from file
-    const realPages = await generateRealPDFPages(selectedFile);
-    const pagesWithDeleteFlag = realPages.map(page => ({
-      ...page,
-      deleted: false,
-    }));
-    setPages(pagesWithDeleteFlag);
+    
+    try {
+      // Generate real PDF pages from file
+      const realPages = await generateRealPDFPages(selectedFile);
+      console.log('Delete - Generated pages:', realPages);
+      const pagesWithDeleteFlag = realPages.map(page => ({
+        ...page,
+        deleted: false,
+      }));
+      console.log('Delete - Pages with delete flag:', pagesWithDeleteFlag);
+      setPages(pagesWithDeleteFlag);
+    } catch (error) {
+      console.error('Delete - Error generating PDF pages:', error);
+      toast({
+        title: "Error",
+        description: "Failed to load PDF pages. Please try again.",
+        variant: "destructive",
+      });
+    }
   };
 
   const handleDelete = async (updatedPages: PDFPage[]) => {

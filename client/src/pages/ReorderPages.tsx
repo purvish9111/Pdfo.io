@@ -23,15 +23,29 @@ export default function ReorderPages() {
   const { toast } = useToast();
 
   const handleFilesSelected = async (files: File[]) => {
+    console.log('Files selected:', files);
     const selectedFile = files[0];
+    console.log('Selected file:', selectedFile.name, selectedFile.size);
     setFile(selectedFile);
-    // Generate real PDF pages from file
-    const realPages = await generateRealPDFPages(selectedFile);
-    const pagesWithIndex = realPages.map((page, index) => ({
-      ...page,
-      originalIndex: index,
-    }));
-    setPages(pagesWithIndex);
+    
+    try {
+      // Generate real PDF pages from file
+      const realPages = await generateRealPDFPages(selectedFile);
+      console.log('Generated pages:', realPages);
+      const pagesWithIndex = realPages.map((page, index) => ({
+        ...page,
+        originalIndex: index,
+      }));
+      console.log('Pages with index:', pagesWithIndex);
+      setPages(pagesWithIndex);
+    } catch (error) {
+      console.error('Error generating PDF pages:', error);
+      toast({
+        title: "Error",
+        description: "Failed to load PDF pages. Please try again.",
+        variant: "destructive",
+      });
+    }
   };
 
   const handleReorder = async (reorderedPages: PDFPage[]) => {

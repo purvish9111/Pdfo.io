@@ -22,15 +22,29 @@ export default function RotatePDF() {
   const { toast } = useToast();
 
   const handleFilesSelected = async (files: File[]) => {
+    console.log('Rotate - Files selected:', files);
     const selectedFile = files[0];
+    console.log('Rotate - Selected file:', selectedFile.name, selectedFile.size);
     setFile(selectedFile);
-    // Generate real PDF pages from file
-    const realPages = await generateRealPDFPages(selectedFile);
-    const pagesWithRotation = realPages.map(page => ({
-      ...page,
-      rotation: 0,
-    }));
-    setPages(pagesWithRotation);
+    
+    try {
+      // Generate real PDF pages from file
+      const realPages = await generateRealPDFPages(selectedFile);
+      console.log('Rotate - Generated pages:', realPages);
+      const pagesWithRotation = realPages.map(page => ({
+        ...page,
+        rotation: 0,
+      }));
+      console.log('Rotate - Pages with rotation:', pagesWithRotation);
+      setPages(pagesWithRotation);
+    } catch (error) {
+      console.error('Rotate - Error generating PDF pages:', error);
+      toast({
+        title: "Error",
+        description: "Failed to load PDF pages. Please try again.",
+        variant: "destructive",
+      });
+    }
   };
 
   const handleRotate = async (updatedPages: PDFPage[]) => {

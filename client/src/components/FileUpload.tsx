@@ -34,7 +34,7 @@ export function FileUpload({
   }, [onFilesSelected]);
 
   // Create accept object based on accept prop
-  const getAcceptObject = (acceptString: string) => {
+  const getAcceptObject = (acceptString: string): Record<string, string[]> => {
     if (acceptString.includes('.png') || acceptString.includes('image/png')) {
       return {
         'image/png': ['.png'],
@@ -58,9 +58,11 @@ export function FileUpload({
     };
   };
 
+  const acceptObject = getAcceptObject(accept);
+  
   const { getRootProps, getInputProps } = useDropzone({
     onDrop,
-    accept: getAcceptObject(accept),
+    accept: acceptObject,
     multiple: acceptMultiple,
     maxSize,
     onDragEnter: () => setIsDragActive(true),
