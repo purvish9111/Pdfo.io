@@ -53,17 +53,21 @@ export default function ReorderPages() {
   const handleReorder = async (reorderedPages: PDFPage[]) => {
     if (!file) return;
     
+    console.log('🔄 Starting PDF reorder process...', reorderedPages.map(p => `Page ${p.pageNumber} (orig: ${p.originalIndex})`));
+    
     setIsProcessing(true);
     setProgress(0);
     try {
       setProgress(25);
       // Extract the new page order (0-indexed for PDF processing)
       const newOrder = reorderedPages.map(page => page.originalIndex);
+      console.log('📋 New page order:', newOrder);
       
       setProgress(50);
       const processedBlob = await reorderPDFPages(file, newOrder);
       setProgress(90);
       
+      console.log('💾 Starting download...');
       downloadBlob(processedBlob, 'reordered-document.pdf');
       setProgress(100);
       
@@ -72,6 +76,7 @@ export default function ReorderPages() {
         description: "Your PDF pages have been reordered successfully.",
       });
     } catch (error) {
+      console.error('❌ Reorder error:', error);
       toast({
         title: "Error",
         description: "Failed to reorder PDF pages. Please try again.",
