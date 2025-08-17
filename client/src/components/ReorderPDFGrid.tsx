@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import * as React from 'react';
 import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors, DragOverlay } from '@dnd-kit/core';
 import { arrayMove, SortableContext, sortableKeyboardCoordinates, rectSortingStrategy } from '@dnd-kit/sortable';
 import { useSortable } from '@dnd-kit/sortable';
@@ -91,10 +92,21 @@ function SortablePage({ page, index, file }: SortablePageProps) {
 }
 
 export function ReorderPDFGrid({ file, pages, onReorder, isProcessing }: ReorderPDFGridProps) {
-  const [currentPages, setCurrentPages] = useState<PDFPage[]>(() => 
-    pages.map((page, index) => ({ ...page, originalIndex: index }))
-  );
+  const [currentPages, setCurrentPages] = useState<PDFPage[]>([]);
   const [activeId, setActiveId] = useState<string | null>(null);
+
+  // Update currentPages when pages prop changes
+  React.useEffect(() => {
+    console.log('🔄 ReorderPDFGrid: Pages prop changed:', pages.length);
+    if (pages.length > 0) {
+      const pagesWithOriginalIndex = pages.map((page, index) => ({ 
+        ...page, 
+        originalIndex: index 
+      }));
+      setCurrentPages(pagesWithOriginalIndex);
+      console.log('✅ ReorderPDFGrid: Current pages updated:', pagesWithOriginalIndex.length);
+    }
+  }, [pages]);
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
