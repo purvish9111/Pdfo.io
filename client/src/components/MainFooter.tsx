@@ -75,13 +75,13 @@ export function MainFooter() {
         <div className="border-t border-gray-800 mt-8 pt-8 flex flex-col sm:flex-row justify-between items-center">
           <p className="text-gray-400 text-sm">© 2025 PDFo | Made with ❤️ by Pravaah AI Tech</p>
           <div className="flex space-x-6 mt-4 sm:mt-0">
-            <a href="#" className="text-gray-400 hover:text-white transition-colors" aria-label="Follow us on Twitter">
+            <a href="https://www.facebook.com/pdfo.io/" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors" aria-label="Follow us on Facebook">
+              <i className="fab fa-facebook" aria-hidden="true"></i>
+            </a>
+            <a href="https://x.com/PDFo_io" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors" aria-label="Follow us on X (Twitter)">
               <i className="fab fa-twitter" aria-hidden="true"></i>
             </a>
-            <a href="#" className="text-gray-400 hover:text-white transition-colors" aria-label="Visit our GitHub">
-              <i className="fab fa-github" aria-hidden="true"></i>
-            </a>
-            <a href="#" className="text-gray-400 hover:text-white transition-colors" aria-label="Connect on LinkedIn">
+            <a href="https://www.linkedin.com/showcase/pdfo/" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors" aria-label="Connect on LinkedIn">
               <i className="fab fa-linkedin" aria-hidden="true"></i>
             </a>
           </div>

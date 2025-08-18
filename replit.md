@@ -29,6 +29,7 @@ PDFo is a comprehensive web-based PDF manipulation and conversion platform that 
 - **EMAIL INTEGRATION**: Updated all contact references to use info@pdfo.io as primary company email
 - **DOMAIN UPDATES**: Updated sitemap.xml and all legal references to use pdfo.io domain
 - **CONTACT IMPROVEMENTS**: Fixed white button visibility on gradient background and updated founder contact to pravaah.purvish@gmail.com
+- **SOCIAL MEDIA INTEGRATION**: Added official social media links with Facebook (https://www.facebook.com/pdfo.io/), X/Twitter (https://x.com/PDFo_io), and LinkedIn (https://www.linkedin.com/showcase/pdfo/) replacing GitHub integration
 - **UX NAVIGATION FIX**: Implemented scroll-to-top functionality across all 25+ PDF tools and company pages for proper page loading
 - **HISTORIC BREAKTHROUGH - 100% SUCCESS ACHIEVED**: Completed comprehensive fix of ALL 26 PDF tools:
   - **OFFICE INTEGRATION**: Added mammoth.js, xlsx, pptxgenjs, utif libraries for authentic Office conversions
