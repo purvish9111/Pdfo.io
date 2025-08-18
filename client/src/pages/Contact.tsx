@@ -151,7 +151,7 @@ export default function Contact() {
                 </Button>
               </a>
               <Link href="/about">
-                <Button size="lg" variant="outline" className="border-2 border-white text-white hover:bg-white hover:text-green-600">
+                <Button size="lg" variant="outline" className="border-2 border-white text-white hover:bg-white hover:text-blue-600 bg-white/10 backdrop-blur-sm">
                   Learn More About Us
                 </Button>
               </Link>

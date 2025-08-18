@@ -176,7 +176,7 @@ export default function Terms() {
                   If you have questions about these terms, please contact us:
                 </p>
                 <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
-                  <p><strong>Email:</strong> legal@pdfo.com</p>
+                  <p><strong>Email:</strong> legal@pdfo.io</p>
                   <p><strong>Company:</strong> Pravaah AI Tech</p>
                   <p><strong>Founder:</strong> Purvish Patel</p>
                   <p><strong>Location:</strong> Khambhat, Gujarat, India</p>

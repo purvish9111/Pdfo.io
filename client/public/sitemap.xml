@@ -1,137 +1,137 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://your-domain.replit.app/</loc>
+    <loc>https://pdfo.io/</loc>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://your-domain.replit.app/merge</loc>
+    <loc>https://pdfo.io/merge</loc>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://your-domain.replit.app/split</loc>
+    <loc>https://pdfo.io/split</loc>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://your-domain.replit.app/reorder</loc>
+    <loc>https://pdfo.io/reorder</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://your-domain.replit.app/delete</loc>
+    <loc>https://pdfo.io/delete</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://your-domain.replit.app/rotate</loc>
+    <loc>https://pdfo.io/rotate</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://your-domain.replit.app/page-numbers</loc>
+    <loc>https://pdfo.io/page-numbers</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://your-domain.replit.app/edit-metadata</loc>
+    <loc>https://pdfo.io/edit-metadata</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://your-domain.replit.app/watermark-pdf</loc>
+    <loc>https://pdfo.io/watermark-pdf</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://your-domain.replit.app/lock-pdf</loc>
+    <loc>https://pdfo.io/lock-pdf</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://your-domain.replit.app/unlock-pdf</loc>
+    <loc>https://pdfo.io/unlock-pdf</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://your-domain.replit.app/compress-pdf</loc>
+    <loc>https://pdfo.io/compress-pdf</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://your-domain.replit.app/pdf-to-jpg</loc>
+    <loc>https://pdfo.io/pdf-to-jpg</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://your-domain.replit.app/pdf-to-png</loc>
+    <loc>https://pdfo.io/pdf-to-png</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://your-domain.replit.app/pdf-to-tiff</loc>
+    <loc>https://pdfo.io/pdf-to-tiff</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://your-domain.replit.app/pdf-to-word</loc>
+    <loc>https://pdfo.io/pdf-to-word</loc>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://your-domain.replit.app/pdf-to-excel</loc>
+    <loc>https://pdfo.io/pdf-to-excel</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://your-domain.replit.app/pdf-to-ppt</loc>
+    <loc>https://pdfo.io/pdf-to-ppt</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://your-domain.replit.app/pdf-to-txt</loc>
+    <loc>https://pdfo.io/pdf-to-txt</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://your-domain.replit.app/pdf-to-json</loc>
+    <loc>https://pdfo.io/pdf-to-json</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://your-domain.replit.app/png-to-pdf</loc>
+    <loc>https://pdfo.io/png-to-pdf</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://your-domain.replit.app/word-to-pdf</loc>
+    <loc>https://pdfo.io/word-to-pdf</loc>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://your-domain.replit.app/excel-to-pdf</loc>
+    <loc>https://pdfo.io/excel-to-pdf</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://your-domain.replit.app/about</loc>
+    <loc>https://pdfo.io/about</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://your-domain.replit.app/contact</loc>
+    <loc>https://pdfo.io/contact</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://your-domain.replit.app/privacy</loc>
+    <loc>https://pdfo.io/privacy</loc>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
   <url>
-    <loc>https://your-domain.replit.app/terms</loc>
+    <loc>https://pdfo.io/terms</loc>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
