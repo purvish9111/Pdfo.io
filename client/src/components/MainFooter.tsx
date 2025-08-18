@@ -1,7 +1,7 @@
 import { Link } from "wouter";
 import { Coffee } from "lucide-react";
 import { Button } from "@/components/ui/button";
-// Logo removed from footer to match original design
+import logoUrl from "@assets/logo_1755359015395.png";
 
 export function MainFooter() {
   const tools = [
@@ -19,8 +19,12 @@ export function MainFooter() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Brand Section */}
           <div className="col-span-1 md:col-span-2">
-            <div className="mb-4">
-              <h2 className="text-2xl font-bold text-white">PDFo</h2>
+            <div className="flex items-center mb-4">
+              <img 
+                src={logoUrl} 
+                alt="PDFo Logo" 
+                className="h-10 w-auto"
+              />
             </div>
             <p className="text-gray-400 mb-6 max-w-md leading-relaxed">
               Professional PDF tools for everyone. Fast, secure, and completely free. Transform your documents with ease.

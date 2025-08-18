@@ -15,7 +15,7 @@ import { initializePDFJS } from "./lib/pdf-worker-config";
 import { initializePerformanceMonitoring } from "./lib/performance-monitor";
 import { initializeWebVitalsOptimizations } from "./lib/web-vitals-optimization";
 import { injectCriticalCSS, optimizeNonCriticalCSS } from "./lib/critical-css";
-// Performance optimizations temporarily disabled to ensure original design
+import { initializeAllPerformanceOptimizations } from "./lib/performance-bootstrap";
 // Import all pages directly for instant access (no lazy loading for better performance)
 import Home from "@/pages/Home";
 import Login from "@/pages/Login";
@@ -134,8 +134,11 @@ function App() {
     // Initialize PDF.js worker for better performance
     initializePDFJS();
     
-    // Initialize performance monitoring only (no visual changes)
+    // Initialize performance monitoring
     initializePerformanceMonitoring();
+    
+    // Initialize only backend performance monitoring (no design changes)
+    initializeAllPerformanceOptimizations();
   }, []);
 
   return (

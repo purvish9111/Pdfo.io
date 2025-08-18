@@ -48,8 +48,6 @@ Preferred communication style: Simple, everyday language.
 
 **CRITICAL USER REQUIREMENT**: Absolutely NO design, layout, or visual changes allowed. User has explicitly stated they don't want any modifications to the website's appearance, styling, or visual elements. Only backend performance optimizations that don't affect the user interface are acceptable.
 
-**DESIGN REQUIREMENT**: The original website design uses a dark theme with dark background and white/light text. The website must always display in dark mode to match the original appearance exactly.
-
 # System Architecture
 
 ## Frontend Architecture

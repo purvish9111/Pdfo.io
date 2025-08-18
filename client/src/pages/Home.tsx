@@ -237,10 +237,10 @@ export default function Home() {
       {/* Hero Section */}
       <section className="hero-bg py-12 lg:py-16">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-gray-900 dark:text-white mb-4">
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white mb-4">
             Professional PDF Tools
           </h1>
-          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black text-blue-500 mb-8">
+          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-blue-500 mb-8">
             Made Simple
           </h2>
           <p className="text-lg text-gray-600 dark:text-gray-300 mb-8 max-w-3xl mx-auto">
