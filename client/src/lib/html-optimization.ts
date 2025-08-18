@@ -108,8 +108,7 @@ export const optimizeDOM = () => {
   const walker = document.createTreeWalker(
     document.body,
     NodeFilter.SHOW_TEXT,
-    null,
-    false
+    null
   );
 
   const textNodes: Text[] = [];
