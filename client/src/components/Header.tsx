@@ -1,26 +1,14 @@
-import { Link, useLocation } from "wouter";
-import { useTheme } from "./SimpleThemeProvider";
+import { Link } from "wouter";
 import { Moon, Sun, Menu, User, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-  DropdownMenuSeparator,
-} from "@/components/ui/dropdown-menu";
-import { Sheet, SheetContent, SheetTrigger, SheetTitle, SheetDescription } from "@/components/ui/sheet";
-// Temporarily disabled due to React hooks issue
-// import { useAuth } from "@/hooks/use-auth";
-// import { signOutUser } from "@/lib/firebase";
 import AdminPanelButton from "@/components/AdminPanelButton";
 
 export function Header() {
-  // const { theme, toggleTheme } = useTheme(); // Disabled
+  // Static values to avoid React hooks issues
   const theme = 'light';
   const toggleTheme = () => {};
-  const [location] = useLocation();
-  const user = null; // Simplified
+  const location = '/';
+  const user = null;
 
   const handleSignOut = async () => {
     console.log("Sign out disabled temporarily");

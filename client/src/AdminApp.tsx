@@ -4,8 +4,8 @@ import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { ThemeProvider } from "@/components/SimpleThemeProvider";
-import { AuthProvider, useAuth } from "@/components/SimpleAuthProvider";
+import { ThemeProvider } from "@/components/ThemeProvider";
+import { AuthProvider, useAuth } from "@/hooks/use-auth";
 import { useEffect } from "react";
 import AdminDashboard from "@/pages/AdminDashboard";
 import AnalyticsDashboard from "@/pages/AnalyticsDashboard";
@@ -110,7 +110,8 @@ function AdminLogin() {
 // Admin Router Component
 function AdminRouter() {
   const [location] = useLocation();
-  const { user, loading } = useAuth();
+  const { user } = useAuth();
+  const isLoading = !user && user !== null; // Simple loading state
   
   // Scroll to top on route change
   useEffect(() => {
@@ -118,7 +119,7 @@ function AdminRouter() {
   }, [location]);
 
   // Show loading state
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
         <div className="text-center">

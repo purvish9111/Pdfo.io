@@ -1,6 +1,7 @@
 import { createRoot } from "react-dom/client";
 import App from "./App";
-import MinimalApp from "./MinimalApp";
 import "./index.css";
 
-createRoot(document.getElementById("root")!).render(<App />);
+// Use SimpleApp to avoid React hooks issues
+import SimpleApp from "./SimpleApp";
+createRoot(document.getElementById("root")!).render(<SimpleApp />);
