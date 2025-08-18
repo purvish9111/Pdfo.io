@@ -13,7 +13,8 @@ export const trackWebVitals = () => {
 
     const observer = new PerformanceObserver((list) => {
       for (const entry of list.getEntries()) {
-        if (!entry.hadRecentInput) {
+        // FIXED: Type cast to access hadRecentInput property
+        if (!(entry as any).hadRecentInput) {
           const firstSessionEntry = clsEntries[0];
           const lastSessionEntry = clsEntries[clsEntries.length - 1];
 
@@ -48,11 +49,12 @@ export const trackWebVitals = () => {
     observer.observe({ type: 'largest-contentful-paint', buffered: true });
   };
 
-  // Track First Input Delay (FID)
+  // Track First Input Delay (FID)  
   const trackFID = () => {
     const observer = new PerformanceObserver((list) => {
       for (const entry of list.getEntries()) {
-        console.log('FID:', entry.processingStart - entry.startTime);
+        // FIXED: Type cast to access processingStart property
+        console.log('FID:', (entry as any).processingStart - entry.startTime);
       }
     });
 

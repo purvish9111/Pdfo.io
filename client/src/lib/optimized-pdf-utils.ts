@@ -34,7 +34,7 @@ export const renderPDFPageOptimized = async (
     
     // Create canvas with optimized settings
     const canvas = document.createElement('canvas');
-    const context = canvas.getContext('2d', PDF_CONFIG.canvasSettings);
+    const context = canvas.getContext('2d', PDF_CONFIG.canvasSettings) as CanvasRenderingContext2D;
     
     if (!context) {
       throw new Error('Could not get canvas context');
@@ -43,10 +43,10 @@ export const renderPDFPageOptimized = async (
     canvas.height = viewport.height;
     canvas.width = viewport.width;
 
-    // Render page
+    // Render page - FIXED: Simplified render parameters for PDF.js compatibility
     await page.render({
       canvasContext: context,
-      viewport: viewport,
+      viewport: viewport
     }).promise;
 
     const dataUrl = canvas.toDataURL('image/jpeg', 0.8); // Use JPEG with 80% quality for smaller size
@@ -55,7 +55,9 @@ export const renderPDFPageOptimized = async (
     if (useCache) {
       if (pageCache.size >= MAX_CACHE_SIZE) {
         const firstKey = pageCache.keys().next().value;
-        pageCache.delete(firstKey);
+        if (firstKey !== undefined) {
+          pageCache.delete(firstKey);
+        }
       }
       pageCache.set(cacheKey, dataUrl);
     }
@@ -121,14 +123,14 @@ export const getPDFMetadataOptimized = async (file: File) => {
     
     return {
       pageCount,
-      title: metadata.info?.Title || '',
-      author: metadata.info?.Author || '',
-      subject: metadata.info?.Subject || '',
-      keywords: metadata.info?.Keywords || '',
-      creator: metadata.info?.Creator || '',
-      producer: metadata.info?.Producer || '',
-      creationDate: metadata.info?.CreationDate || null,
-      modificationDate: metadata.info?.ModDate || null,
+      title: (metadata.info as any)?.Title || '',
+      author: (metadata.info as any)?.Author || '',
+      subject: (metadata.info as any)?.Subject || '',
+      keywords: (metadata.info as any)?.Keywords || '',
+      creator: (metadata.info as any)?.Creator || '',
+      producer: (metadata.info as any)?.Producer || '',
+      creationDate: (metadata.info as any)?.CreationDate || null,
+      modificationDate: (metadata.info as any)?.ModDate || null,
     };
   } catch (error) {
     console.error('Error getting PDF metadata:', error);
