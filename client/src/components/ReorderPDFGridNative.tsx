@@ -41,7 +41,7 @@ function SortablePage({
   const [isDragging, setIsDragging] = useState(false);
 
   const handleDragStart = (e: React.DragEvent) => {
-    console.log('🚀 Native drag start:', page.id, 'index:', index);
+    // FIXED: Removed debug logging for production performance
     setIsDragging(true);
     e.dataTransfer.setData('text/plain', index.toString());
     e.dataTransfer.effectAllowed = 'move';
@@ -67,7 +67,7 @@ function SortablePage({
   };
 
   const handleDragEnd = () => {
-    console.log('🎯 Native drag end:', page.id);
+    // FIXED: Removed debug logging for production performance
     setIsDragging(false);
     onDragEnd();
   };
@@ -80,7 +80,7 @@ function SortablePage({
 
   const handleDrop = (e: React.DragEvent) => {
     e.preventDefault();
-    console.log('📍 Native drop on:', page.id, 'index:', index);
+    // FIXED: Removed debug logging for production performance
     onDrop(e, index);
   };
 
@@ -139,14 +139,14 @@ export function ReorderPDFGridNative({ file, pages, onPagesChange, isProcessing 
 
   // Update currentPages when pages prop changes
   React.useEffect(() => {
-    console.log('🔄 ReorderPDFGridNative: Pages prop changed:', pages.length);
+    // FIXED: Removed debug logging for production performance
     if (pages.length > 0) {
       const pagesWithOriginalIndex = pages.map((page, index) => ({ 
         ...page, 
         originalIndex: index 
       }));
       setCurrentPages(pagesWithOriginalIndex);
-      console.log('✅ ReorderPDFGridNative: Current pages updated:', pagesWithOriginalIndex.length);
+      // FIXED: Removed debug logging for production performance
     }
   }, [pages]);
 
@@ -166,7 +166,7 @@ export function ReorderPDFGridNative({ file, pages, onPagesChange, isProcessing 
     e.preventDefault();
     const dragIndex = parseInt(e.dataTransfer.getData('text/plain'));
     
-    console.log('📋 Native reorder:', { dragIndex, dropIndex, pagesLength: currentPages.length });
+    // FIXED: Removed debug logging for production performance
     
     if (dragIndex !== dropIndex && dragIndex >= 0 && dropIndex >= 0) {
       setCurrentPages(prevPages => {
@@ -178,7 +178,7 @@ export function ReorderPDFGridNative({ file, pages, onPagesChange, isProcessing 
         // Insert it at the new position
         newPages.splice(dropIndex, 0, draggedPage);
         
-        console.log('✅ Native pages reordered:', newPages.map(p => p.pageNumber));
+        // FIXED: Removed debug logging for production performance
         
         // Notify parent component of changes
         onPagesChange(newPages);
