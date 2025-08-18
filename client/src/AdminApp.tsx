@@ -110,8 +110,7 @@ function AdminLogin() {
 // Admin Router Component
 function AdminRouter() {
   const [location] = useLocation();
-  const { user } = useAuth();
-  const isLoading = !user && user !== null; // Simple loading state
+  const { user, loading } = useAuth();
   
   // Scroll to top on route change
   useEffect(() => {
@@ -119,7 +118,7 @@ function AdminRouter() {
   }, [location]);
 
   // Show loading state
-  if (isLoading) {
+  if (loading) {
     return (
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
         <div className="text-center">

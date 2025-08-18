@@ -22,12 +22,12 @@ interface PerformanceProviderProps {
 }
 
 export const PerformanceProvider = ({ children }: PerformanceProviderProps) => {
-  const [isSlowConnection, setIsSlowConnection] = useState(false);
-  const [memoryUsage, setMemoryUsage] = useState<PerformanceContextType['memoryUsage']>(null);
-  const [performanceScore, setPerformanceScore] = useState(100);
-  const [enableOptimizations, setEnableOptimizations] = useState(false);
+  const [isSlowConnection, setIsSlowConnection] = React.useState(false);
+  const [memoryUsage, setMemoryUsage] = React.useState<PerformanceContextType['memoryUsage']>(null);
+  const [performanceScore, setPerformanceScore] = React.useState(100);
+  const [enableOptimizations, setEnableOptimizations] = React.useState(false);
 
-  useEffect(() => {
+  React.useEffect(() => {
     // Detect connection speed
     const detectConnectionSpeed = () => {
       if ('connection' in navigator) {
