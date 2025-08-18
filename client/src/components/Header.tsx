@@ -33,10 +33,10 @@ export function Header() {
           {/* Logo */}
           <Link href="/" className="flex items-center">
             <img 
-              src={`/logo.png?v=${Date.now()}`} 
+              src="/logo.png" 
               alt="PDFo - Free Online PDF Tools Home" 
               className="h-8 w-8 object-contain" 
-              style={{ height: '32px', width: '32px', objectFit: 'contain' }}
+              style={{ height: '32px', width: '32px', objectFit: 'contain', maxHeight: '32px', maxWidth: '32px' }}
             />
           </Link>
 

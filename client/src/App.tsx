@@ -14,8 +14,9 @@ import { useAnalytics } from "./hooks/use-analytics";
 import { initializePDFJS } from "./lib/pdf-worker-config";
 import { initializePerformanceMonitoring } from "./lib/performance-monitor";
 import { initializeWebVitalsOptimizations } from "./lib/web-vitals-optimization";
-import { injectCriticalCSS, optimizeNonCriticalCSS } from "./lib/critical-css";
-import { initializeAllPerformanceOptimizations } from "./lib/performance-bootstrap";
+// DISABLED: These imports cause CSS corruption
+// import { injectCriticalCSS, optimizeNonCriticalCSS } from "./lib/critical-css";
+// import { initializeAllPerformanceOptimizations } from "./lib/performance-bootstrap";
 // Import all pages directly for instant access (no lazy loading for better performance)
 import Home from "@/pages/Home";
 import Login from "@/pages/Login";
@@ -137,8 +138,9 @@ function App() {
     // Initialize performance monitoring
     initializePerformanceMonitoring();
     
-    // Safe performance monitoring only (design corruption fixed)
-    initializeAllPerformanceOptimizations();
+    // DISABLED: Optimization scripts corrupt CSS classes and design
+    // These scripts remove h-8, w-8, object-contain and other needed classes
+    // initializeAllPerformanceOptimizations();
   }, []);
 
   return (
