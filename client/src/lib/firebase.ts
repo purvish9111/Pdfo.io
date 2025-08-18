@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getAuth, GoogleAuthProvider, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, updateProfile } from "firebase/auth";
+import { getAuth, GoogleAuthProvider, createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup, signOut, updateProfile } from "firebase/auth";
 import { getFirestore, doc, setDoc, getDoc } from "firebase/firestore";
 
 const firebaseConfig = {
@@ -63,6 +63,29 @@ export const signOutUser = async () => {
     await signOut(auth);
   } catch (error) {
     console.error('Error signing out:', error);
+    throw error;
+  }
+};
+
+export const signInWithGoogle = async () => {
+  try {
+    const result = await signInWithPopup(auth, googleProvider);
+    const user = result.user;
+    
+    // Check if user document exists, if not create one
+    const userDoc = await getDoc(doc(db, 'users', user.uid));
+    if (!userDoc.exists()) {
+      await setDoc(doc(db, 'users', user.uid), {
+        name: user.displayName || 'Google User',
+        email: user.email,
+        createdAt: new Date(),
+        uid: user.uid
+      });
+    }
+    
+    return user;
+  } catch (error) {
+    console.error('Error signing in with Google:', error);
     throw error;
   }
 };
