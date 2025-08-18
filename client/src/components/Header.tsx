@@ -1,5 +1,5 @@
 import { Link, useLocation } from "wouter";
-import { useTheme } from "./ThemeProvider";
+import { useTheme } from "./SimpleThemeProvider";
 import { Moon, Sun, Menu, User, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {

@@ -4,7 +4,7 @@ import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { ThemeProvider } from "@/components/ThemeProvider";
+import { ThemeProvider } from "@/components/SimpleThemeProvider";
 import { AuthProvider, useAuth } from "@/components/SimpleAuthProvider";
 import { useEffect } from "react";
 import AdminDashboard from "@/pages/AdminDashboard";
