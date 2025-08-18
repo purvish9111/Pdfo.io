@@ -76,7 +76,7 @@ export function MainFooter() {
           <p className="text-gray-400 text-sm">© 2025 PDFo | Made with ❤️ by Pravaah AI Tech</p>
           <div className="flex space-x-6 mt-4 sm:mt-0">
             <a href="https://www.facebook.com/pdfo.io/" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors" aria-label="Follow us on Facebook">
-              <i className="fab fa-facebook" aria-hidden="true"></i>
+              <i className="fab fa-facebook-f" aria-hidden="true"></i>
             </a>
             <a href="https://x.com/PDFo_io" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors" aria-label="Follow us on X (Twitter)">
               <i className="fab fa-twitter" aria-hidden="true"></i>
