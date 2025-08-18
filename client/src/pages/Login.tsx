@@ -8,7 +8,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Loader2, Eye, EyeOff, ArrowLeft } from "lucide-react";
 import { signInUser, signInWithGoogle } from "@/lib/firebase";
 import { trackEvent } from "@/lib/analytics";
-import { useAuth } from "@/hooks/use-auth";
+import { useAuth } from "@/hooks/use-auth-simple";
 
 export default function Login() {
   const [, setLocation] = useLocation();
