@@ -1,9 +1,14 @@
+import { useEffect } from "react";
 import { Link } from "wouter";
 import { ArrowLeft, Shield, Lock, Eye, Database } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { MainFooter } from "@/components/MainFooter";
 
 export default function Privacy() {
+  // Scroll to top when component mounts
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   return (
     <>
       <div className="bg-gradient-to-br from-blue-50 via-white to-emerald-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">

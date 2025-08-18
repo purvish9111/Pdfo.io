@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Link } from "wouter";
 import { ArrowLeft, MapPin, Building, User, Heart, Coffee } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -6,6 +7,10 @@ import { BuyMeCoffeeButton } from "@/components/BuyMeCoffeeButton";
 import purvishPhoto from "@assets/image_1755367460356.jpg";
 
 export default function About() {
+  // Scroll to top when component mounts
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   return (
     <>
       <div className="bg-gradient-to-br from-blue-50 via-white to-emerald-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
