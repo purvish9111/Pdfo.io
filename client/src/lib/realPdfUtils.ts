@@ -1,6 +1,7 @@
 import { PDFDocument, rgb, StandardFonts, degrees } from 'pdf-lib';
 import * as pdfjsLib from 'pdfjs-dist';
-import { ensurePDFWorker } from './pdfWorkerSetup';
+// FIXED: Use centralized PDF worker initialization
+import { initializePDFJS } from './pdf-worker-config';
 import JSZip from 'jszip';
 
 // Real PDF processing utilities using pdf-lib
@@ -309,8 +310,8 @@ export async function getPDFPageCount(file: File): Promise<number> {
   try {
     console.log('📊 Getting page count for:', file.name);
     
-    // Ensure PDF.js worker is set up first
-    ensurePDFWorker();
+    // FIXED: Use centralized PDF.js worker initialization
+    initializePDFJS();
     
     const arrayBuffer = await file.arrayBuffer();
     
@@ -335,8 +336,8 @@ export async function generateRealPDFPages(file: File): Promise<PDFPage[]> {
   try {
     console.log('🔄 Generating PDF pages for:', file.name);
     
-    // Ensure PDF.js worker is set up first
-    ensurePDFWorker();
+    // FIXED: Use centralized PDF.js worker initialization
+    initializePDFJS();
     
     const pageCount = await getPDFPageCount(file);
     

@@ -95,7 +95,7 @@ export const analyzeBundleSize = () => {
   const observer = new PerformanceObserver((list) => {
     for (const entry of list.getEntries()) {
       if (entry.name.includes('.js') || entry.name.includes('.css')) {
-        console.log(`Bundle: ${entry.name.split('/').pop()} - ${(entry.transferSize / 1024).toFixed(2)}KB`);
+        // FIXED: Removed bundle logging for production performance
       }
     }
   });
@@ -115,7 +115,7 @@ export const monitorMemoryUsage = () => {
     jsHeapSizeLimit: (memory.jsHeapSizeLimit / 1048576).toFixed(2) + ' MB'
   };
 
-  console.log('Memory Usage:', memoryInfo);
+  // FIXED: Removed memory logging for production performance
   return memoryInfo;
 };
 

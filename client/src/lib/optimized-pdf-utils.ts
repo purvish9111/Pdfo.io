@@ -139,7 +139,7 @@ export const getPDFMetadataOptimized = async (file: File) => {
 // Clear cache to free memory
 export const clearPDFCache = () => {
   pageCache.clear();
-  console.log('PDF cache cleared');
+  // FIXED: Removed cache logging for production performance
 };
 
 // Get cache statistics

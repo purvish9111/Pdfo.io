@@ -48,12 +48,15 @@ import ExtractImages from "@/pages/ExtractImages";
 import OptimizePDF from "@/pages/OptimizePDF";
 import RemoveBlankPages from "@/pages/RemoveBlankPages";
 import AddHeaderFooter from "@/pages/AddHeaderFooter";
+// FIXED: Import missing page components
 import About from "@/pages/About";
+import Contact from "@/pages/Contact";
 import Privacy from "@/pages/Privacy";
 import Terms from "@/pages/Terms";
-import Contact from "@/pages/Contact";
+import Dashboard from "@/pages/Dashboard";
 import NotFound from "@/pages/not-found";
-import { LazyRoute } from "@/components/LazyRoute";
+// FIXED: Removed unused LazyRoute import causing errors
+// import { LazyRoute } from "@/components/LazyRoute";
 
 function Router() {
   const [location] = useLocation();
@@ -115,10 +118,8 @@ function Router() {
       <Route path="/terms" component={Terms} />
       <Route path="/contact" component={Contact} />
 
-      <Route path="/dashboard">
-        <LazyRoute factory={() => import("@/pages/Dashboard")} />
-      </Route>
-      <Route component={NotFound} />
+      <Route path="/dashboard" component={Dashboard} />
+      <Route path="/:rest*" component={NotFound} />
     </Switch>
   );
 }
@@ -146,7 +147,8 @@ function App() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <PerformanceProvider>
+      {/* TEMPORARILY DISABLED: PerformanceProvider causing React Hook errors */}
+      {/* <PerformanceProvider> */}
         <AuthProvider>
           <ThemeProvider>
             <TooltipProvider>
@@ -160,7 +162,7 @@ function App() {
             </TooltipProvider>
           </ThemeProvider>
         </AuthProvider>
-      </PerformanceProvider>
+      {/* </PerformanceProvider> */}
     </QueryClientProvider>
   );
 }

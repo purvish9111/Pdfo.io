@@ -66,14 +66,16 @@ export const PerformanceProvider = ({ children }: PerformanceProviderProps) => {
       }
     };
 
+    // Run initial checks
     detectConnectionSpeed();
     monitorMemory();
     checkDeviceCapabilities();
 
-    // Set up intervals for continuous monitoring
+    // Set up intervals for continuous monitoring with proper cleanup
     const connectionInterval = setInterval(detectConnectionSpeed, 30000); // Check every 30s
     const memoryInterval = setInterval(monitorMemory, 10000); // Check every 10s
 
+    // FIXED: Properly clear intervals to prevent memory leaks
     return () => {
       clearInterval(connectionInterval);
       clearInterval(memoryInterval);

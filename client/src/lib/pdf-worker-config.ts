@@ -43,9 +43,22 @@ const PDF_CONFIG = {
 
 export { pdfjsLib, PDF_CONFIG };
 
-// Preload worker for faster first-time loading
-export const preloadPDFWorker = () => {
+// Global flag to prevent multiple worker initializations
+let isWorkerInitialized = false;
+
+// FIXED: Centralized worker initialization to prevent conflicts
+export const initializePDFJS = () => {
+  if (isWorkerInitialized) {
+    console.info('📋 PDF.js worker already initialized');
+    return;
+  }
+  
   if (typeof window !== 'undefined') {
+    pdfjsLib.GlobalWorkerOptions.workerSrc = WORKER_URL;
+    // FIXED: Reduce debug logging for production performance
+    isWorkerInitialized = true;
+    
+    // Preload worker for faster first-time loading
     const link = document.createElement('link');
     link.rel = 'preload';
     link.as = 'script';
@@ -54,13 +67,4 @@ export const preloadPDFWorker = () => {
   }
 };
 
-// Initialize PDF.js with optimized settings
-export const initializePDFJS = () => {
-  // Set global options for better performance
-  pdfjsLib.GlobalWorkerOptions.workerSrc = WORKER_URL;
-  
-  // Preload the worker
-  preloadPDFWorker();
-  
-  console.log('📋 PDF.js optimized configuration loaded');
-};
+// FIXED: Removed duplicate function declaration

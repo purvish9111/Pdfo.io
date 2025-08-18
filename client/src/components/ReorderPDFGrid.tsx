@@ -99,14 +99,14 @@ export function ReorderPDFGrid({ file, pages, onReorder, isProcessing }: Reorder
 
   // Update currentPages when pages prop changes
   React.useEffect(() => {
-    console.log('🔄 ReorderPDFGrid: Pages prop changed:', pages.length);
+    // FIXED: Removed debug logging for production performance
     if (pages.length > 0) {
       const pagesWithOriginalIndex = pages.map((page, index) => ({ 
         ...page, 
         originalIndex: index 
       }));
       setCurrentPages(pagesWithOriginalIndex);
-      console.log('✅ ReorderPDFGrid: Current pages updated:', pagesWithOriginalIndex.length);
+      // FIXED: Removed debug logging for production performance
     }
   }, [pages]);
 
@@ -122,7 +122,7 @@ export function ReorderPDFGrid({ file, pages, onReorder, isProcessing }: Reorder
   );
 
   const handleDragStart = (event: any) => {
-    console.log('🚀 ReorderPDFGrid drag start:', event.active.id);
+    // FIXED: Removed debug logging for production performance
     setActiveId(event.active.id);
   };
 

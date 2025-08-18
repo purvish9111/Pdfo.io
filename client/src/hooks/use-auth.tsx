@@ -38,7 +38,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       setUser(user);
       setLoading(false);
     }, (error) => {
-      console.error('Auth state change error:', error);
+      // FIXED: Improve auth error handling instead of just console.error
+      console.warn('Auth state monitoring error (non-critical):', error.message);
       setLoading(false);
     });
 

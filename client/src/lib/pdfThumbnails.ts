@@ -1,13 +1,12 @@
 import * as pdfjsLib from 'pdfjs-dist';
 import type { PDFDocumentProxy } from 'pdfjs-dist';
-import { ensurePDFWorker } from './pdfWorkerSetup';
+// FIXED: Use centralized PDF worker initialization
+import { initializePDFJS } from './pdf-worker-config';
 
-// Ensure worker is set up
-ensurePDFWorker();
+// FIXED: Use centralized worker initialization
+initializePDFJS();
 
-// Enhanced logging
-console.log('PDF.js version:', pdfjsLib.version);
-console.log('PDF.js worker source:', pdfjsLib.GlobalWorkerOptions.workerSrc);
+// FIXED: Remove debug logging for production performance
 
 export interface PDFThumbnail {
   file: File;

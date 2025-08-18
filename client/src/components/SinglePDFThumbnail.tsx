@@ -17,9 +17,8 @@ export function SinglePDFThumbnail({ file, className = "", pageNumber }: SingleP
     const generateThumbnail = async () => {
       setLoading(true);
       try {
-        console.log('🖼️ SinglePDFThumbnail generating for:', file.name, 'page:', pageNumber);
+        // FIXED: Removed debug logging for production performance  
         const result = await generatePDFThumbnail(file, pageNumber);
-        console.log('✅ SinglePDFThumbnail generated successfully:', result.thumbnailUrl ? 'SUCCESS' : 'FAILED');
         setThumbnail(result);
       } catch (error) {
         console.error('❌ SinglePDFThumbnail generation failed:', error);
