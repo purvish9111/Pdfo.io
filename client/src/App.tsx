@@ -15,7 +15,7 @@ import { initializePDFJS } from "./lib/pdf-worker-config";
 import { initializePerformanceMonitoring } from "./lib/performance-monitor";
 import { initializePerformanceOptimizations, optimizeFontLoading } from "./lib/performance-optimizations";
 import { initializeWebVitalsOptimizations } from "./lib/web-vitals-optimization";
-import { injectCriticalCSS, optimizeNonCriticalCSS } from "./lib/critical-css";
+// import { injectCriticalCSS, optimizeNonCriticalCSS } from "./lib/critical-css";
 // Import all pages directly for instant access (no lazy loading for better performance)
 import Home from "@/pages/Home";
 import Login from "@/pages/Login";
@@ -117,8 +117,8 @@ function Router() {
 function App() {
   // Initialize all performance optimizations and analytics
   useEffect(() => {
-    // Inject critical CSS immediately for faster rendering
-    injectCriticalCSS();
+    // Skip critical CSS injection to maintain original design
+    // injectCriticalCSS();
     
     // Initialize performance optimizations first
     initializePerformanceOptimizations();
@@ -129,8 +129,8 @@ function App() {
     // Initialize font loading optimization
     optimizeFontLoading();
     
-    // Optimize non-critical CSS loading
-    optimizeNonCriticalCSS();
+    // Skip non-critical CSS optimization to maintain design
+    // optimizeNonCriticalCSS();
     
     // Initialize PDF.js worker for better performance
     initializePDFJS();

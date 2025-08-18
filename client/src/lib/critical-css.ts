@@ -115,7 +115,23 @@ export const injectCriticalCSS = () => {
       .dark\\:text-gray-300 { color: #d1d5db; }
       .dark\\:text-blue-400 { color: #60a5fa; }
       .dark\\:border-gray-700 { border-color: #374151; }
+      .dark\\:text-white { color: #ffffff; }
+      .dark\\:text-gray-900 { color: #111827; }
     }
+    
+    /* Ensure font weights are properly loaded */
+    .text-gray-900 { color: #111827; }
+    .text-white { color: #ffffff; }
+    .text-blue-500 { color: #3b82f6; }
+    .mb-4 { margin-bottom: 1rem; }
+    .mb-8 { margin-bottom: 2rem; }
+    .text-5xl { font-size: 3rem; line-height: 1; }
+    .text-6xl { font-size: 3.75rem; line-height: 1; }
+    
+    /* Force font-weight rendering */
+    .font-bold { font-weight: 700 !important; }
+    .font-semibold { font-weight: 600 !important; }
+    .font-medium { font-weight: 500 !important; }
   `;
 
   const style = document.createElement('style');
