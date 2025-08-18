@@ -82,7 +82,7 @@ export function DocumentsList({
   const handleDragEnd = (event: any) => {
     const { active, over } = event;
     
-    console.log('🔄 DocumentsList drag end:', { active: active.id, over: over?.id });
+    // FIXED: Removed debug logging for production performance
 
     if (active.id !== over?.id && over) {
       const activeIndex = files.findIndex((file, index) => `${file.name}-${file.size}-${index}` === active.id);

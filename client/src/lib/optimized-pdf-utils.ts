@@ -43,11 +43,12 @@ export const renderPDFPageOptimized = async (
     canvas.height = viewport.height;
     canvas.width = viewport.width;
 
-    // Render page - FIXED: Simplified render parameters for PDF.js compatibility
+    // Render page - FIXED: Add canvas parameter for PDF.js compatibility
     await page.render({
       canvasContext: context,
-      viewport: viewport
-    }).promise;
+      viewport: viewport,
+      canvas: canvas
+    } as any).promise;
 
     const dataUrl = canvas.toDataURL('image/jpeg', 0.8); // Use JPEG with 80% quality for smaller size
     

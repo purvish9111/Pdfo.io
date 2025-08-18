@@ -151,7 +151,7 @@ export function ReorderPDFGrid({ file, pages, onReorder, isProcessing }: Reorder
         return items;
       });
     } else {
-      console.log('❌ ReorderPDFGrid drag cancelled: no valid drop target');
+      // FIXED: Removed debug logging for production performance
     }
   };
 

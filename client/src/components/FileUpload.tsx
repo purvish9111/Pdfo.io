@@ -29,7 +29,7 @@ export function FileUpload({
   const [isDragActive, setIsDragActive] = useState(false);
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
-    console.log('📁 Files dropped:', acceptedFiles.map(f => f.name));
+    // FIXED: Removed debug logging for production performance
     setIsDragActive(false);
     if (acceptedFiles.length > 0) {
       onFilesSelected(acceptedFiles);

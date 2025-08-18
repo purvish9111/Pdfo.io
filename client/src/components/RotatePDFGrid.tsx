@@ -21,10 +21,10 @@ export function RotatePDFGrid({ file, pages, onRotate, isProcessing }: RotatePDF
 
   // Update currentPages when pages prop changes
   useEffect(() => {
-    console.log('🔄 RotatePDFGrid: Pages prop changed:', pages.length);
+    // FIXED: Removed debug logging for production performance
     if (pages.length > 0) {
       setCurrentPages(pages);
-      console.log('✅ RotatePDFGrid: Current pages updated:', pages.length);
+      // FIXED: Removed debug logging for production performance
     }
   }, [pages]);
 

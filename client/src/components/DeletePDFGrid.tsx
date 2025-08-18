@@ -21,10 +21,10 @@ export function DeletePDFGrid({ file, pages, onDelete, isProcessing }: DeletePDF
 
   // Update currentPages when pages prop changes
   useEffect(() => {
-    console.log('🔄 DeletePDFGrid: Pages prop changed:', pages.length);
+    // FIXED: Removed debug logging for production performance
     if (pages.length > 0) {
       setCurrentPages(pages);
-      console.log('✅ DeletePDFGrid: Current pages updated:', pages.length);
+      // FIXED: Removed debug logging for production performance
     }
   }, [pages]);
 

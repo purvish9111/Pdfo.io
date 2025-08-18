@@ -60,7 +60,18 @@ export default function SignUp() {
       setLocation("/");
     } catch (error: any) {
       console.error("Signup error:", error);
-      setError(error.message || "Failed to create account. Please try again.");
+      // ENHANCED: Better error handling with specific messages
+      if (error.code === 'auth/email-already-in-use') {
+        setError("An account with this email already exists. Please use a different email or try logging in.");
+      } else if (error.code === 'auth/weak-password') {
+        setError("Password is too weak. Please use at least 6 characters.");
+      } else if (error.code === 'auth/invalid-email') {
+        setError("Please enter a valid email address.");
+      } else if (error.code === 'auth/operation-not-allowed') {
+        setError("Email signup is currently disabled. Please contact support.");
+      } else {
+        setError(error.message || "Failed to create account. Please try again.");
+      }
     } finally {
       setLoading(false);
     }

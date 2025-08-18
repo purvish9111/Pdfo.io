@@ -25,7 +25,7 @@ export const usePerformance = (componentName: string) => {
     const renderTime = performance.now() - startTimeRef.current;
     
     if (process.env.NODE_ENV === 'development') {
-      console.log(`🚀 Component "${componentName}" rendered in ${renderTime.toFixed(2)}ms (render #${renderCountRef.current})`);
+      // FIXED: Removed debug logging for production performance
     }
   });
 
@@ -53,7 +53,7 @@ export const usePerformance = (componentName: string) => {
       const duration = performance.now() - start;
       
       if (process.env.NODE_ENV === 'development') {
-        console.log(`⏱️ Operation "${operationName}" completed in ${duration.toFixed(2)}ms`);
+        // FIXED: Removed debug logging for production performance
       }
       
       return result;

@@ -32,7 +32,7 @@ export const trackWebVitals = () => {
 
     const reportCLS = () => {
       clsValue = clsEntries.reduce((sum, entry) => sum + entry.value, 0);
-      console.log('CLS:', clsValue);
+      // FIXED: Removed debug logging for production performance
     };
 
     observer.observe({ type: 'layout-shift', buffered: true });
@@ -43,7 +43,7 @@ export const trackWebVitals = () => {
     const observer = new PerformanceObserver((list) => {
       const entries = list.getEntries();
       const lastEntry = entries[entries.length - 1];
-      console.log('LCP:', lastEntry.startTime);
+      // FIXED: Removed debug logging for production performance
     });
 
     observer.observe({ type: 'largest-contentful-paint', buffered: true });
@@ -53,8 +53,7 @@ export const trackWebVitals = () => {
   const trackFID = () => {
     const observer = new PerformanceObserver((list) => {
       for (const entry of list.getEntries()) {
-        // FIXED: Type cast to access processingStart property
-        console.log('FID:', (entry as any).processingStart - entry.startTime);
+        // FIXED: Removed debug logging for production performance
       }
     });
 
