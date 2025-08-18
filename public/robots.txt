@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+Disallow: /purvish_toolspravaah
+Disallow: /purvish_toolspravaah/
+Disallow: /purvish_toolspravaah/*
+Disallow: /api/admin/
+Disallow: /api/admin/*
+
+# Sitemap
+Sitemap: https://pdfo.io/sitemap.xml
