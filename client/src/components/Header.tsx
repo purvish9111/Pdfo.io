@@ -16,17 +16,13 @@ import { Sheet, SheetContent, SheetTrigger, SheetTitle, SheetDescription } from 
 import AdminPanelButton from "@/components/AdminPanelButton";
 
 export function Header() {
-  const { theme, toggleTheme } = useTheme();
+  // const { theme, toggleTheme } = useTheme(); // Disabled
+  const theme = 'light';
+  const toggleTheme = () => {};
   const [location] = useLocation();
-  // const { user } = useAuth(); // Temporarily disabled
-  const user = null; // Temporary fallback
+  const user = null; // Simplified
 
   const handleSignOut = async () => {
-    // try {
-    //   await signOutUser();
-    // } catch (error) {
-    //   console.error("Error signing out:", error);
-    // }
     console.log("Sign out disabled temporarily");
   };
 

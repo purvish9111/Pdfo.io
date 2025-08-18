@@ -150,21 +150,12 @@ function App() {
   }, []);
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        <ThemeProvider>
-          <TooltipProvider>
-            <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-              <Header />
-              <main>
-                <Router />
-              </main>
-            </div>
-            <Toaster />
-          </TooltipProvider>
-        </ThemeProvider>
-      </AuthProvider>
-    </QueryClientProvider>
+    <div className="min-h-screen bg-gray-50">
+      <Header />
+      <main>
+        <Router />
+      </main>
+    </div>
   );
 }
 
