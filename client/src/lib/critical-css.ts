@@ -6,8 +6,9 @@
 export const injectCriticalCSS = () => {
   if (typeof window === 'undefined') return;
 
-  // Check if critical CSS is already injected
-  if (document.querySelector('#critical-css')) return;
+  // Remove existing critical CSS to allow updates
+  const existing = document.querySelector('#critical-css');
+  if (existing) existing.remove();
 
   const criticalCSS = `
     /* Critical CSS for above-the-fold content */
@@ -38,7 +39,10 @@ export const injectCriticalCSS = () => {
     .dark .text-gray-300 { color: #d1d5db; }
     .text-blue-600 { color: #2563eb; }
     .dark .text-blue-400 { color: #60a5fa; }
+    .font-bold { font-weight: 700; }
     .font-semibold { font-weight: 600; }
+    .font-medium { font-weight: 500; }
+    .text-4xl { font-size: 2.25rem; line-height: 2.5rem; }
     .text-3xl { font-size: 1.875rem; line-height: 2.25rem; }
     .text-xl { font-size: 1.25rem; line-height: 1.75rem; }
     .text-lg { font-size: 1.125rem; line-height: 1.75rem; }
@@ -79,11 +83,11 @@ export const injectCriticalCSS = () => {
       50% { opacity: .5; }
     }
     
-    /* Critical font loading */
+    /* Critical font loading with proper font-weight range */
     @font-face {
       font-family: 'Inter';
       font-style: normal;
-      font-weight: 400 700;
+      font-weight: 300 900;
       font-display: swap;
       src: url('https://fonts.gstatic.com/s/inter/v13/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyfAZ9hiJ-Ek-_EeA.woff2') format('woff2');
     }
