@@ -32,7 +32,7 @@ export function Header() {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <Link href="/" className="flex items-center">
-            <img src="/logo.png" alt="PDFo - Free Online PDF Tools Home" className="h-8 w-auto" />
+            <img src="/logo.png" alt="PDFo - Free Online PDF Tools Home" className="h-6 w-auto" />
           </Link>
 
           {/* Desktop Navigation */}
