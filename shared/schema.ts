@@ -51,80 +51,6 @@ export const pdfLogs = pgTable("pdf_logs", {
   timestamp: timestamp("timestamp").defaultNow().notNull(),
 });
 
-// Admin and blog management schemas
-export const admins = pgTable("admins", {
-  id: uuid("id").primaryKey().defaultRandom(),
-  userId: uuid("user_id").notNull().references(() => users.id),
-  role: text("role").notNull().default("admin"), // 'admin', 'super_admin', 'editor'
-  permissions: jsonb("permissions"), // JSON array of permissions
-  createdAt: timestamp("created_at").defaultNow().notNull(),
-  updatedAt: timestamp("updated_at").defaultNow().notNull(),
-});
-
-// Blog posts schema for SEO content
-export const blogPosts = pgTable("blog_posts", {
-  id: uuid("id").primaryKey().defaultRandom(),
-  authorId: uuid("author_id").notNull().references(() => users.id),
-  title: text("title").notNull(),
-  slug: text("slug").notNull().unique(),
-  content: text("content").notNull(),
-  excerpt: text("excerpt"),
-  featuredImage: text("featured_image"),
-  status: text("status").notNull().default("draft"), // 'draft', 'published', 'archived'
-  tags: jsonb("tags"), // JSON array of tags
-  metaTitle: text("meta_title"),
-  metaDescription: text("meta_description"),
-  readingTime: integer("reading_time"), // in minutes
-  viewCount: integer("view_count").default(0),
-  publishedAt: timestamp("published_at"),
-  createdAt: timestamp("created_at").defaultNow().notNull(),
-  updatedAt: timestamp("updated_at").defaultNow().notNull(),
-});
-
-// Blog categories for better organization
-export const blogCategories = pgTable("blog_categories", {
-  id: uuid("id").primaryKey().defaultRandom(),
-  name: text("name").notNull().unique(),
-  slug: text("slug").notNull().unique(),
-  description: text("description"),
-  color: text("color").default("#3b82f6"), // Hex color for UI
-  createdAt: timestamp("created_at").defaultNow().notNull(),
-});
-
-// Many-to-many relationship for post categories
-export const postCategories = pgTable("post_categories", {
-  id: uuid("id").primaryKey().defaultRandom(),
-  postId: uuid("post_id").notNull().references(() => blogPosts.id),
-  categoryId: uuid("category_id").notNull().references(() => blogCategories.id),
-});
-
-// System analytics for admin dashboard
-export const systemAnalytics = pgTable("system_analytics", {
-  id: uuid("id").primaryKey().defaultRandom(),
-  date: timestamp("date").notNull(),
-  totalUsers: integer("total_users").default(0),
-  activeUsers: integer("active_users").default(0),
-  toolsUsed: integer("tools_used").default(0),
-  filesProcessed: integer("files_processed").default(0),
-  errorCount: integer("error_count").default(0),
-  avgProcessingTime: integer("avg_processing_time").default(0), // milliseconds
-  topTools: jsonb("top_tools"), // JSON array of tool usage stats
-  metadata: jsonb("metadata"), // Additional metrics
-});
-
-// User preferences for personalization
-export const userPreferences = pgTable("user_preferences", {
-  id: uuid("id").primaryKey().defaultRandom(),
-  userId: uuid("user_id").notNull().references(() => users.id),
-  favoriteTools: jsonb("favorite_tools"), // JSON array of tool names
-  theme: text("theme").default("light"), // 'light', 'dark', 'system'
-  language: text("language").default("en"),
-  emailNotifications: jsonb("email_notifications"), // notification preferences
-  dashboardLayout: jsonb("dashboard_layout"), // custom layout preferences
-  createdAt: timestamp("created_at").defaultNow().notNull(),
-  updatedAt: timestamp("updated_at").defaultNow().notNull(),
-});
-
 // Insert schemas
 export const insertUserSchema = createInsertSchema(users).omit({
   id: true,
@@ -147,55 +73,18 @@ export const insertPdfLogSchema = createInsertSchema(pdfLogs).omit({
   timestamp: true,
 });
 
-export const insertAdminSchema = createInsertSchema(admins).omit({
-  id: true,
-  createdAt: true,
-  updatedAt: true,
-});
-
-export const insertBlogPostSchema = createInsertSchema(blogPosts).omit({
-  id: true,
-  createdAt: true,
-  updatedAt: true,
-  viewCount: true,
-});
-
-export const insertBlogCategorySchema = createInsertSchema(blogCategories).omit({
-  id: true,
-  createdAt: true,
-});
-
-export const insertSystemAnalyticsSchema = createInsertSchema(systemAnalytics).omit({
-  id: true,
-});
-
-export const insertUserPreferencesSchema = createInsertSchema(userPreferences).omit({
-  id: true,
-  createdAt: true,
-  updatedAt: true,
-});
-
-// Type exports
+// Types
 export type User = typeof users.$inferSelect;
 export type InsertUser = z.infer<typeof insertUserSchema>;
+
 export type ToolUsage = typeof toolUsage.$inferSelect;
 export type InsertToolUsage = z.infer<typeof insertToolUsageSchema>;
+
 export type UserFile = typeof userFiles.$inferSelect;
 export type InsertUserFile = z.infer<typeof insertUserFileSchema>;
+
 export type PdfLog = typeof pdfLogs.$inferSelect;
 export type InsertPdfLog = z.infer<typeof insertPdfLogSchema>;
-export type Admin = typeof admins.$inferSelect;
-export type InsertAdmin = z.infer<typeof insertAdminSchema>;
-export type BlogPost = typeof blogPosts.$inferSelect;
-export type InsertBlogPost = z.infer<typeof insertBlogPostSchema>;
-export type BlogCategory = typeof blogCategories.$inferSelect;
-export type InsertBlogCategory = z.infer<typeof insertBlogCategorySchema>;
-export type SystemAnalytics = typeof systemAnalytics.$inferSelect;
-export type InsertSystemAnalytics = z.infer<typeof insertSystemAnalyticsSchema>;
-export type UserPreferences = typeof userPreferences.$inferSelect;
-export type InsertUserPreferences = z.infer<typeof insertUserPreferencesSchema>;
-
-// Removed duplicate types - they are now defined above
 
 // Tool categories for organization
 export const TOOL_CATEGORIES = {

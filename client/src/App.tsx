@@ -54,8 +54,6 @@ import Terms from "@/pages/Terms";
 import Contact from "@/pages/Contact";
 import NotFound from "@/pages/not-found";
 import { LazyRoute } from "@/components/LazyRoute";
-import AdminDashboard from "@/pages/AdminDashboard";
-import AnalyticsDashboard from "@/pages/AnalyticsDashboard";
 
 function Router() {
   const [location] = useLocation();
@@ -116,10 +114,6 @@ function Router() {
       <Route path="/privacy" component={Privacy} />
       <Route path="/terms" component={Terms} />
       <Route path="/contact" component={Contact} />
-
-      {/* Admin and Analytics Routes */}
-      <Route path="/admin" component={AdminDashboard} />
-      <Route path="/analytics" component={AnalyticsDashboard} />
 
       <Route path="/dashboard">
         <LazyRoute factory={() => import("@/pages/Dashboard")} />
