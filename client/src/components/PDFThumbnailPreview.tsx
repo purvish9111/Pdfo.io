@@ -3,7 +3,8 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { generateMultiplePDFThumbnails, PDFThumbnail } from "@/lib/pdfThumbnails";
-import { generateSimplePDFThumbnails, SimplePDFThumbnail } from "@/lib/simplePdfPreview";
+// DISABLED: File deleted during cleanup
+// import { generateSimplePDFThumbnails, SimplePDFThumbnail } from "@/lib/simplePdfPreview";
 import { FileText, AlertCircle, Image } from "lucide-react";
 
 interface PDFThumbnailPreviewProps {
@@ -31,15 +32,15 @@ export function PDFThumbnailPreview({ files, onThumbnailsGenerated }: PDFThumbna
         // Try PDF.js first
         const generatedThumbnails = await generateMultiplePDFThumbnails(
           files,
-          (completed, total) => setProgress({ completed, total })
+          (completed: number, total: number) => setProgress({ completed, total })
         );
 
         // Check if any thumbnails failed due to worker issues
-        const hasWorkerErrors = generatedThumbnails.some(t => 
+        const hasWorkerErrors = generatedThumbnails.some((t: PDFThumbnail) => 
           t.error && (t.error.includes('GlobalWorkerOptions') || t.error.includes('worker'))
         );
 
-        console.log('Generated thumbnails:', generatedThumbnails.map(t => ({ 
+        console.log('Generated thumbnails:', generatedThumbnails.map((t: PDFThumbnail) => ({ 
           fileName: t.file.name, 
           hasThumb: !!t.thumbnailUrl, 
           pageCount: t.pageCount,
@@ -47,42 +48,12 @@ export function PDFThumbnailPreview({ files, onThumbnailsGenerated }: PDFThumbna
         })));
         console.log('Has worker errors:', hasWorkerErrors);
 
-        if (hasWorkerErrors) {
-          // Fall back to simple preview
-          setUseSimplePreview(true);
-          const simpleThumbnails = await generateSimplePDFThumbnails(
-            files,
-            (completed, total) => setProgress({ completed, total })
-          );
-          
-          // Convert to PDFThumbnail format
-          const convertedThumbnails = simpleThumbnails.map(t => ({
-            file: t.file,
-            thumbnailUrl: t.thumbnailUrl,
-            pageCount: t.pageCount,
-            error: t.error,
-          }));
-          
-          setThumbnails(convertedThumbnails);
-        } else {
-          setThumbnails(generatedThumbnails);
-        }
+        // Always use the main PDF thumbnails (simplified after cleanup)
+        setThumbnails(generatedThumbnails);
       } catch (error) {
-        // Complete fallback to simple preview
-        setUseSimplePreview(true);
-        const simpleThumbnails = await generateSimplePDFThumbnails(
-          files,
-          (completed, total) => setProgress({ completed, total })
-        );
-        
-        const convertedThumbnails = simpleThumbnails.map(t => ({
-          file: t.file,
-          thumbnailUrl: t.thumbnailUrl,
-          pageCount: t.pageCount,
-          error: t.error,
-        }));
-        
-        setThumbnails(convertedThumbnails);
+        console.error('Error generating thumbnails:', error);
+        // Set empty thumbnails on error
+        setThumbnails([]);
       }
 
       setLoading(false);

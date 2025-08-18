@@ -13,7 +13,8 @@ import { initGA } from "./lib/analytics";
 import { useAnalytics } from "./hooks/use-analytics";
 import { initializePDFJS } from "./lib/pdf-worker-config";
 import { initializePerformanceMonitoring } from "./lib/performance-monitor";
-import { initializeWebVitalsOptimizations } from "./lib/web-vitals-optimization";
+// DISABLED: File deleted to prevent CSS corruption
+// import { initializeWebVitalsOptimizations } from "./lib/web-vitals-optimization";
 // DISABLED: These imports cause CSS corruption
 // import { injectCriticalCSS, optimizeNonCriticalCSS } from "./lib/critical-css";
 // import { initializeAllPerformanceOptimizations } from "./lib/performance-bootstrap";

@@ -41,6 +41,8 @@ PDFo is a comprehensive web-based PDF manipulation and conversion platform that 
   - **ZERO FAILURES**: All 26 tools now have 100% working functionality with enterprise-grade capabilities
 - **SOCIAL MEDIA ICONS FIX**: Resolved FontAwesome loading issues by replacing with inline SVG icons
 - **GOOGLE ADSENSE INTEGRATION**: Added AdSense code (ca-pub-4548485826994455) with DNS prefetch optimization
+- **LOGO SIZING FIX (August 18, 2025)**: Fixed oversized logos in header and footer by disabling CSS optimization scripts
+- **MAJOR CLEANUP (August 18, 2025)**: Removed 101 screenshot files (~24MB) and 10 redundant optimization files (~40KB) that were causing CSS corruption
 
 # User Preferences
 

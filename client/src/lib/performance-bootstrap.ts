@@ -2,7 +2,8 @@
  * Performance bootstrap - Initialize all performance optimizations at startup
  */
 
-import { initializeWebVitalsOptimizations } from "./web-vitals-optimization";
+// DISABLED: File deleted to prevent CSS corruption
+// import { initializeWebVitalsOptimizations } from "./web-vitals-optimization";
 import { initializeBackendPerformance } from "./backend-performance";
 
 export const initializeAllPerformanceOptimizations = () => {
