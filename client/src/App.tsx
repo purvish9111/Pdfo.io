@@ -137,7 +137,7 @@ function App() {
     // Initialize performance monitoring
     initializePerformanceMonitoring();
     
-    // Initialize only backend performance monitoring (no design changes)
+    // Safe performance monitoring only (design corruption fixed)
     initializeAllPerformanceOptimizations();
   }, []);
 

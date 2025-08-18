@@ -1,7 +1,7 @@
 import { Link } from "wouter";
 import { Coffee } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import logoUrl from "@assets/logo_1755359015395.png";
+// Using public folder logo for reliability
 
 export function MainFooter() {
   const tools = [
@@ -21,7 +21,7 @@ export function MainFooter() {
           <div className="col-span-1 md:col-span-2">
             <div className="flex items-center mb-4">
               <img 
-                src={logoUrl} 
+                src="/logo.png" 
                 alt="PDFo Logo" 
                 className="h-10 w-auto"
               />

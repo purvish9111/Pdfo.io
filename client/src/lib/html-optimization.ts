@@ -278,12 +278,6 @@ export const initializeHTMLOptimizations = () => {
   if (typeof window === 'undefined') return;
 
   const runOptimizations = () => {
-    // Only run HTML optimizations in production to prevent design corruption
-    if (window.location.hostname.includes('replit.dev') || window.location.hostname === 'localhost') {
-      console.log('Development mode: Skipping HTML optimizations to preserve design');
-      return;
-    }
-    
     try {
       optimizeHTMLHead();
       optimizeResourceOrder();
@@ -295,11 +289,6 @@ export const initializeHTMLOptimizations = () => {
   };
 
   const runSafeOptimizations = () => {
-    // Only run style removal in production
-    if (window.location.hostname.includes('replit.dev') || window.location.hostname === 'localhost') {
-      return;
-    }
-    
     try {
       removeUnusedStyles();
     } catch (error) {

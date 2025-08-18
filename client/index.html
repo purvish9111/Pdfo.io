@@ -77,8 +77,7 @@
     
     <!-- Load replit banner asynchronously in dev mode only -->
     <script>
-      // Check if we're in development mode without using import.meta
-      if (window.location.hostname.includes('replit.dev') || window.location.hostname === 'localhost') {
+      if (import.meta.env.DEV) {
         const script = document.createElement('script');
         script.src = 'https://replit.com/public/js/replit-dev-banner.js';
         script.async = true;

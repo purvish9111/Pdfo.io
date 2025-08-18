@@ -7,7 +7,7 @@ import { SEOHead } from "@/components/SEOHead";
 export default function Home() {
   const homeSEO = {
     title: "PDFo - Free Online PDF Tools | Merge, Split, Convert & Edit PDFs",
-    description: "Free online PDF tools to merge, split, compress, convert, and edit PDF files. 22+ professional PDF tools with drag-and-drop interface. No registration required.",
+    description: "Free online PDF tools to merge, split, compress, convert, and edit PDF files. 26+ professional PDF tools with drag-and-drop interface. No registration required.",
     keywords: "pdf tools, merge pdf, split pdf, pdf converter, compress pdf, pdf to word, word to pdf, free pdf tools online",
     structuredData: {
       "@context": "https://schema.org",
