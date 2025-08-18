@@ -91,17 +91,6 @@ export default function SplitPDF() {
       
       // Store split files for download
       setSplitFiles(splitBlobs);
-      
-      // Auto-download first file as convenience, store rest for manual download
-      if (splitBlobs.length > 0) {
-        const group = groups[0];
-        const startPage = group[0].pageNumber;
-        const endPage = group[group.length - 1].pageNumber;
-        const fileName = startPage === endPage 
-          ? `split-page-${startPage}.pdf`
-          : `split-pages-${startPage}-${endPage}.pdf`;
-        downloadBlob(splitBlobs[0], fileName);
-      }
 
       setProgress(100);
       

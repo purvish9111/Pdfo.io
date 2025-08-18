@@ -20,6 +20,8 @@ export default function ReorderPages() {
   const [pages, setPages] = useState<PDFPage[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
   const [progress, setProgress] = useState(0);
+  const [reorderedBlob, setReorderedBlob] = useState<Blob | null>(null);
+  const [hasChanges, setHasChanges] = useState(false);
   const { toast } = useToast();
 
   const handleFilesSelected = async (files: File[]) => {
@@ -50,25 +52,36 @@ export default function ReorderPages() {
     }
   };
 
-  const handleReorder = async (reorderedPages: PDFPage[]) => {
-    if (!file) return;
+  const handlePagesChange = (reorderedPages: PDFPage[]) => {
+    setPages(reorderedPages);
+    // Check if pages have been reordered from original
+    const hasReordered = reorderedPages.some((page, index) => page.originalIndex !== index);
+    setHasChanges(hasReordered);
+  };
+
+  const handleApplyReorder = async () => {
+    if (!file || !hasChanges) return;
     
-    console.log('🔄 Starting PDF reorder process...', reorderedPages.map(p => `Page ${p.pageNumber} (orig: ${p.originalIndex})`));
+    console.log('🔄 Starting PDF reorder process...', pages.map(p => `Page ${p.pageNumber} (orig: ${p.originalIndex})`));
     
     setIsProcessing(true);
+    setProgress(0);
     try {
+      setProgress(20);
       // Extract the new page order (0-indexed for PDF processing)
-      const newOrder = reorderedPages.map(page => page.originalIndex);
+      const newOrder = pages.map(page => page.originalIndex);
       console.log('📋 New page order:', newOrder);
       
+      setProgress(60);
       const processedBlob = await reorderPDFPages(file, newOrder);
       
-      console.log('💾 Starting download...');
-      downloadBlob(processedBlob, 'reordered-document.pdf');
+      setProgress(90);
+      setReorderedBlob(processedBlob);
+      setProgress(100);
       
       toast({
         title: "Success!",
-        description: "Your PDF has been downloaded with reordered pages.",
+        description: "Your PDF has been reordered. Download button available below.",
       });
     } catch (error) {
       console.error('❌ Reorder error:', error);
@@ -79,6 +92,12 @@ export default function ReorderPages() {
       });
     } finally {
       setIsProcessing(false);
+    }
+  };
+
+  const handleDownload = () => {
+    if (reorderedBlob) {
+      downloadBlob(reorderedBlob, 'reordered-document.pdf');
     }
   };
 
@@ -129,21 +148,63 @@ export default function ReorderPages() {
             <ReorderPDFGridNative
               file={file}
               pages={pages}
-              onReorder={handleReorder}
+              onPagesChange={handlePagesChange}
               isProcessing={isProcessing}
             />
-            {isProcessing && (
-              <div className="mt-6 flex justify-center">
-                <div className="bg-purple-50 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-800 rounded-lg p-4">
-                  <div className="flex items-center space-x-3">
-                    <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-purple-600"></div>
-                    <span className="text-purple-700 dark:text-purple-300 font-medium">
-                      Processing PDF reorder...
-                    </span>
+
+            {/* Progress Bar */}
+            <ProgressBar 
+              progress={progress} 
+              isVisible={isProcessing} 
+              color="purple"
+              className="mt-6"
+            />
+
+            {/* Page Order Changes Summary */}
+            {hasChanges && !isProcessing && (
+              <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4 mt-6">
+                <h3 className="text-blue-800 dark:text-blue-200 font-medium mb-2">Page Order Changes</h3>
+                <div className="text-sm text-blue-700 dark:text-blue-300">
+                  The following pages have been reordered:
+                  <div className="mt-2 space-y-1">
+                    {pages.map((page, newIndex) => {
+                      if (page.originalIndex !== newIndex) {
+                        return (
+                          <div key={page.id} className="text-blue-600 dark:text-blue-400">
+                            Page {page.pageNumber}: Position {page.originalIndex + 1} → {newIndex + 1}
+                          </div>
+                        );
+                      }
+                      return null;
+                    }).filter(Boolean)}
                   </div>
                 </div>
               </div>
             )}
+
+            {/* Action Buttons */}
+            <div className="flex justify-center space-x-4 mt-6">
+              {hasChanges && !reorderedBlob ? (
+                <Button
+                  onClick={handleApplyReorder}
+                  disabled={isProcessing}
+                  className="bg-purple-600 hover:bg-purple-700 text-white"
+                >
+                  <i className="fas fa-check mr-2"></i>
+                  Apply Page Order
+                </Button>
+              ) : null}
+
+              {reorderedBlob && !isProcessing && (
+                <Button
+                  onClick={handleDownload}
+                  className="bg-green-600 hover:bg-green-700 text-white"
+                >
+                  <i className="fas fa-download mr-2"></i>
+                  Download Reordered PDF
+                </Button>
+              )}
+            </div>
           </>
         )}
         
@@ -161,6 +222,8 @@ export default function ReorderPages() {
                   setFile(null);
                   setPages([]);
                   setProgress(0);
+                  setReorderedBlob(null);
+                  setHasChanges(false);
                 }}
                 className="text-gray-600 dark:text-gray-300"
               >

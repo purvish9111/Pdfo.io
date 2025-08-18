@@ -13,7 +13,7 @@ interface PDFPage {
 interface ReorderPDFGridProps {
   file: File;
   pages: PDFPage[];
-  onReorder: (reorderedPages: PDFPage[]) => void;
+  onPagesChange: (reorderedPages: PDFPage[]) => void;
   isProcessing: boolean;
 }
 
@@ -132,7 +132,7 @@ function SortablePage({
   );
 }
 
-export function ReorderPDFGridNative({ file, pages, onReorder, isProcessing }: ReorderPDFGridProps) {
+export function ReorderPDFGridNative({ file, pages, onPagesChange, isProcessing }: ReorderPDFGridProps) {
   const [currentPages, setCurrentPages] = useState<PDFPage[]>([]);
   const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
   const [draggedOverIndex, setDraggedOverIndex] = useState<number | null>(null);
@@ -179,6 +179,10 @@ export function ReorderPDFGridNative({ file, pages, onReorder, isProcessing }: R
         newPages.splice(dropIndex, 0, draggedPage);
         
         console.log('✅ Native pages reordered:', newPages.map(p => p.pageNumber));
+        
+        // Notify parent component of changes
+        onPagesChange(newPages);
+        
         return newPages;
       });
     }
@@ -192,14 +196,10 @@ export function ReorderPDFGridNative({ file, pages, onReorder, isProcessing }: R
     setDraggedOverIndex(null);
   };
 
-  const hasChanges = currentPages.some((page, index) => page.originalIndex !== index);
-
-  const handleApplyChanges = () => {
-    onReorder(currentPages);
-  };
-
   const resetOrder = () => {
-    setCurrentPages(pages.map((page, index) => ({ ...page, originalIndex: index })));
+    const resetPages = pages.map((page, index) => ({ ...page, originalIndex: index }));
+    setCurrentPages(resetPages);
+    onPagesChange(resetPages);
   };
 
   return (
@@ -214,16 +214,14 @@ export function ReorderPDFGridNative({ file, pages, onReorder, isProcessing }: R
             <div className="text-sm text-gray-500 dark:text-gray-400">
               Drag to reorder pages
             </div>
-            {hasChanges && (
-              <Button
-                onClick={resetOrder}
-                variant="outline"
-                size="sm"
-                className="text-gray-600 dark:text-gray-300"
-              >
-                Reset Order
-              </Button>
-            )}
+            <Button
+              onClick={resetOrder}
+              variant="outline"
+              size="sm"
+              className="text-gray-600 dark:text-gray-300"
+            >
+              Reset Order
+            </Button>
           </div>
         </div>
 
@@ -243,56 +241,13 @@ export function ReorderPDFGridNative({ file, pages, onReorder, isProcessing }: R
           ))}
         </div>
 
-        {/* Changes Summary */}
-        {hasChanges && (
-          <div className="mt-6 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
-            <h4 className="text-sm font-medium text-blue-900 dark:text-blue-200 mb-2">Page Order Changes</h4>
-            <div className="text-sm text-blue-700 dark:text-blue-300">
-              <p className="mb-2">The following pages have been reordered:</p>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                {currentPages.map((page, newIndex) => {
-                  if (page.originalIndex !== newIndex) {
-                    return (
-                      <div key={page.id} className="flex items-center text-xs">
-                        <span>Page {page.pageNumber}: Position {page.originalIndex + 1} → {newIndex + 1}</span>
-                      </div>
-                    );
-                  }
-                  return null;
-                }).filter(Boolean)}
-              </div>
-            </div>
-          </div>
-        )}
       </div>
-
-      {/* Apply Changes Button */}
-      <div className="flex justify-center">
-        <Button
-          onClick={handleApplyChanges}
-          disabled={!hasChanges || isProcessing}
-          size="lg"
-          className="bg-purple-600 hover:bg-purple-700 text-white px-8 py-4 text-lg font-medium rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          <Download className="w-5 h-5 mr-2" />
-          {isProcessing ? (
-            <span className="flex items-center">
-              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-              Applying Changes...
-            </span>
-          ) : (
-            'Apply Page Order'
-          )}
-        </Button>
+      
+      <div className="text-center">
+        <p className="text-sm text-gray-500 dark:text-gray-400">
+          Drag and drop page thumbnails to change their order
+        </p>
       </div>
-
-      {!hasChanges && (
-        <div className="text-center">
-          <p className="text-sm text-gray-500 dark:text-gray-400">
-            Drag and drop page thumbnails to change their order
-          </p>
-        </div>
-      )}
     </div>
   );
 }
