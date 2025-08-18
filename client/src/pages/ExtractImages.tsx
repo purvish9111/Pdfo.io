@@ -23,12 +23,19 @@ export default function ExtractImages() {
   const [progress, setProgress] = useState(0);
   const [pdfPages, setPdfPages] = useState<number>(0);
   const [extractedImages, setExtractedImages] = useState<ExtractedImage[]>([]);
+  const [extractedImagesZip, setExtractedImagesZip] = useState<Blob | null>(null);
   const { toast } = useToast();
 
   const handleFilesSelected = (files: File[]) => {
     setFile(files[0]);
     setExtractedImages([]);
+    setExtractedImagesZip(null);
     loadPDFInfo(files[0]);
+  };
+
+  const handleDownloadZip = () => {
+    if (!extractedImagesZip) return;
+    downloadBlob(extractedImagesZip, 'extracted-images.zip');
   };
 
   const loadPDFInfo = async (pdfFile: File) => {
@@ -91,10 +98,10 @@ export default function ExtractImages() {
     
     try {
       const imageZip = await extractImagesFromPDF(file);
-      downloadBlob(imageZip, 'extracted-images.zip');
+      setExtractedImagesZip(imageZip);
       toast({
         title: "Success!",
-        description: "All images downloaded as ZIP file.",
+        description: "All images prepared for download as ZIP file. Download button available below.",
       });
     } catch (error) {
       toast({

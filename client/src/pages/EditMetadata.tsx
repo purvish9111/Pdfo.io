@@ -20,15 +20,22 @@ export default function EditMetadata() {
   });
   const [isProcessing, setIsProcessing] = useState(false);
   const [progress, setProgress] = useState(0);
+  const [updatedBlob, setUpdatedBlob] = useState<Blob | null>(null);
   const { toast } = useToast();
 
   const handleFilesSelected = async (files: File[]) => {
     const selectedFile = files[0];
     setFile(selectedFile);
+    setUpdatedBlob(null);
     
     // Load existing metadata
     const existingMetadata = await getPDFMetadata(selectedFile);
     setMetadata(existingMetadata);
+  };
+
+  const handleDownload = () => {
+    if (!updatedBlob) return;
+    downloadBlob(updatedBlob, 'metadata-updated.pdf');
   };
 
   const handleUpdateMetadata = async () => {
@@ -40,10 +47,10 @@ export default function EditMetadata() {
       setProgress(25);
       const updatedBlob = await editPDFMetadata(file, metadata);
       setProgress(100);
-      downloadBlob(updatedBlob, 'metadata-updated.pdf');
+      setUpdatedBlob(updatedBlob);
       toast({
         title: "Success!",
-        description: "PDF metadata has been updated successfully.",
+        description: "PDF metadata has been updated successfully. Download button available below.",
       });
     } catch (error) {
       toast({

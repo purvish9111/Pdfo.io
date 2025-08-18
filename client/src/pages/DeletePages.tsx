@@ -20,6 +20,7 @@ export default function DeletePages() {
   const [pages, setPages] = useState<PDFPage[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
   const [progress, setProgress] = useState(0);
+  const [processedBlob, setProcessedBlob] = useState<Blob | null>(null);
   const { toast } = useToast();
 
   const handleFilesSelected = async (files: File[]) => {
@@ -27,6 +28,7 @@ export default function DeletePages() {
     const selectedFile = files[0];
     console.log('Delete - Selected file:', selectedFile.name, selectedFile.size);
     setFile(selectedFile);
+    setProcessedBlob(null);
     
     try {
       // Generate real PDF pages from file
@@ -46,6 +48,11 @@ export default function DeletePages() {
         variant: "destructive",
       });
     }
+  };
+
+  const handleDownload = () => {
+    if (!processedBlob) return;
+    downloadBlob(processedBlob, 'pages-deleted-document.pdf');
   };
 
   const handleDelete = async (updatedPages: PDFPage[]) => {
@@ -71,15 +78,14 @@ export default function DeletePages() {
         .map(page => page.pageNumber - 1);
       
       setProgress(50);
-      const processedBlob = await deletePDFPages(file, pagesToKeep);
+      const deletedBlob = await deletePDFPages(file, pagesToKeep);
       setProgress(90);
-      
-      downloadBlob(processedBlob, 'pages-deleted-document.pdf');
+      setProcessedBlob(deletedBlob);
       setProgress(100);
       
       toast({
         title: "Success!",
-        description: `PDF created with ${remainingPages.length} pages. Deleted pages removed successfully.`,
+        description: `PDF created with ${remainingPages.length} pages. Deleted pages removed successfully. Download button available below.`,
       });
     } catch (error) {
       toast({

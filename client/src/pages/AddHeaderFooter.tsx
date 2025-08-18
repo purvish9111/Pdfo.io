@@ -29,12 +29,19 @@ export default function AddHeaderFooter() {
   const [pdfPages, setPdfPages] = useState<number>(0);
   const [isProcessing, setIsProcessing] = useState(false);
   const [progress, setProgress] = useState(0);
+  const [processedBlob, setProcessedBlob] = useState<Blob | null>(null);
   const { toast } = useToast();
 
   const handleFilesSelected = (files: File[]) => {
     setFile(files[0]);
     setPdfPages(0);
+    setProcessedBlob(null);
     loadPDFInfo(files[0]);
+  };
+
+  const handleDownload = () => {
+    if (!processedBlob) return;
+    downloadBlob(processedBlob, 'header-footer-added.pdf');
   };
 
   const loadPDFInfo = async (pdfFile: File) => {
@@ -55,10 +62,10 @@ export default function AddHeaderFooter() {
       setProgress(25);
       const modifiedBlob = await addHeadersFooters(file, headerText, footerText);
       setProgress(100);
-      downloadBlob(modifiedBlob, 'header-footer-added.pdf');
+      setProcessedBlob(modifiedBlob);
       toast({
         title: "Success!",
-        description: "Header and footer have been added to your PDF.",
+        description: "Header and footer have been added to your PDF. Download button available below.",
       });
     } catch (error) {
       toast({

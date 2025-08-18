@@ -42,10 +42,9 @@ export default function PDFToTXT() {
       const txtBlob = await convertPDFToTXT(file, options);
       setProgress(100);
       setConvertedFile(txtBlob);
-      downloadBlob(txtBlob, 'converted-text.txt');
       toast({
         title: "Success!",
-        description: "PDF has been converted to plain text successfully.",
+        description: "PDF has been converted to plain text successfully. Download button available below.",
       });
     } catch (error) {
       toast({

@@ -45,10 +45,9 @@ export default function ExcelToPDF() {
       const pdfBlob = await convertExcelToPDF(file);
       setProgress(100);
       setConvertedFile(pdfBlob);
-      downloadBlob(pdfBlob, 'converted-from-excel.pdf');
       toast({
         title: "Success!",
-        description: "Excel spreadsheet has been converted to PDF successfully.",
+        description: "Excel spreadsheet has been converted to PDF successfully. Download button available below.",
       });
     } catch (error) {
       toast({

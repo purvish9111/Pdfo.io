@@ -40,10 +40,9 @@ export default function PDFToPNG() {
       const zipBlob = await convertPDFToImages(file, 'png', options);
       setProgress(100);
       setConvertedFile(zipBlob);
-      downloadBlob(zipBlob, 'pdf-images.zip');
       toast({
         title: "Success!",
-        description: "PDF has been converted to PNG images successfully.",
+        description: "PDF has been converted to PNG images successfully. Download button available below.",
       });
     } catch (error) {
       toast({

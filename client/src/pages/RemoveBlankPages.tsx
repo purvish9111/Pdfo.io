@@ -25,13 +25,20 @@ export default function RemoveBlankPages() {
   const [progress, setProgress] = useState(0);
   const [pages, setPages] = useState<PageInfo[]>([]);
   const [blankPagesDetected, setBlankPagesDetected] = useState(0);
+  const [processedBlob, setProcessedBlob] = useState<Blob | null>(null);
   const { toast } = useToast();
 
   const handleFilesSelected = (files: File[]) => {
     setFile(files[0]);
     setPages([]);
     setBlankPagesDetected(0);
+    setProcessedBlob(null);
     loadPDFAndDetectBlankPages(files[0]);
+  };
+
+  const handleDownload = () => {
+    if (!processedBlob) return;
+    downloadBlob(processedBlob, 'no-blank-pages.pdf');
   };
 
   const loadPDFAndDetectBlankPages = async (pdfFile: File) => {
@@ -86,14 +93,14 @@ export default function RemoveBlankPages() {
       setProgress(25);
       const cleanedBlob = await removeBlankPages(file);
       setProgress(100);
-      downloadBlob(cleanedBlob, 'no-blank-pages.pdf');
+      setProcessedBlob(cleanedBlob);
       
       const removedCount = selectedBlankPages.length;
       const remainingPages = pages.length - removedCount;
       
       toast({
         title: "Success!",
-        description: `${removedCount} blank page${removedCount > 1 ? 's' : ''} removed. Final document has ${remainingPages} pages.`,
+        description: `${removedCount} blank page${removedCount > 1 ? 's' : ''} removed. Final document has ${remainingPages} pages. Download button available below.`,
       });
     } catch (error) {
       toast({

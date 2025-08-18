@@ -142,10 +142,9 @@ export default function PNGToPDF() {
       const pdfBlob = await convertImagesToPDF(files, options);
       setProgress(100);
       setConvertedFile(pdfBlob);
-      downloadBlob(pdfBlob, 'images-to-pdf.pdf');
       toast({
         title: "Success!",
-        description: "PNG images have been converted to PDF successfully.",
+        description: "PNG images have been converted to PDF successfully. Download button available below.",
       });
     } catch (error) {
       toast({

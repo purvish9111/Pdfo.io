@@ -36,10 +36,9 @@ export default function PDFToPPT() {
       const pptBlob = await convertPDFToPPT(file);
       setProgress(100);
       setConvertedFile(pptBlob);
-      downloadBlob(pptBlob, 'converted-presentation.pptx');
       toast({
         title: "Success!",
-        description: "PDF has been converted to PowerPoint presentation successfully.",
+        description: "PDF has been converted to PowerPoint presentation successfully. Download button available below.",
       });
     } catch (error) {
       toast({

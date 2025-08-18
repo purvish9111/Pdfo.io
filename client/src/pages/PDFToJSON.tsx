@@ -40,10 +40,9 @@ export default function PDFToJSON() {
       const jsonBlob = await convertPDFToJSON(file, options);
       setProgress(100);
       setConvertedFile(jsonBlob);
-      downloadBlob(jsonBlob, 'pdf-data.json');
       toast({
         title: "Success!",
-        description: "PDF has been converted to JSON format successfully.",
+        description: "PDF has been converted to JSON format successfully. Download button available below.",
       });
     } catch (error) {
       toast({

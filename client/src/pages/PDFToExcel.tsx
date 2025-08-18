@@ -40,10 +40,9 @@ export default function PDFToExcel() {
       const excelBlob = await convertPDFToExcel(file, options);
       setProgress(100);
       setConvertedFile(excelBlob);
-      downloadBlob(excelBlob, 'converted-spreadsheet.xlsx');
       toast({
         title: "Success!",
-        description: "PDF has been converted to Excel spreadsheet successfully.",
+        description: "PDF has been converted to Excel spreadsheet successfully. Download button available below.",
       });
     } catch (error) {
       toast({

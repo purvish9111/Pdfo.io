@@ -40,10 +40,9 @@ export default function UnlockPDF() {
       const unlockedBlob = await unlockPDF(file, password);
       setProgress(100);
       setConvertedFile(unlockedBlob);
-      downloadBlob(unlockedBlob, 'unlocked-document.pdf');
       toast({
         title: "Success!",
-        description: "PDF has been unlocked successfully.",
+        description: "PDF has been unlocked successfully. Download button available below.",
       });
       
       // Reset form

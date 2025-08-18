@@ -39,10 +39,9 @@ export default function PDFToTIFF() {
       const zipBlob = await convertPDFToTIFF(file);
       setProgress(100);
       setConvertedFile(zipBlob);
-      downloadBlob(zipBlob, 'pdf-tiff-images.zip');
       toast({
         title: "Success!",
-        description: "PDF has been converted to TIFF images successfully.",
+        description: "PDF has been converted to TIFF images successfully. Download button available below.",
       });
     } catch (error) {
       toast({

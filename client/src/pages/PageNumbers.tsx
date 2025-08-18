@@ -26,6 +26,7 @@ export default function PageNumbers() {
   const [pages, setPages] = useState<PDFPage[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
   const [progress, setProgress] = useState(0);
+  const [numberedBlob, setNumberedBlob] = useState<Blob | null>(null);
   const { toast } = useToast();
 
   const handleFilesSelected = async (files: File[]) => {
@@ -33,6 +34,7 @@ export default function PageNumbers() {
     const selectedFile = files[0];
     console.log('PageNumbers - Selected file:', selectedFile.name, selectedFile.size);
     setFile(selectedFile);
+    setNumberedBlob(null);
     
     try {
       // Generate real PDF pages from file
@@ -49,6 +51,11 @@ export default function PageNumbers() {
     }
   };
 
+  const handleDownload = () => {
+    if (!numberedBlob) return;
+    downloadBlob(numberedBlob, 'numbered-document.pdf');
+  };
+
   const handleAddPageNumbers = async (settings: PageNumberSettings) => {
     if (!file) return;
     
@@ -59,10 +66,10 @@ export default function PageNumbers() {
       setProgress(70);
       const numberedBlob = await addPageNumbers(file, settings);
       setProgress(100);
-      downloadBlob(numberedBlob, 'numbered-document.pdf');
+      setNumberedBlob(numberedBlob);
       toast({
         title: "Success!",
-        description: "Page numbers have been added to your PDF successfully.",
+        description: "Page numbers have been added to your PDF successfully. Download button available below.",
       });
     } catch (error) {
       toast({

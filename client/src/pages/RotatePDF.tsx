@@ -19,6 +19,7 @@ export default function RotatePDF() {
   const [pages, setPages] = useState<PDFPage[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
   const [progress, setProgress] = useState(0);
+  const [rotatedBlob, setRotatedBlob] = useState<Blob | null>(null);
   const { toast } = useToast();
 
   const handleFilesSelected = async (files: File[]) => {
@@ -26,6 +27,7 @@ export default function RotatePDF() {
     const selectedFile = files[0];
     console.log('Rotate - Selected file:', selectedFile.name, selectedFile.size);
     setFile(selectedFile);
+    setRotatedBlob(null);
     
     try {
       // Generate real PDF pages from file
@@ -47,6 +49,11 @@ export default function RotatePDF() {
     }
   };
 
+  const handleDownload = () => {
+    if (!rotatedBlob) return;
+    downloadBlob(rotatedBlob, 'rotated-document.pdf');
+  };
+
   const handleRotate = async (updatedPages: PDFPage[]) => {
     if (!file) return;
     
@@ -65,11 +72,11 @@ export default function RotatePDF() {
       setProgress(70);
       const processedBlob = await rotatePDFPages(file, rotations);
       setProgress(90);
-      downloadBlob(processedBlob, 'rotated-document.pdf');
+      setRotatedBlob(processedBlob);
       setProgress(100);
       toast({
         title: "Success!",
-        description: "Your PDF pages have been rotated successfully.",
+        description: "Your PDF pages have been rotated successfully. Download button available below.",
       });
     } catch (error) {
       toast({
@@ -139,7 +146,23 @@ export default function RotatePDF() {
               color="orange"
               className="mt-6"
             />
-            {!isProcessing && (
+            
+            {/* Download Button */}
+            {rotatedBlob && !isProcessing && (
+              <div className="text-center space-y-4 mt-6">
+                <Button
+                  onClick={handleDownload}
+                  size="lg"
+                  className="bg-green-500 hover:bg-green-600 text-white px-8"
+                >
+                  <i className="fas fa-download mr-2"></i>
+                  Download Rotated PDF
+                </Button>
+                <BuyMeCoffeeButton />
+              </div>
+            )}
+            
+            {!rotatedBlob && !isProcessing && (
               <div className="text-center mt-6">
                 <BuyMeCoffeeButton />
               </div>

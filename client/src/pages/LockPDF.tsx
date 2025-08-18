@@ -42,10 +42,9 @@ export default function LockPDF() {
       const lockedBlob = await lockPDF(file, password);
       setProgress(100);
       setConvertedFile(lockedBlob);
-      downloadBlob(lockedBlob, 'password-protected.pdf');
       toast({
         title: "Success!",
-        description: "PDF has been password protected successfully.",
+        description: "PDF has been password protected successfully. Download button available below.",
       });
       
       // Reset form

@@ -72,10 +72,9 @@ export default function WatermarkPDF() {
       const watermarkedBlob = await addWatermarkToPDF(file, settings);
       setProgress(100);
       setConvertedFile(watermarkedBlob);
-      downloadBlob(watermarkedBlob, 'watermarked-document.pdf');
       toast({
         title: "Success!",
-        description: "Watermark has been added to your PDF successfully.",
+        description: "Watermark has been added to your PDF successfully. Download button available below.",
       });
     } catch (error) {
       toast({

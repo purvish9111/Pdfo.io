@@ -17,6 +17,7 @@ export default function CompressPDF() {
   const [compressionLevel, setCompressionLevel] = useState<CompressionLevel['level'] | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [progress, setProgress] = useState(0);
+  const [compressedBlob, setCompressedBlob] = useState<Blob | null>(null);
   const { toast } = useToast();
 
   const seoData = toolSEOData['/compress-pdf'];
@@ -28,6 +29,12 @@ export default function CompressPDF() {
     setOriginalSize(selectedFile.size);
     setCompressedSize(null);
     setCompressionLevel(null);
+    setCompressedBlob(null);
+  };
+
+  const handleDownload = () => {
+    if (!compressedBlob) return;
+    downloadBlob(compressedBlob, `compressed-${file?.name || 'document.pdf'}`);
   };
 
   const formatFileSize = (bytes: number) => {
@@ -55,16 +62,15 @@ export default function CompressPDF() {
       };
       
       setProgress(70);
-      const compressedBlob = await compressPDF(file, compressionSettings);
-      setCompressedSize(compressedBlob.size);
+      const processedBlob = await compressPDF(file, compressionSettings);
+      setCompressedSize(processedBlob.size);
       setCompressionLevel(level);
+      setCompressedBlob(processedBlob);
       setProgress(100);
-      
-      downloadBlob(compressedBlob, `compressed-${file.name}`);
       
       toast({
         title: "Success!",
-        description: `PDF compressed successfully. Size reduced by ${getReductionPercentage()}%.`,
+        description: `PDF compressed successfully. Size reduced by ${getReductionPercentage()}%. Download button available below.`,
       });
     } catch (error) {
       toast({
@@ -254,6 +260,20 @@ export default function CompressPDF() {
               </div>
             </div>
 
+            {/* Download Button */}
+            {compressedBlob && !isProcessing && (
+              <div className="text-center space-y-4 mt-6">
+                <Button
+                  onClick={handleDownload}
+                  size="lg"
+                  className="bg-green-500 hover:bg-green-600 text-white px-8"
+                >
+                  <i className="fas fa-download mr-2"></i>
+                  Download Compressed PDF
+                </Button>
+              </div>
+            )}
+
             {/* New File Button */}
             <div className="text-center mb-6">
               <Button
@@ -262,6 +282,7 @@ export default function CompressPDF() {
                   setOriginalSize(0);
                   setCompressedSize(null);
                   setCompressionLevel(null);
+                  setCompressedBlob(null);
                 }}
                 variant="outline"
                 className="mr-4"

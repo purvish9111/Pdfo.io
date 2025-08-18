@@ -45,10 +45,9 @@ export default function WordToPDF() {
       const pdfBlob = await convertWordToPDF(file);
       setProgress(100);
       setConvertedFile(pdfBlob);
-      downloadBlob(pdfBlob, 'converted-from-word.pdf');
       toast({
         title: "Success!",
-        description: "Word document has been converted to PDF successfully.",
+        description: "Word document has been converted to PDF successfully. Download button available below.",
       });
     } catch (error) {
       toast({
