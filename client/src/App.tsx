@@ -13,8 +13,8 @@ import { initGA } from "./lib/analytics";
 import { useAnalytics } from "./hooks/use-analytics";
 import { initializePDFJS } from "./lib/pdf-worker-config";
 import { initializePerformanceMonitoring } from "./lib/performance-monitor";
-import { initializePerformanceOptimizations, optimizeFontLoading } from "./lib/performance-optimizations";
-import { initializeWebVitalsOptimizations } from "./lib/web-vitals-optimization";
+// import { initializePerformanceOptimizations, optimizeFontLoading } from "./lib/performance-optimizations";
+// import { initializeWebVitalsOptimizations } from "./lib/web-vitals-optimization";
 // import { injectCriticalCSS, optimizeNonCriticalCSS } from "./lib/critical-css";
 // Import all pages directly for instant access (no lazy loading for better performance)
 import Home from "@/pages/Home";
@@ -120,16 +120,10 @@ function App() {
     // Skip critical CSS injection to maintain original design
     // injectCriticalCSS();
     
-    // Initialize performance optimizations first
-    initializePerformanceOptimizations();
-    
-    // Initialize Web Vitals optimizations
-    initializeWebVitalsOptimizations();
-    
-    // Initialize font loading optimization
-    optimizeFontLoading();
-    
-    // Skip non-critical CSS optimization to maintain design
+    // Skip all CSS and font optimizations to maintain original design
+    // initializePerformanceOptimizations();
+    // initializeWebVitalsOptimizations(); 
+    // optimizeFontLoading();
     // optimizeNonCriticalCSS();
     
     // Initialize PDF.js worker for better performance

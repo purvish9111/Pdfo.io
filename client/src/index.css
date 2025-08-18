@@ -1,5 +1,5 @@
-/* Fonts loaded via HTML preload for better performance */
-/* @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap'); */
+/* Restore font imports for proper font-weight rendering */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 /* FontAwesome icons - load only needed icons to reduce bundle size */
 @tailwind base;
 @tailwind components;
@@ -91,7 +91,7 @@
 
   body {
     @apply font-sans antialiased bg-background text-foreground;
-    font-family: var(--font-sans);
+    font-family: 'Inter', 'Open Sans', sans-serif;
   }
 }
 
