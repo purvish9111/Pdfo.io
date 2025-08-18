@@ -32,7 +32,7 @@ export function SplitPDFGrid({ file, pages, onSplit, isProcessing }: SplitPDFGri
     };
     
     setSplitPoints(prev => {
-      // Don't add duplicate split points
+      // Check for existing split points
       if (prev.some(sp => sp.afterPage === afterPage)) return prev;
       return [...prev, newSplitPoint].sort((a, b) => a.afterPage - b.afterPage);
     });

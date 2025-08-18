@@ -1,6 +1,6 @@
 import * as pdfjsLib from 'pdfjs-dist';
 import type { PDFDocumentProxy } from 'pdfjs-dist';
-import { ensurePDFWorker } from './pdfWorkerSetup';
+import { ensurePDFWorker } from './pdfUtils';
 
 // Ensure worker is set up
 ensurePDFWorker();

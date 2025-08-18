@@ -1,6 +1,6 @@
 import { PDFDocument, rgb, StandardFonts, degrees } from 'pdf-lib';
 import * as pdfjsLib from 'pdfjs-dist';
-import { ensurePDFWorker } from './pdfWorkerSetup';
+import { ensurePDFWorker } from './pdfUtils';
 import JSZip from 'jszip';
 
 // Real PDF processing utilities using pdf-lib
@@ -1015,7 +1015,7 @@ async function createZipFromBlobs(blobs: Blob[], format: string): Promise<Blob> 
   return zipBlob;
 }
 
-// Duplicate function removed - using the one above at line 193
+// ZIP creation function consolidated above
 
 // Convert PNG images to PDF
 export async function convertImagesToPDF(files: File[], options: ImageToPDFOptions = {}): Promise<Blob> {
