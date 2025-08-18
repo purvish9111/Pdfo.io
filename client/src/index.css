@@ -1,5 +1,6 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-@import '@fortawesome/fontawesome-free/css/all.css';
+/* Fonts loaded via HTML preload for better performance */
+/* @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap'); */
+/* FontAwesome icons - load only needed icons to reduce bundle size */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

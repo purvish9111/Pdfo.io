@@ -1,190 +1,166 @@
-/**
- * Backend optimization utilities for serverless deployment
- */
+import { Request, Response, NextFunction } from 'express';
+import compression from 'compression';
 
-import type { Request, Response, NextFunction } from "express";
-import { performance } from "perf_hooks";
-
-// Performance monitoring middleware
-export const performanceMiddleware = (req: Request, res: Response, next: NextFunction) => {
-  const start = performance.now();
-  
-  res.on('finish', () => {
-    const duration = performance.now() - start;
-    
-    // Log slow requests (>1000ms)
-    if (duration > 1000) {
-      console.warn(`🐌 Slow request: ${req.method} ${req.path} - ${duration.toFixed(2)}ms`);
+// Enhanced compression configuration for better performance
+export const compressionConfig = {
+  level: 9, // Maximum compression
+  threshold: 1024, // Only compress files larger than 1KB
+  filter: (req: Request, res: Response) => {
+    // Don't compress if content-encoding is already set
+    if (res.get('Content-Encoding')) {
+      return false;
     }
-  });
+    
+    // Compress all text-based content
+    return compression.filter(req, res);
+  },
+  chunkSize: 16 * 1024, // 16KB chunks for better streaming
+};
+
+// Cache headers optimization
+export const setCacheHeaders = (req: Request, res: Response, next: NextFunction) => {
+  const path = req.path;
   
-  // Set performance headers before response starts
-  res.set('X-Response-Time-Start', Date.now().toString());
+  // Long-term caching for static assets
+  if (path.match(/\.(js|css|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot)$/)) {
+    // Cache for 1 year
+    res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+  }
+  // Medium-term caching for HTML pages
+  else if (path.match(/\.html$/) || path === '/') {
+    // Cache for 1 hour
+    res.setHeader('Cache-Control', 'public, max-age=3600, must-revalidate');
+  }
+  // Short-term caching for API responses
+  else if (path.startsWith('/api/')) {
+    // Cache for 5 minutes
+    res.setHeader('Cache-Control', 'public, max-age=300');
+  }
+  // PDF worker files - cache for 1 week
+  else if (path.includes('pdf.worker') || path.includes('.worker.')) {
+    res.setHeader('Cache-Control', 'public, max-age=604800');
+  }
+  
+  // Additional performance headers (only set once)
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
   
   next();
 };
 
-// Memory usage monitoring
-export const monitorMemoryUsage = () => {
-  const usage = process.memoryUsage();
-  const formatBytes = (bytes: number) => (bytes / 1024 / 1024).toFixed(2) + ' MB';
+// Performance monitoring middleware
+export const performanceMiddleware = (req: Request, res: Response, next: NextFunction) => {
+  const start = Date.now();
   
-  return {
-    rss: formatBytes(usage.rss),
-    heapTotal: formatBytes(usage.heapTotal),
-    heapUsed: formatBytes(usage.heapUsed),
-    external: formatBytes(usage.external),
-    arrayBuffers: formatBytes(usage.arrayBuffers || 0),
-  };
+  // Add response time calculation when response finishes
+  res.on('finish', () => {
+    const duration = Date.now() - start;
+    
+    // Log slow requests (>1000ms) for optimization
+    if (duration > 1000) {
+      console.warn(`🐌 Slow request: ${req.method} ${req.path} - ${duration}ms`);
+    }
+  });
+  
+  next();
 };
 
-// Request rate limiting for API optimization
+// Rate limiting for better performance and security
 export const createRateLimiter = () => {
-  const requests = new Map<string, { count: number; timestamp: number }>();
-  const WINDOW_MS = 60000; // 1 minute
-  const MAX_REQUESTS = process.env.NODE_ENV === 'development' ? 1000 : 100; // Higher limit for development
+  const requests = new Map();
   
   return (req: Request, res: Response, next: NextFunction) => {
     const ip = req.ip || req.connection.remoteAddress || 'unknown';
     const now = Date.now();
+    const windowMs = 60 * 1000; // 1 minute
+    const maxRequests = 100; // 100 requests per minute
     
     // Clean old entries
-    const entries = Array.from(requests.entries());
-    for (const [key, value] of entries) {
-      if (now - value.timestamp > WINDOW_MS) {
+    const cutoff = now - windowMs;
+    for (const [key, timestamps] of requests.entries()) {
+      const filtered = timestamps.filter((t: number) => t > cutoff);
+      if (filtered.length === 0) {
         requests.delete(key);
+      } else {
+        requests.set(key, filtered);
       }
     }
     
-    const current = requests.get(ip) || { count: 0, timestamp: now };
+    // Check current IP
+    const ipRequests = requests.get(ip) || [];
+    const recentRequests = ipRequests.filter((t: number) => t > cutoff);
     
-    if (now - current.timestamp > WINDOW_MS) {
-      current.count = 1;
-      current.timestamp = now;
-    } else {
-      current.count++;
+    if (recentRequests.length >= maxRequests) {
+      res.status(429).json({ error: 'Too many requests' });
+      return;
     }
     
-    requests.set(ip, current);
-    
-    if (current.count > MAX_REQUESTS) {
-      return res.status(429).json({
-        error: 'Too many requests',
-        retryAfter: Math.ceil((WINDOW_MS - (now - current.timestamp)) / 1000),
-      });
-    }
-    
-    // Add rate limit headers (only if headers not sent)
-    if (!res.headersSent) {
-      res.set({
-        'X-RateLimit-Limit': MAX_REQUESTS.toString(),
-        'X-RateLimit-Remaining': Math.max(0, MAX_REQUESTS - current.count).toString(),
-        'X-RateLimit-Reset': new Date(current.timestamp + WINDOW_MS).toISOString(),
-      });
-    }
+    // Add current request
+    recentRequests.push(now);
+    requests.set(ip, recentRequests);
     
     next();
   };
 };
 
-// Response compression for better performance
-export const compressionConfig = {
-  level: 6, // Balanced compression level
-  threshold: 1024, // Only compress responses > 1KB
-  filter: (req: Request, res: Response): boolean => {
-    // Don't compress already compressed content
-    if (req.headers['x-no-compression']) {
-      return false;
-    }
-    
-    // Compress text-based responses
-    const contentType = res.get('Content-Type');
-    return !!(contentType && (
-      contentType.includes('text/') ||
-      contentType.includes('application/json') ||
-      contentType.includes('application/javascript') ||
-      contentType.includes('application/xml')
-    ));
-  },
-};
-
-// Database connection optimization
-export const optimizeDBConnection = () => {
-  // Connection pooling settings for better performance
-  return {
-    maxConnections: 10,
-    idleTimeout: 30000, // 30 seconds
-    connectionTimeout: 5000, // 5 seconds
-    acquireTimeout: 10000, // 10 seconds
-    retryAttempts: 3,
-    retryDelay: 1000, // 1 second
-  };
-};
-
-// Caching headers for static assets
-export const setCacheHeaders = (req: Request, res: Response, next: NextFunction) => {
-  const url = req.url;
-  
-  // Long cache for static assets
-  if (url.match(/\.(js|css|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|pdf)$/)) {
-    res.set('Cache-Control', 'public, max-age=31536000, immutable'); // 1 year
-  }
-  // Short cache for API responses
-  else if (url.startsWith('/api/')) {
-    res.set('Cache-Control', 'public, max-age=300'); // 5 minutes
-  }
-  // No cache for HTML pages
-  else {
-    res.set('Cache-Control', 'no-cache, no-store, must-revalidate');
-  }
-  
-  next();
-};
-
-// Error handling optimization
-export const optimizedErrorHandler = (err: Error, req: Request, res: Response, next: NextFunction) => {
-  const start = performance.now();
-  
-  // Log error with context
-  console.error('Server Error:', {
-    message: err.message,
-    stack: process.env.NODE_ENV === 'development' ? err.stack : undefined,
-    method: req.method,
-    url: req.url,
-    userAgent: req.get('User-Agent'),
-    timestamp: new Date().toISOString(),
-  });
-  
-  // Return appropriate error response
-  const statusCode = res.statusCode !== 200 ? res.statusCode : 500;
-  const errorResponse = {
-    error: process.env.NODE_ENV === 'development' ? err.message : 'Internal Server Error',
-    timestamp: new Date().toISOString(),
-    ...(process.env.NODE_ENV === 'development' && { stack: err.stack }),
-  };
-  
-  // Add performance timing (only if headers not sent)
-  const duration = performance.now() - start;
-  if (!res.headersSent) {
-    res.set('X-Error-Time', `${duration.toFixed(2)}ms`);
-  }
-  
-  res.status(statusCode).json(errorResponse);
-};
-
-// Health check endpoint optimization
+// Health check endpoint with performance metrics
 export const createHealthCheck = () => {
   return (req: Request, res: Response) => {
-    const memoryUsage = monitorMemoryUsage();
+    const memoryUsage = process.memoryUsage();
     const uptime = process.uptime();
     
     res.json({
-      status: 'healthy',
+      status: 'ok',
       timestamp: new Date().toISOString(),
       uptime: `${Math.floor(uptime / 60)}m ${Math.floor(uptime % 60)}s`,
-      memory: memoryUsage,
-      version: process.env.npm_package_version || '1.0.0',
-      environment: process.env.NODE_ENV || 'development',
+      memory: {
+        used: `${Math.round(memoryUsage.heapUsed / 1024 / 1024)}MB`,
+        total: `${Math.round(memoryUsage.heapTotal / 1024 / 1024)}MB`,
+        external: `${Math.round(memoryUsage.external / 1024 / 1024)}MB`,
+      },
+      performance: {
+        nodeVersion: process.version,
+        platform: process.platform,
+        arch: process.arch,
+      },
     });
   };
+};
+
+// Error handler optimization
+export const optimizedErrorHandler = (err: any, req: Request, res: Response, next: NextFunction) => {
+  // Log error but don't expose sensitive information
+  console.error('Server error:', {
+    path: req.path,
+    method: req.method,
+    error: err.message,
+    stack: process.env.NODE_ENV === 'development' ? err.stack : undefined,
+  });
+  
+  const status = err.status || err.statusCode || 500;
+  const message = status === 500 ? 'Internal Server Error' : err.message;
+  
+  res.status(status).json({
+    error: message,
+    timestamp: new Date().toISOString(),
+    path: req.path,
+  });
+};
+
+// Static file optimization
+export const optimizeStaticFiles = (req: Request, res: Response, next: NextFunction) => {
+  // Enable compression for all static files
+  if (req.path.match(/\.(js|css|html|xml|txt|json)$/)) {
+    res.set('Content-Encoding', 'gzip');
+  }
+  
+  // Set optimal headers for static assets
+  if (req.path.match(/\.(jpg|jpeg|png|gif|ico|svg)$/)) {
+    res.set({
+      'Cache-Control': 'public, max-age=31536000, immutable',
+      'Vary': 'Accept-Encoding',
+    });
+  }
+  
+  next();
 };

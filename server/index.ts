@@ -26,14 +26,10 @@ if (process.env.NODE_ENV === 'production') {
 app.use(express.json({ limit: '50mb' })); // Increased limit for PDF uploads
 app.use(express.urlencoded({ extended: false, limit: '50mb' }));
 
-// Security headers
+// Security headers (simplified to avoid conflicts)
 app.use((req, res, next) => {
-  res.set({
-    'X-Content-Type-Options': 'nosniff',
-    'X-Frame-Options': 'DENY',
-    'X-XSS-Protection': '1; mode=block',
-    'Referrer-Policy': 'strict-origin-when-cross-origin',
-  });
+  res.setHeader('X-Frame-Options', 'DENY');
+  res.setHeader('X-XSS-Protection', '1; mode=block');
   next();
 });
 

@@ -6,13 +6,17 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { Header } from "@/components/Header";
 import { AuthProvider } from "@/hooks/use-auth";
-import { LazyRoute } from "@/components/LazyRoute";
+import { OptimizedLazyRoute, lazyRoutes } from "@/components/OptimizedLazyRoute";
 import { PerformanceProvider } from "@/components/PerformanceProvider";
 import { useEffect } from "react";
 import { initGA } from "./lib/analytics";
 import { useAnalytics } from "./hooks/use-analytics";
 import { initializePDFJS } from "./lib/pdf-worker-config";
 import { initializePerformanceMonitoring } from "./lib/performance-monitor";
+import { initializePerformanceOptimizations, optimizeFontLoading } from "./lib/performance-optimizations";
+import { initializeWebVitalsOptimizations } from "./lib/web-vitals-optimization";
+import { injectCriticalCSS, optimizeNonCriticalCSS } from "./lib/critical-css";
+// Import all pages directly for instant access (no lazy loading for better performance)
 import Home from "@/pages/Home";
 import Login from "@/pages/Login";
 import SignUp from "@/pages/SignUp";
@@ -43,12 +47,11 @@ import OptimizePDF from "@/pages/OptimizePDF";
 import RemoveBlankPages from "@/pages/RemoveBlankPages";
 import AddHeaderFooter from "@/pages/AddHeaderFooter";
 import About from "@/pages/About";
-
 import Privacy from "@/pages/Privacy";
 import Terms from "@/pages/Terms";
 import Contact from "@/pages/Contact";
-
 import NotFound from "@/pages/not-found";
+import { LazyRoute } from "@/components/LazyRoute";
 
 function Router() {
   // Track page views when routes change
@@ -114,6 +117,21 @@ function Router() {
 function App() {
   // Initialize all performance optimizations and analytics
   useEffect(() => {
+    // Inject critical CSS immediately for faster rendering
+    injectCriticalCSS();
+    
+    // Initialize performance optimizations first
+    initializePerformanceOptimizations();
+    
+    // Initialize Web Vitals optimizations
+    initializeWebVitalsOptimizations();
+    
+    // Initialize font loading optimization
+    optimizeFontLoading();
+    
+    // Optimize non-critical CSS loading
+    optimizeNonCriticalCSS();
+    
     // Initialize PDF.js worker for better performance
     initializePDFJS();
     
