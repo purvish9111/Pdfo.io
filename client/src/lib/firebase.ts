@@ -86,6 +86,7 @@ export const signOutUser = async () => {
   }
 };
 
+// Google Sign-In function with enhanced error handling
 export const signInWithGoogle = async () => {
   try {
     // Use a more optimized approach with error handling for blocked popups
