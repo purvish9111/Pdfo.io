@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "wouter";
 import { FileUpload } from "@/components/FileUpload";
 import { ReorderPDFGridNative } from "@/components/ReorderPDFGridNative";
@@ -23,6 +23,11 @@ export default function ReorderPages() {
   const [reorderedBlob, setReorderedBlob] = useState<Blob | null>(null);
   const [hasChanges, setHasChanges] = useState(false);
   const { toast } = useToast();
+
+  // Scroll to top when component mounts
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   const handleFilesSelected = async (files: File[]) => {
     console.log('📄 ReorderPages - Files selected:', files.map(f => f.name));

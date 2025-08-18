@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "wouter";
 import { FileUpload } from "@/components/FileUpload";
 import { ToolFooter } from "@/components/ToolFooter";
@@ -57,6 +57,11 @@ export default function OptimizePDF() {
   const [optimizedFile, setOptimizedFile] = useState<Blob | null>(null);
   const [showResults, setShowResults] = useState(false);
   const { toast } = useToast();
+
+  // Scroll to top when component mounts
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   const handleFilesSelected = (files: File[]) => {
     setFile(files[0]);

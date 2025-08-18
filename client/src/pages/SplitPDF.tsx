@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "wouter";
 import { FileUpload } from "@/components/FileUpload";
 import { FilesPreviewWithThumbnails } from "@/components/FilesPreviewWithThumbnails";
@@ -32,6 +32,11 @@ export default function SplitPDF() {
   const { toast } = useToast();
 
   const seoData = toolSEOData['/split'];
+
+  // Scroll to top when component mounts
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   const handleFilesSelected = async (selectedFiles: File[]) => {
     // Allow multiple PDF files for batch splitting

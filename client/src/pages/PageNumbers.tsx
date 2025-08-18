@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "wouter";
 import { FileUpload } from "@/components/FileUpload";
 import { PageNumbersGrid } from "@/components/PageNumbersGrid";
@@ -28,6 +28,11 @@ export default function PageNumbers() {
   const [progress, setProgress] = useState(0);
   const [numberedBlob, setNumberedBlob] = useState<Blob | null>(null);
   const { toast } = useToast();
+
+  // Scroll to top when component mounts
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   const handleFilesSelected = async (files: File[]) => {
     console.log('PageNumbers - Files selected:', files);

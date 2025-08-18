@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "wouter";
 import { FileUpload } from "@/components/FileUpload";
 import { ToolFooter } from "@/components/ToolFooter";
@@ -77,6 +77,11 @@ export default function PNGToPDF() {
   const [progress, setProgress] = useState(0);
   const [convertedFile, setConvertedFile] = useState<Blob | null>(null);
   const { toast } = useToast();
+
+  // Scroll to top when component mounts
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   const sensors = useSensors(
     useSensor(PointerSensor),

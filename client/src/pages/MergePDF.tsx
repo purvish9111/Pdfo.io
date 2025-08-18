@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "wouter";
 import { FileUpload } from "@/components/FileUpload";
 import { DocumentsList } from "@/components/DocumentsList";
@@ -20,6 +20,11 @@ export default function MergePDF() {
   const { toast } = useToast();
 
   const seoData = toolSEOData['/merge'];
+
+  // Scroll to top when component mounts
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   const handleFilesSelected = (selectedFiles: File[]) => {
     console.log('📄 MergePDF - Files selected:', selectedFiles.map(f => f.name));

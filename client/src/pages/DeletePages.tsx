@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "wouter";
 import { FileUpload } from "@/components/FileUpload";
 import { DeletePDFGrid } from "@/components/DeletePDFGrid";
@@ -22,6 +22,11 @@ export default function DeletePages() {
   const [progress, setProgress] = useState(0);
   const [processedBlob, setProcessedBlob] = useState<Blob | null>(null);
   const { toast } = useToast();
+
+  // Scroll to top when component mounts
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   const handleFilesSelected = async (files: File[]) => {
     console.log('Delete - Files selected:', files);
