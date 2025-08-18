@@ -5,10 +5,10 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { Header } from "@/components/Header";
-// DISABLED: import { AuthProvider } from "@/hooks/use-auth";
+import { AuthProvider } from "@/hooks/use-auth";
 import { OptimizedLazyRoute, lazyRoutes } from "@/components/OptimizedLazyRoute";
-// DISABLED: import { PerformanceProvider } from "@/components/PerformanceProvider";
-import React, { useEffect } from "react";
+import { PerformanceProvider } from "@/components/PerformanceProvider";
+import { useEffect } from "react";
 import { initGA } from "./lib/analytics";
 import { useAnalytics } from "./hooks/use-analytics";
 import { initializePDFJS } from "./lib/pdf-worker-config";
@@ -146,22 +146,21 @@ function App() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      {/* TEMPORARILY DISABLED: Both providers causing React hook errors - need to debug */}
-      {/* <PerformanceProvider> */}
-      {/* <AuthProvider> */}
-        <ThemeProvider>
-          <TooltipProvider>
-            <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-              <Header />
-              <main>
-                <Router />
-              </main>
-            </div>
-            <Toaster />
-          </TooltipProvider>
-        </ThemeProvider>
-      {/* </AuthProvider> */}
-      {/* </PerformanceProvider> */}
+      <PerformanceProvider>
+        <AuthProvider>
+          <ThemeProvider>
+            <TooltipProvider>
+              <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+                <Header />
+                <main>
+                  <Router />
+                </main>
+              </div>
+              <Toaster />
+            </TooltipProvider>
+          </ThemeProvider>
+        </AuthProvider>
+      </PerformanceProvider>
     </QueryClientProvider>
   );
 }
