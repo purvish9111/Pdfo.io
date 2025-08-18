@@ -123,8 +123,6 @@ export const injectCriticalCSS = () => {
     .text-gray-900 { color: #111827; }
     .text-white { color: #ffffff; }
     .text-blue-500 { color: #3b82f6; }
-    .mb-4 { margin-bottom: 1rem; }
-    .mb-8 { margin-bottom: 2rem; }
     .text-5xl { font-size: 3rem; line-height: 1; }
     .text-6xl { font-size: 3.75rem; line-height: 1; }
     
@@ -150,8 +148,8 @@ export const optimizeNonCriticalCSS = () => {
     if (!linkElement.href.includes('fonts') && !linkElement.href.includes('critical')) {
       linkElement.media = 'print';
       linkElement.onload = function() {
-        this.media = 'all';
-        this.onload = null;
+        (this as HTMLLinkElement).media = 'all';
+        (this as HTMLLinkElement).onload = null;
       };
     }
   });

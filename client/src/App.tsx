@@ -13,9 +13,9 @@ import { initGA } from "./lib/analytics";
 import { useAnalytics } from "./hooks/use-analytics";
 import { initializePDFJS } from "./lib/pdf-worker-config";
 import { initializePerformanceMonitoring } from "./lib/performance-monitor";
-// import { initializePerformanceOptimizations, optimizeFontLoading } from "./lib/performance-optimizations";
-// import { initializeWebVitalsOptimizations } from "./lib/web-vitals-optimization";
-// import { injectCriticalCSS, optimizeNonCriticalCSS } from "./lib/critical-css";
+import { initializeWebVitalsOptimizations } from "./lib/web-vitals-optimization";
+import { injectCriticalCSS, optimizeNonCriticalCSS } from "./lib/critical-css";
+import { initializeAllPerformanceOptimizations } from "./lib/performance-bootstrap";
 // Import all pages directly for instant access (no lazy loading for better performance)
 import Home from "@/pages/Home";
 import Login from "@/pages/Login";
@@ -122,16 +122,14 @@ function Router() {
 }
 
 function App() {
-  // Initialize all performance optimizations and analytics
+  // Initialize all optimizations and analytics
   useEffect(() => {
-    // Skip critical CSS injection to maintain original design
-    // injectCriticalCSS();
-    
-    // Skip all CSS and font optimizations to maintain original design
-    // initializePerformanceOptimizations();
-    // initializeWebVitalsOptimizations(); 
-    // optimizeFontLoading();
-    // optimizeNonCriticalCSS();
+    // Initialize Google Analytics
+    if (!import.meta.env.VITE_GA_MEASUREMENT_ID) {
+      console.warn('Missing required Google Analytics key: VITE_GA_MEASUREMENT_ID');
+    } else {
+      initGA();
+    }
     
     // Initialize PDF.js worker for better performance
     initializePDFJS();
@@ -139,12 +137,8 @@ function App() {
     // Initialize performance monitoring
     initializePerformanceMonitoring();
     
-    // Initialize Google Analytics
-    if (!import.meta.env.VITE_GA_MEASUREMENT_ID) {
-      console.warn('Missing required Google Analytics key: VITE_GA_MEASUREMENT_ID');
-    } else {
-      initGA();
-    }
+    // Initialize all performance optimizations for 100% PageSpeed score
+    initializeAllPerformanceOptimizations();
   }, []);
 
   return (

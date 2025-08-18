@@ -40,8 +40,9 @@ export const optimizeFID = () => {
   // Defer non-critical JavaScript
   const scripts = document.querySelectorAll('script:not([async]):not([defer])');
   scripts.forEach(script => {
-    if (!script.src.includes('main') && !script.src.includes('pdf.worker')) {
-      script.setAttribute('defer', 'true');
+    const scriptElement = script as HTMLScriptElement;
+    if (!scriptElement.src.includes('main') && !scriptElement.src.includes('pdf.worker')) {
+      scriptElement.setAttribute('defer', 'true');
     }
   });
 
@@ -122,97 +123,49 @@ export const monitorWebVitals = () => {
 
   // Web Vitals monitoring
   try {
-    const observer = new PerformanceObserver((list) => {
-      for (const entry of list.getEntries()) {
-        if (entry.entryType === 'largest-contentful-paint') {
-          console.log('LCP:', entry.startTime);
-          if (entry.startTime > 2500) {
-            optimizeLCP();
-          }
-        }
-        if (entry.entryType === 'first-input') {
-          console.log('FID:', (entry as any).processingStart - entry.startTime);
-        }
-        if (entry.entryType === 'layout-shift') {
-          console.log('CLS:', (entry as any).value);
-          if ((entry as any).value > 0.1) {
-            optimizeCLS();
-          }
-        }
+    // Track LCP
+    const lcpObserver = new PerformanceObserver((list) => {
+      const entries = list.getEntries();
+      const lastEntry = entries[entries.length - 1] as any;
+      if (lastEntry.renderTime || lastEntry.loadTime) {
+        const lcp = lastEntry.renderTime || lastEntry.loadTime;
+        console.log('LCP:', lcp);
       }
     });
-    
-    observer.observe({ entryTypes: ['largest-contentful-paint', 'first-input', 'layout-shift'] });
-  } catch (e) {
-    console.log('Performance observer not supported');
+    lcpObserver.observe({ type: 'largest-contentful-paint', buffered: true });
+
+    // Track FID
+    const fidObserver = new PerformanceObserver((list) => {
+      const entries = list.getEntries();
+      entries.forEach((entry: any) => {
+        console.log('FID:', entry.processingStart - entry.startTime);
+      });
+    });
+    fidObserver.observe({ type: 'first-input', buffered: true });
+
+    // Track CLS
+    let clsValue = 0;
+    const clsObserver = new PerformanceObserver((list) => {
+      const entries = list.getEntries();
+      entries.forEach((entry: any) => {
+        if (!entry.hadRecentInput) {
+          clsValue += entry.value;
+        }
+      });
+      console.log('CLS:', clsValue);
+    });
+    clsObserver.observe({ type: 'layout-shift', buffered: true });
+
+  } catch (error) {
+    console.warn('Web Vitals monitoring not supported:', error);
   }
-
-
-};
-
-// Resource hints optimization
-export const optimizeResourceHints = () => {
-  if (typeof window === 'undefined') return;
-
-  // Preconnect to external domains
-  const preconnectDomains = [
-    'https://fonts.googleapis.com',
-    'https://fonts.gstatic.com',
-    'https://www.google-analytics.com',
-  ];
-
-  preconnectDomains.forEach(domain => {
-    if (!document.querySelector(`link[href="${domain}"]`)) {
-      const link = document.createElement('link');
-      link.rel = 'preconnect';
-      link.href = domain;
-      link.crossOrigin = 'anonymous';
-      document.head.appendChild(link);
-    }
-  });
-
-  // DNS prefetch for likely navigation
-  const dnsPrefetchDomains = [
-    '//replit.com',
-    '//cdnjs.cloudflare.com',
-  ];
-
-  dnsPrefetchDomains.forEach(domain => {
-    if (!document.querySelector(`link[href="${domain}"]`)) {
-      const link = document.createElement('link');
-      link.rel = 'dns-prefetch';
-      link.href = domain;
-      document.head.appendChild(link);
-    }
-  });
-};
-
-// Critical resource prioritization
-export const prioritizeCriticalResources = () => {
-  if (typeof window === 'undefined') return;
-
-  // Prioritize above-the-fold content
-  const criticalResources = [
-    '/src/main.tsx',
-    '/src/index.css',
-    '/pdf.worker.min.js',
-  ];
-
-  criticalResources.forEach(resource => {
-    const link = document.createElement('link');
-    link.rel = 'modulepreload';
-    link.href = resource;
-    document.head.appendChild(link);
-  });
 };
 
 // Initialize all Web Vitals optimizations
 export const initializeWebVitalsOptimizations = () => {
-  // Run immediately for critical optimizations
-  optimizeResourceHints();
-  prioritizeCriticalResources();
-
-  // Run after DOM is ready
+  if (typeof window === 'undefined') return;
+  
+  // Run optimizations when DOM is ready
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => {
       optimizeLCP();

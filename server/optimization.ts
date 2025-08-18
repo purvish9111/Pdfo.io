@@ -67,7 +67,7 @@ export const performanceMiddleware = (req: Request, res: Response, next: NextFun
 
 // Rate limiting for better performance and security
 export const createRateLimiter = () => {
-  const requests = new Map();
+  const requests = new Map<string, number[]>();
   
   return (req: Request, res: Response, next: NextFunction) => {
     const ip = req.ip || req.connection.remoteAddress || 'unknown';
@@ -77,7 +77,8 @@ export const createRateLimiter = () => {
     
     // Clean old entries
     const cutoff = now - windowMs;
-    for (const [key, timestamps] of requests.entries()) {
+    const entries = Array.from(requests.entries());
+    for (const [key, timestamps] of entries) {
       const filtered = timestamps.filter((t: number) => t > cutoff);
       if (filtered.length === 0) {
         requests.delete(key);
