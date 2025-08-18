@@ -10,21 +10,24 @@ import {
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle, SheetDescription } from "@/components/ui/sheet";
-import { useAuth } from "@/hooks/use-auth";
-import { signOutUser } from "@/lib/firebase";
+// Temporarily disabled due to React hooks issue
+// import { useAuth } from "@/hooks/use-auth";
+// import { signOutUser } from "@/lib/firebase";
 import AdminPanelButton from "@/components/AdminPanelButton";
 
 export function Header() {
   const { theme, toggleTheme } = useTheme();
   const [location] = useLocation();
-  const { user } = useAuth();
+  // const { user } = useAuth(); // Temporarily disabled
+  const user = null; // Temporary fallback
 
   const handleSignOut = async () => {
-    try {
-      await signOutUser();
-    } catch (error) {
-      console.error("Error signing out:", error);
-    }
+    // try {
+    //   await signOutUser();
+    // } catch (error) {
+    //   console.error("Error signing out:", error);
+    // }
+    console.log("Sign out disabled temporarily");
   };
 
   return (
