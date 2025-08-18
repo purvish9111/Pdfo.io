@@ -21,9 +21,10 @@ export function MainFooter() {
           <div className="col-span-1 md:col-span-2">
             <div className="flex items-center mb-4">
               <img 
-                src="/logo.png" 
+                src={`/logo.png?v=${Date.now()}`}
                 alt="PDFo Logo" 
                 className="h-8 w-8 object-contain"
+                style={{ height: '32px', width: '32px', objectFit: 'contain' }}
               />
             </div>
             <p className="text-gray-400 mb-6 max-w-md leading-relaxed">

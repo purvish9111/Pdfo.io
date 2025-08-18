@@ -32,7 +32,12 @@ export function Header() {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <Link href="/" className="flex items-center">
-            <img src="/logo.png" alt="PDFo - Free Online PDF Tools Home" className="h-8 w-8 object-contain" />
+            <img 
+              src={`/logo.png?v=${Date.now()}`} 
+              alt="PDFo - Free Online PDF Tools Home" 
+              className="h-8 w-8 object-contain" 
+              style={{ height: '32px', width: '32px', objectFit: 'contain' }}
+            />
           </Link>
 
           {/* Desktop Navigation */}
