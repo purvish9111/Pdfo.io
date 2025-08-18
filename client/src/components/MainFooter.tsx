@@ -23,7 +23,7 @@ export function MainFooter() {
               <img 
                 src="/logo.png" 
                 alt="PDFo Logo" 
-                className="h-6 w-auto"
+                className="h-8 w-8 object-contain"
               />
             </div>
             <p className="text-gray-400 mb-6 max-w-md leading-relaxed">
