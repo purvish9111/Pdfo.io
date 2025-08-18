@@ -421,6 +421,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Admin subdomain/route handling
+  app.get("/admin*", (req, res) => {
+    // Check if request is for admin subdomain or admin routes
+    const host = req.get('host') || '';
+    const isAdminSubdomain = host.startsWith('admin.');
+    const isAdminRoute = req.path.startsWith('/admin');
+    
+    if (isAdminSubdomain || isAdminRoute) {
+      // Serve admin HTML
+      res.sendFile('admin.html', { root: '.' });
+    } else {
+      res.status(404).json({ error: "Not found" });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }

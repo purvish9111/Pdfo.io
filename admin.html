@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Panel - PDFo</title>
+  <meta name="description" content="PDFo Admin Panel - Manage your PDF platform, analytics, and content" />
+  <meta name="robots" content="noindex, nofollow" />
+  
+  <!-- Admin-specific styles -->
+  <style>
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+        'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+        sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    
+    #root {
+      min-height: 100vh;
+    }
+    
+    /* Admin theme colors */
+    :root {
+      --admin-primary: #1f2937;
+      --admin-secondary: #374151;
+      --admin-accent: #3b82f6;
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="module" src="/src/admin.tsx"></script>
+</body>
+</html>

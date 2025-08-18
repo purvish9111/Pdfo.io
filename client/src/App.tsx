@@ -7,7 +7,8 @@ import { ThemeProvider } from "@/components/ThemeProvider";
 import { Header } from "@/components/Header";
 import { AuthProvider } from "@/hooks/use-auth";
 import { OptimizedLazyRoute, lazyRoutes } from "@/components/OptimizedLazyRoute";
-import { PerformanceProvider } from "@/components/PerformanceProvider";
+// Temporarily disabled due to React hooks issue
+// import { PerformanceProvider } from "@/components/PerformanceProvider";
 import { useEffect } from "react";
 import { initGA } from "./lib/analytics";
 import { useAnalytics } from "./hooks/use-analytics";
@@ -152,21 +153,19 @@ function App() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <PerformanceProvider>
-        <AuthProvider>
-          <ThemeProvider>
-            <TooltipProvider>
-              <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-                <Header />
-                <main>
-                  <Router />
-                </main>
-              </div>
-              <Toaster />
-            </TooltipProvider>
-          </ThemeProvider>
-        </AuthProvider>
-      </PerformanceProvider>
+      <AuthProvider>
+        <ThemeProvider>
+          <TooltipProvider>
+            <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+              <Header />
+              <main>
+                <Router />
+              </main>
+            </div>
+            <Toaster />
+          </TooltipProvider>
+        </ThemeProvider>
+      </AuthProvider>
     </QueryClientProvider>
   );
 }

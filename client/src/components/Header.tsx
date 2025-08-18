@@ -12,6 +12,7 @@ import {
 import { Sheet, SheetContent, SheetTrigger, SheetTitle, SheetDescription } from "@/components/ui/sheet";
 import { useAuth } from "@/hooks/use-auth";
 import { signOutUser } from "@/lib/firebase";
+import AdminPanelButton from "@/components/AdminPanelButton";
 
 export function Header() {
   const { theme, toggleTheme } = useTheme();
@@ -72,6 +73,9 @@ export function Header() {
 
           {/* Right side */}
           <div className="flex items-center space-x-4">
+            {/* Admin Panel Button */}
+            <AdminPanelButton />
+            
             {/* Theme Toggle */}
             <Button
               variant="ghost"
