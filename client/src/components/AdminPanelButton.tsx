@@ -13,13 +13,8 @@ export function AdminPanelButton({ className = "" }: AdminPanelButtonProps) {
       size="sm"
       className={`hidden lg:flex items-center space-x-2 ${className}`}
       onClick={() => {
-        // Check if admin subdomain is available, otherwise use route
-        const currentHost = window.location.hostname;
-        const adminUrl = currentHost.includes('.') 
-          ? `https://admin.${currentHost.split('.').slice(-2).join('.')}`
-          : '/admin';
-        
-        window.open(adminUrl, '_blank');
+        // Navigate to admin panel
+        window.open('/purvish_tools', '_blank');
       }}
     >
       <Shield className="w-4 h-4" />

@@ -118,9 +118,7 @@ function Router() {
       <Route path="/terms" component={Terms} />
       <Route path="/contact" component={Contact} />
 
-      {/* Admin and Analytics Routes */}
-      <Route path="/admin" component={AdminDashboard} />
-      <Route path="/analytics" component={AnalyticsDashboard} />
+
 
       <Route path="/dashboard">
         <LazyRoute factory={() => import("@/pages/Dashboard")} />

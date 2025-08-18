@@ -421,19 +421,22 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Admin subdomain/route handling
-  app.get("/admin*", (req, res) => {
-    // Check if request is for admin subdomain or admin routes
-    const host = req.get('host') || '';
-    const isAdminSubdomain = host.startsWith('admin.');
-    const isAdminRoute = req.path.startsWith('/admin');
+  // Admin panel route handling - non-indexable
+  app.get("/purvish_tools*", (req, res) => {
+    // Set headers to prevent search engine indexing
+    res.setHeader('X-Robots-Tag', 'noindex, nofollow, nosnippet, noarchive');
+    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+    res.setHeader('Pragma', 'no-cache');
+    res.setHeader('Expires', '0');
     
-    if (isAdminSubdomain || isAdminRoute) {
-      // Serve admin HTML
-      res.sendFile('admin.html', { root: '.' });
-    } else {
-      res.status(404).json({ error: "Not found" });
-    }
+    // Serve admin HTML
+    res.sendFile('admin.html', { root: '.' });
+  });
+
+  // Serve robots.txt
+  app.get("/robots.txt", (req, res) => {
+    res.setHeader('Content-Type', 'text/plain');
+    res.sendFile('client/public/robots.txt', { root: '.' });
   });
 
   const httpServer = createServer(app);
