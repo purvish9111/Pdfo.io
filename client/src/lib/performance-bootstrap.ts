@@ -3,29 +3,15 @@
  */
 
 import { initializeWebVitalsOptimizations } from "./web-vitals-optimization";
-import { injectCriticalCSS, optimizeNonCriticalCSS } from "./critical-css";
-import { initializeAdvancedPerformance } from "./advanced-performance";
-import { initializeHTMLOptimizations } from "./html-optimization";
-import { initializeCSSOptimizations } from "./css-optimization";
+import { initializeBackendPerformance } from "./backend-performance";
 
 export const initializeAllPerformanceOptimizations = () => {
-  // Priority 1: Critical rendering path optimizations
-  injectCriticalCSS();
+  // Only initialize backend performance optimizations that don't affect design
+  // NO CSS modifications, NO HTML modifications, NO visual changes
   
-  // Priority 2: Web Vitals and core performance metrics
+  // Backend monitoring only (invisible to user)
   initializeWebVitalsOptimizations();
+  initializeBackendPerformance();
   
-  // Priority 3: Advanced performance features
-  initializeAdvancedPerformance();
-  
-  // Priority 4: HTML and CSS optimizations
-  initializeHTMLOptimizations();
-  initializeCSSOptimizations();
-  
-  // Priority 5: Deferred optimizations (non-critical)
-  setTimeout(() => {
-    optimizeNonCriticalCSS();
-  }, 2000);
-  
-  console.log('🚀 All performance optimizations initialized');
+  console.log('Backend performance monitoring initialized (no design changes)');
 };

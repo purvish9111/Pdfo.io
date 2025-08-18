@@ -137,7 +137,7 @@ function App() {
     // Initialize performance monitoring
     initializePerformanceMonitoring();
     
-    // Initialize all performance optimizations for 100% PageSpeed score
+    // Initialize only backend performance monitoring (no design changes)
     initializeAllPerformanceOptimizations();
   }, []);
 

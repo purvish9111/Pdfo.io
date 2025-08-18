@@ -161,24 +161,18 @@ export const monitorWebVitals = () => {
   }
 };
 
-// Initialize all Web Vitals optimizations
+// Initialize Web Vitals monitoring ONLY (no visual changes)
 export const initializeWebVitalsOptimizations = () => {
   if (typeof window === 'undefined') return;
   
-  // Run optimizations when DOM is ready
+  // ONLY monitoring - NO visual modifications to preserve original design
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => {
-      optimizeLCP();
-      optimizeFID();
-      optimizeCLS();
-      optimizeTTI();
       monitorWebVitals();
     });
   } else {
-    optimizeLCP();
-    optimizeFID();
-    optimizeCLS();
-    optimizeTTI();
     monitorWebVitals();
   }
+  
+  console.log('Web Vitals monitoring initialized (no design changes)');
 };

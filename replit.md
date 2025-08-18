@@ -46,6 +46,8 @@ PDFo is a comprehensive web-based PDF manipulation and conversion platform that 
 
 Preferred communication style: Simple, everyday language.
 
+**CRITICAL USER REQUIREMENT**: Absolutely NO design, layout, or visual changes allowed. User has explicitly stated they don't want any modifications to the website's appearance, styling, or visual elements. Only backend performance optimizations that don't affect the user interface are acceptable.
+
 # System Architecture
 
 ## Frontend Architecture
