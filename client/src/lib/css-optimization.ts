@@ -287,6 +287,12 @@ export const initializeCSSOptimizations = () => {
   if (typeof window === 'undefined') return;
 
   const runOptimizations = () => {
+    // Only run CSS optimizations in production to prevent design corruption
+    if (window.location.hostname.includes('replit.dev') || window.location.hostname === 'localhost') {
+      console.log('Development mode: Skipping aggressive CSS optimizations to preserve design');
+      return;
+    }
+    
     inlineCriticalCSS();
     deferNonCriticalCSS();
     minifyInlineCSS();
@@ -301,8 +307,12 @@ export const initializeCSSOptimizations = () => {
     runOptimizations();
   }
 
-  // Run additional optimizations after page load
+  // Run additional optimizations after page load (production only)
   window.addEventListener('load', () => {
+    if (window.location.hostname.includes('replit.dev') || window.location.hostname === 'localhost') {
+      return; // Skip in development
+    }
+    
     setTimeout(() => {
       removeUnusedCSSVariables();
       minifyInlineCSS();
