@@ -1,6 +1,7 @@
 /* Restore font imports for proper font-weight rendering */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-/* FontAwesome icons - load only needed icons to reduce bundle size */
+/* FontAwesome icons - ensure all icons are loaded */
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
