@@ -107,7 +107,9 @@ export const optimizeDOM = () => {
   // Combine adjacent text nodes
   const walker = document.createTreeWalker(
     document.body,
-    NodeFilter.SHOW_TEXT
+    NodeFilter.SHOW_TEXT,
+    null,
+    false
   );
 
   const textNodes: Text[] = [];
