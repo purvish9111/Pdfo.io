@@ -77,6 +77,16 @@ export const signInUser = async (email: string, password: string) => {
   }
 };
 
+export const signInWithGoogle = async () => {
+  try {
+    const result = await signInWithPopup(auth, googleProvider);
+    return result.user;
+  } catch (error) {
+    console.error('Error signing in with Google:', error);
+    throw error;
+  }
+};
+
 export const signOutUser = async () => {
   try {
     await signOut(auth);

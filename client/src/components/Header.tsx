@@ -1,17 +1,29 @@
-import { Link } from "wouter";
+import { Link, useLocation } from "wouter";
+import { useTheme } from "./ThemeProvider";
 import { Moon, Sun, Menu, User, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import AdminPanelButton from "@/components/AdminPanelButton";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+  DropdownMenuSeparator,
+} from "@/components/ui/dropdown-menu";
+import { Sheet, SheetContent, SheetTrigger, SheetTitle, SheetDescription } from "@/components/ui/sheet";
+import { useAuth } from "@/hooks/use-auth";
+import { signOutUser } from "@/lib/firebase";
 
 export function Header() {
-  // Static values to avoid React hooks issues
-  const theme = 'light';
-  const toggleTheme = () => {};
-  const location = '/';
-  const user = null;
+  const { theme, toggleTheme } = useTheme();
+  const [location] = useLocation();
+  const { user } = useAuth();
 
   const handleSignOut = async () => {
-    console.log("Sign out disabled temporarily");
+    try {
+      await signOutUser();
+    } catch (error) {
+      console.error("Error signing out:", error);
+    }
   };
 
   return (
@@ -60,9 +72,6 @@ export function Header() {
 
           {/* Right side */}
           <div className="flex items-center space-x-4">
-            {/* Admin Panel Button */}
-            <AdminPanelButton />
-            
             {/* Theme Toggle */}
             <Button
               variant="ghost"

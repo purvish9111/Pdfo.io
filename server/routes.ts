@@ -421,24 +421,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Admin panel route handling - non-indexable
-  app.get("/purvish_tools*", (req, res) => {
-    // Set headers to prevent search engine indexing
-    res.setHeader('X-Robots-Tag', 'noindex, nofollow, nosnippet, noarchive');
-    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
-    res.setHeader('Pragma', 'no-cache');
-    res.setHeader('Expires', '0');
-    
-    // Serve admin HTML
-    res.sendFile('admin.html', { root: '.' });
-  });
-
-  // Serve robots.txt
-  app.get("/robots.txt", (req, res) => {
-    res.setHeader('Content-Type', 'text/plain');
-    res.sendFile('client/public/robots.txt', { root: '.' });
-  });
-
   const httpServer = createServer(app);
   return httpServer;
 }
