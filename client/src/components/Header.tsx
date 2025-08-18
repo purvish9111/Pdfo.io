@@ -10,7 +10,7 @@ import {
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle, SheetDescription } from "@/components/ui/sheet";
-import { useAuth } from "@/hooks/use-auth-simple";
+import { useAuth } from "@/hooks/use-auth";
 import { signOutUser } from "@/lib/firebase";
 
 export function Header() {

@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { Switch, Route, useLocation } from "wouter";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
@@ -6,10 +5,10 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { Header } from "@/components/Header";
-// import { AuthProvider } from "@/hooks/use-auth";
-import { AuthProvider } from "@/hooks/use-auth-simple";
+import { AuthProvider } from "@/hooks/use-auth";
 import { OptimizedLazyRoute, lazyRoutes } from "@/components/OptimizedLazyRoute";
 import { PerformanceProvider } from "@/components/PerformanceProvider";
+import { useEffect } from "react";
 import { initGA } from "./lib/analytics";
 import { useAnalytics } from "./hooks/use-analytics";
 import { initializePDFJS } from "./lib/pdf-worker-config";
