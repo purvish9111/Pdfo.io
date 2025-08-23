@@ -36,13 +36,13 @@ export function Header() {
               src="/logo.png" 
               alt="PDFo - Free Online PDF Tools Home" 
               style={{ 
-                height: '24px !important', 
-                width: '24px !important', 
+                height: '16px !important', 
+                width: '16px !important', 
                 objectFit: 'contain',
-                maxHeight: '24px !important', 
-                maxWidth: '24px !important',
-                minHeight: '24px !important',
-                minWidth: '24px !important'
+                maxHeight: '16px !important', 
+                maxWidth: '16px !important',
+                minHeight: '16px !important',
+                minWidth: '16px !important'
               }}
             />
           </Link>
