@@ -29,7 +29,7 @@ export function Header() {
   return (
     <header className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
+        <div className="flex justify-between items-center h-20">
           {/* Logo */}
           <Link href="/" className="flex items-center">
             <img 
@@ -37,13 +37,13 @@ export function Header() {
               alt="PDFo - Free Online PDF Tools Home" 
               className="block"
               style={{ 
-                height: '40px', 
-                width: '40px', 
+                height: '60px', 
+                width: '60px', 
                 objectFit: 'contain',
-                maxHeight: '40px', 
-                maxWidth: '40px',
-                minHeight: '40px',
-                minWidth: '40px'
+                maxHeight: '60px', 
+                maxWidth: '60px',
+                minHeight: '60px',
+                minWidth: '60px'
               } as React.CSSProperties}
             />
           </Link>

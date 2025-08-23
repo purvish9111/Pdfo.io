@@ -25,13 +25,13 @@ export function MainFooter() {
                 alt="PDFo Logo" 
                 className="block"
                 style={{ 
-                  height: '40px', 
-                  width: '40px', 
+                  height: '60px', 
+                  width: '60px', 
                   objectFit: 'contain',
-                  maxHeight: '40px', 
-                  maxWidth: '40px',
-                  minHeight: '40px',
-                  minWidth: '40px'
+                  maxHeight: '60px', 
+                  maxWidth: '60px',
+                  minHeight: '60px',
+                  minWidth: '60px'
                 } as React.CSSProperties}
               />
             </div>
