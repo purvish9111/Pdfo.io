@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { Slider } from '@/components/ui/slider';
-import { Upload, Download, FileImage, Compress, X, CheckCircle } from 'lucide-react';
+import { Upload, Download, FileImage, X, CheckCircle, Package } from 'lucide-react';
 import { Link } from 'wouter';
 import { toast } from '@/hooks/use-toast';
 import { useEffect } from 'react';
@@ -187,7 +187,7 @@ export default function ImageCompressor() {
         <Card className="mb-6">
           <CardHeader>
             <CardTitle className="flex items-center">
-              <Compress className="w-5 h-5 mr-2 text-green-600" />
+              <Package className="w-5 h-5 mr-2 text-green-600" />
               Compression Settings
             </CardTitle>
           </CardHeader>
@@ -317,7 +317,7 @@ export default function ImageCompressor() {
         <div className="mt-12 grid md:grid-cols-3 gap-8">
           <div className="text-center">
             <div className="w-16 h-16 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center mx-auto mb-4">
-              <Compress className="w-8 h-8 text-green-600" />
+              <Package className="w-8 h-8 text-green-600" />
             </div>
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Smart Compression</h3>
             <p className="text-gray-600 dark:text-gray-300">Advanced algorithms maintain image quality while reducing file size significantly.</p>
