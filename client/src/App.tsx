@@ -58,6 +58,15 @@ const PNGToPDF = lazy(() => import("@/pages/PNGToPDF"));
 const WordToPDF = lazy(() => import("@/pages/WordToPDF"));
 const ExcelToPDF = lazy(() => import("@/pages/ExcelToPDF"));
 
+// Other Tools - Non-PDF Tools
+const ImageCompressor = lazy(() => import("@/pages/ImageCompressor"));
+const URLShortener = lazy(() => import("@/pages/URLShortener"));
+const QRGenerator = lazy(() => import("@/pages/QRGenerator"));
+const PasswordGenerator = lazy(() => import("@/pages/PasswordGenerator"));
+const ColorPalette = lazy(() => import("@/pages/ColorPalette"));
+const UnitConverter = lazy(() => import("@/pages/UnitConverter"));
+const HashGenerator = lazy(() => import("@/pages/HashGenerator"));
+
 // Loading component for lazy routes
 const LazyLoader = () => (
   <div className="flex items-center justify-center min-h-[400px]">
@@ -123,6 +132,15 @@ function Router() {
       <Route path="/png-to-pdf" component={() => <Suspense fallback={<LazyLoader />}><PNGToPDF /></Suspense>} />
       <Route path="/word-to-pdf" component={() => <Suspense fallback={<LazyLoader />}><WordToPDF /></Suspense>} />
       <Route path="/excel-to-pdf" component={() => <Suspense fallback={<LazyLoader />}><ExcelToPDF /></Suspense>} />
+      
+      {/* Other Tools - Non-PDF Tools */}
+      <Route path="/image-compressor" component={() => <Suspense fallback={<LazyLoader />}><ImageCompressor /></Suspense>} />
+      <Route path="/url-shortener" component={() => <Suspense fallback={<LazyLoader />}><URLShortener /></Suspense>} />
+      <Route path="/qr-generator" component={() => <Suspense fallback={<LazyLoader />}><QRGenerator /></Suspense>} />
+      <Route path="/password-generator" component={() => <Suspense fallback={<LazyLoader />}><PasswordGenerator /></Suspense>} />
+      <Route path="/color-palette" component={() => <Suspense fallback={<LazyLoader />}><ColorPalette /></Suspense>} />
+      <Route path="/unit-converter" component={() => <Suspense fallback={<LazyLoader />}><UnitConverter /></Suspense>} />
+      <Route path="/hash-generator" component={() => <Suspense fallback={<LazyLoader />}><HashGenerator /></Suspense>} />
       
       {/* Company Pages */}
       <Route path="/about" component={About} />

@@ -268,8 +268,7 @@ export default function Home() {
       description: "Compress JPG/PNG images without quality loss",
       iconBg: "bg-green-500",
       faIcon: "fas fa-compress-alt",
-      category: "image",
-      comingSoon: true
+      category: "image"
     },
     {
       name: "URL Shortener",
@@ -277,8 +276,7 @@ export default function Home() {
       description: "Create short links with click analytics",
       iconBg: "bg-blue-500",
       faIcon: "fas fa-link",
-      category: "utility",
-      comingSoon: true
+      category: "utility"
     },
     {
       name: "QR Code Generator",
@@ -286,8 +284,7 @@ export default function Home() {
       description: "Generate QR codes for text, URLs, and data",
       iconBg: "bg-purple-500",
       faIcon: "fas fa-qrcode", 
-      category: "utility",
-      comingSoon: true
+      category: "utility"
     },
     {
       name: "Password Generator",
@@ -295,8 +292,7 @@ export default function Home() {
       description: "Create strong, secure passwords",
       iconBg: "bg-red-500",
       faIcon: "fas fa-key",
-      category: "security",
-      comingSoon: true
+      category: "security"
     },
     {
       name: "Color Palette",
@@ -304,8 +300,7 @@ export default function Home() {
       description: "Extract colors from images and create palettes",
       iconBg: "bg-pink-500",
       faIcon: "fas fa-palette",
-      category: "design",
-      comingSoon: true
+      category: "design"
     },
     {
       name: "Unit Converter",
@@ -313,8 +308,7 @@ export default function Home() {
       description: "Convert length, weight, temperature units",
       iconBg: "bg-orange-500",
       faIcon: "fas fa-calculator",
-      category: "utility",
-      comingSoon: true
+      category: "utility"
     },
     {
       name: "Hash Generator",
@@ -322,8 +316,7 @@ export default function Home() {
       description: "Generate MD5, SHA256, SHA512 hashes",
       iconBg: "bg-gray-500",
       faIcon: "fas fa-hashtag",
-      category: "security",
-      comingSoon: true
+      category: "security"
     },
     {
       name: "Base64 Encoder",
@@ -331,8 +324,7 @@ export default function Home() {
       description: "Encode/decode text and files to Base64",
       iconBg: "bg-indigo-500",
       faIcon: "fas fa-code",
-      category: "utility",
-      comingSoon: true
+      category: "utility"
     }
   ];
 
