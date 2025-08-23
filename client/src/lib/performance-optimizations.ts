@@ -76,7 +76,9 @@ export class PDFPerformanceOptimizer {
       // Implement LRU cache with memory limits
       if (this.memoryCache.size >= this.MAX_CACHE_SIZE) {
         const firstKey = this.memoryCache.keys().next().value;
-        this.memoryCache.delete(firstKey);
+        if (firstKey) {
+          this.memoryCache.delete(firstKey);
+        }
       }
 
       this.memoryCache.set(key, {
