@@ -5,6 +5,8 @@ import { Button } from "@/components/ui/button";
 import { MainFooter } from "@/components/MainFooter";
 import { SEOHead } from "@/components/SEOHead";
 import { ToolsFilter } from "@/components/ToolsFilter";
+import { ToolsToggle } from "@/components/ToolsToggle";
+import { OtherToolsGrid } from "@/components/OtherToolsGrid";
 
 interface Tool {
   name: string;
@@ -17,6 +19,7 @@ interface Tool {
 
 export default function Home() {
   const [filteredTools, setFilteredTools] = useState<Tool[]>([]);
+  const [activeTab, setActiveTab] = useState<'pdf' | 'other'>('pdf');
   
   const homeSEO = {
     title: "PDFo - Free Online PDF Tools | Merge, Split, Convert & Edit PDFs",
@@ -258,6 +261,81 @@ export default function Home() {
     },
   ];
 
+  const otherTools = [
+    {
+      name: "Image Compressor",
+      path: "/image-compressor",
+      description: "Compress JPG/PNG images without quality loss",
+      iconBg: "bg-green-500",
+      faIcon: "fas fa-compress-alt",
+      category: "image",
+      comingSoon: true
+    },
+    {
+      name: "URL Shortener",
+      path: "/url-shortener", 
+      description: "Create short links with click analytics",
+      iconBg: "bg-blue-500",
+      faIcon: "fas fa-link",
+      category: "utility",
+      comingSoon: true
+    },
+    {
+      name: "QR Code Generator",
+      path: "/qr-generator",
+      description: "Generate QR codes for text, URLs, and data",
+      iconBg: "bg-purple-500",
+      faIcon: "fas fa-qrcode", 
+      category: "utility",
+      comingSoon: true
+    },
+    {
+      name: "Password Generator",
+      path: "/password-generator",
+      description: "Create strong, secure passwords",
+      iconBg: "bg-red-500",
+      faIcon: "fas fa-key",
+      category: "security",
+      comingSoon: true
+    },
+    {
+      name: "Color Palette",
+      path: "/color-palette",
+      description: "Extract colors from images and create palettes",
+      iconBg: "bg-pink-500",
+      faIcon: "fas fa-palette",
+      category: "design",
+      comingSoon: true
+    },
+    {
+      name: "Unit Converter",
+      path: "/unit-converter",
+      description: "Convert length, weight, temperature units",
+      iconBg: "bg-orange-500",
+      faIcon: "fas fa-calculator",
+      category: "utility",
+      comingSoon: true
+    },
+    {
+      name: "Hash Generator",
+      path: "/hash-generator",
+      description: "Generate MD5, SHA256, SHA512 hashes",
+      iconBg: "bg-gray-500",
+      faIcon: "fas fa-hashtag",
+      category: "security",
+      comingSoon: true
+    },
+    {
+      name: "Base64 Encoder",
+      path: "/base64-encoder",
+      description: "Encode/decode text and files to Base64",
+      iconBg: "bg-indigo-500",
+      faIcon: "fas fa-code",
+      category: "utility",
+      comingSoon: true
+    }
+  ];
+
   // Initialize filteredTools with all tools when component mounts
   useEffect(() => {
     setFilteredTools(tools);
@@ -318,40 +396,59 @@ export default function Home() {
         </div>
       </section>
 
-      {/* PDF Tools Grid */}
+      {/* Tools Section */}
       <section id="tools-section" className="py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">Choose Your PDF Tool</h2>
+            <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
+              {activeTab === 'pdf' ? 'Choose Your PDF Tool' : 'Choose Your Tool'}
+            </h2>
             <p className="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-              Select from our comprehensive suite of PDF manipulation tools designed for professionals and individuals alike.
+              {activeTab === 'pdf' 
+                ? 'Select from our comprehensive suite of PDF manipulation tools designed for professionals and individuals alike.'
+                : 'Explore our collection of useful utility tools for everyday tasks.'
+              }
             </p>
           </div>
 
-          {/* Tools Filter */}
-          <ToolsFilter 
-            tools={tools}
-            onFilteredToolsChange={setFilteredTools}
+          {/* Tools Toggle */}
+          <ToolsToggle 
+            activeTab={activeTab}
+            onTabChange={setActiveTab}
           />
 
-          <div className="grid grid-cols-1 gap-4 max-w-lg mx-auto">
-            {filteredTools.map((tool) => (
-              <Link key={tool.path} href={tool.path}>
-                <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 p-6 border border-gray-200 dark:border-gray-700 cursor-pointer group">
-                  <div className="flex items-center">
-                    <div className={`w-14 h-14 ${tool.iconBg} rounded-xl flex items-center justify-center text-white text-xl mr-5`} role="img" aria-label={`${tool.name} tool`}>
-                      <i className={tool.faIcon} aria-hidden="true"></i>
-                    </div>
-                    <div className="flex-1">
-                      <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">{tool.name}</h3>
-                      <p className="text-gray-600 dark:text-gray-300 leading-relaxed">{tool.description}</p>
-                    </div>
-                  </div>
-                </div>
-              </Link>
-            ))}
-          </div>
+          {/* Content with CSS Transitions */}
+          <div className={`transition-all duration-300 ease-in-out ${activeTab === 'pdf' ? 'opacity-100' : 'opacity-100'}`}>
+            {activeTab === 'pdf' ? (
+              <div>
+                {/* PDF Tools Filter */}
+                <ToolsFilter 
+                  tools={tools}
+                  onFilteredToolsChange={setFilteredTools}
+                />
 
+                <div className="grid grid-cols-1 gap-4 max-w-lg mx-auto">
+                  {filteredTools.map((tool) => (
+                    <Link key={tool.path} href={tool.path}>
+                      <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 p-6 border border-gray-200 dark:border-gray-700 cursor-pointer group">
+                        <div className="flex items-center">
+                          <div className={`w-14 h-14 ${tool.iconBg} rounded-xl flex items-center justify-center text-white text-xl mr-5`} role="img" aria-label={`${tool.name} tool`}>
+                            <i className={tool.faIcon} aria-hidden="true"></i>
+                          </div>
+                          <div className="flex-1">
+                            <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">{tool.name}</h3>
+                            <p className="text-gray-600 dark:text-gray-300 leading-relaxed">{tool.description}</p>
+                          </div>
+                        </div>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            ) : (
+              <OtherToolsGrid tools={otherTools} />
+            )}
+          </div>
 
         </div>
       </section>
