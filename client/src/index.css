@@ -127,6 +127,5 @@
     object-fit: contain !important;
     display: block !important;
     flex-shrink: 0 !important;
-    border: 2px solid red !important;
   }
 }
