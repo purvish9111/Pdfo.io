@@ -128,4 +128,11 @@ export const PDF_TOOLS = [
   { name: 'PNG to PDF', path: '/png-to-pdf', category: TOOL_CATEGORIES.CONVERSION_TO_PDF, icon: 'fas fa-file-pdf' },
   { name: 'Word to PDF', path: '/word-to-pdf', category: TOOL_CATEGORIES.CONVERSION_TO_PDF, icon: 'fas fa-file-pdf' },
   { name: 'Excel to PDF', path: '/excel-to-pdf', category: TOOL_CATEGORIES.CONVERSION_TO_PDF, icon: 'fas fa-file-pdf' },
+  
+  // Additional useful tools
+  { name: 'Extract Images', path: '/extract-images', category: TOOL_CATEGORIES.MANIPULATION, icon: 'fas fa-images' },
+  { name: 'Remove Blank Pages', path: '/remove-blank-pages', category: TOOL_CATEGORIES.MANIPULATION, icon: 'fas fa-eraser' },
+  { name: 'Add Header & Footer', path: '/add-header-footer', category: TOOL_CATEGORIES.MANIPULATION, icon: 'fas fa-align-center' },
+  { name: 'PDF Optimizer', path: '/optimize-pdf', category: TOOL_CATEGORIES.OPTIMIZATION, icon: 'fas fa-magic' },
+  { name: 'JPG to PDF', path: '/jpg-to-pdf', category: TOOL_CATEGORIES.CONVERSION_TO_PDF, icon: 'fas fa-file-pdf' },
 ] as const;

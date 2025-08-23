@@ -1,10 +1,28 @@
+import { useState, useEffect } from "react";
 import { Link } from "wouter";
 import { Coffee, ArrowRight, Shield, Zap, Smartphone } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { MainFooter } from "@/components/MainFooter";
 import { SEOHead } from "@/components/SEOHead";
+import { ToolsFilter } from "@/components/ToolsFilter";
+
+interface Tool {
+  name: string;
+  path: string;
+  description: string;
+  iconBg: string;
+  faIcon: string;
+  category: string;
+}
 
 export default function Home() {
+  const [filteredTools, setFilteredTools] = useState<Tool[]>([]);
+  
+  // Initialize filteredTools with all tools when component mounts
+  useEffect(() => {
+    setFilteredTools(tools);
+  }, []);
+  
   const homeSEO = {
     title: "PDFo - Free Online PDF Tools | Merge, Split, Convert & Edit PDFs",
     description: "Free online PDF tools to merge, split, compress, convert, and edit PDF files. 26+ professional PDF tools with drag-and-drop interface. No registration required.",
@@ -40,182 +58,208 @@ export default function Home() {
       path: "/merge",
       description: "Combine multiple PDF files into one document",
       iconBg: "bg-blue-500",
-      faIcon: "fas fa-layer-group"
+      faIcon: "fas fa-layer-group",
+      category: "manipulation"
     },
     {
       name: "Split PDF",
       path: "/split", 
       description: "Extract pages or split PDF into multiple files",
       iconBg: "bg-green-500",
-      faIcon: "fas fa-cut"
+      faIcon: "fas fa-cut",
+      category: "manipulation"
     },
     {
       name: "Reorder Pages",
       path: "/reorder",
       description: "Rearrange pages in your PDF document",
       iconBg: "bg-purple-500", 
-      faIcon: "fas fa-sort"
+      faIcon: "fas fa-sort",
+      category: "manipulation"
     },
     {
       name: "Delete Pages",
       path: "/delete",
       description: "Remove unwanted pages from PDF",
       iconBg: "bg-red-500",
-      faIcon: "fas fa-trash-alt"
+      faIcon: "fas fa-trash-alt",
+      category: "manipulation"
     },
     {
       name: "Rotate PDF",
       path: "/rotate",
       description: "Rotate PDF pages by 90, 180, or 270 degrees",
       iconBg: "bg-orange-500",
-      faIcon: "fas fa-redo-alt"
+      faIcon: "fas fa-redo-alt",
+      category: "manipulation"
     },
     {
       name: "Page Numbers",
       path: "/page-numbers",
       description: "Add page numbers to your PDF document",
       iconBg: "bg-indigo-500",
-      faIcon: "fas fa-list-ol"
+      faIcon: "fas fa-list-ol",
+      category: "manipulation"
     },
     {
       name: "Edit Metadata",
       path: "/edit-metadata",
       description: "Edit PDF title, author, subject and keywords",
       iconBg: "bg-cyan-500",
-      faIcon: "fas fa-edit"
+      faIcon: "fas fa-edit",
+      category: "optimization"
     },
     {
       name: "Watermark PDF",
       path: "/watermark-pdf",
       description: "Add text or image watermarks to your PDF",
       iconBg: "bg-teal-500",
-      faIcon: "fas fa-tint"
+      faIcon: "fas fa-tint",
+      category: "security"
     },
     {
       name: "Lock PDF",
       path: "/lock-pdf",
       description: "Password protect your PDF document",
       iconBg: "bg-yellow-500",
-      faIcon: "fas fa-lock"
+      faIcon: "fas fa-lock",
+      category: "security"
     },
     {
       name: "Unlock PDF",
       path: "/unlock-pdf", 
       description: "Remove password protection from PDF",
       iconBg: "bg-pink-500",
-      faIcon: "fas fa-unlock-alt"
+      faIcon: "fas fa-unlock-alt",
+      category: "security"
     },
     {
       name: "Compress PDF",
       path: "/compress-pdf",
       description: "Reduce PDF file size efficiently",
       iconBg: "bg-gray-500",
-      faIcon: "fas fa-compress-alt"
+      faIcon: "fas fa-compress-alt",
+      category: "optimization"
     },
     {
       name: "Extract Images",
       path: "/extract-images",
       description: "Extract all images from PDF as PNG files",
       iconBg: "bg-purple-500",
-      faIcon: "fas fa-images"
+      faIcon: "fas fa-images",
+      category: "manipulation"
     },
     {
       name: "PDF Optimizer",
       path: "/optimize-pdf",
       description: "Optimize PDF to reduce size without quality loss",
       iconBg: "bg-orange-500",
-      faIcon: "fas fa-magic"
+      faIcon: "fas fa-magic",
+      category: "optimization"
     },
     {
       name: "Remove Blank Pages",
       path: "/remove-blank-pages",
       description: "Automatically remove empty pages from PDF",
       iconBg: "bg-red-500",
-      faIcon: "fas fa-eraser"
+      faIcon: "fas fa-eraser",
+      category: "manipulation"
     },
     {
       name: "Add Header & Footer",
       path: "/add-header-footer",
       description: "Add custom headers and footers to all pages",
       iconBg: "bg-indigo-500",
-      faIcon: "fas fa-align-center"
+      faIcon: "fas fa-align-center",
+      category: "manipulation"
     },
     {
       name: "PDF to JPG",
       path: "/pdf-to-jpg",
       description: "Convert PDF pages to high-quality JPG images",
       iconBg: "bg-rose-500",
-      faIcon: "fas fa-image"
+      faIcon: "fas fa-image",
+      category: "conversion_from_pdf"
     },
     {
       name: "PDF to PNG",
       path: "/pdf-to-png", 
       description: "Convert PDF pages to PNG images with transparency",
       iconBg: "bg-emerald-500",
-      faIcon: "far fa-images"
+      faIcon: "far fa-images",
+      category: "conversion_from_pdf"
     },
     {
       name: "PDF to TIFF",
       path: "/pdf-to-tiff",
       description: "Convert PDF to TIFF format with compression options",
       iconBg: "bg-amber-500",
-      faIcon: "fas fa-file-image"
+      faIcon: "fas fa-file-image",
+      category: "conversion_from_pdf"
     },
     {
       name: "PDF to Word",
       path: "/pdf-to-word",
       description: "Convert PDF to editable Word document",
       iconBg: "bg-blue-600",
-      faIcon: "fas fa-file-word"
+      faIcon: "fas fa-file-word",
+      category: "conversion_from_pdf"
     },
     {
       name: "PDF to Excel",
       path: "/pdf-to-excel",
       description: "Extract tables and data to Excel spreadsheet",
       iconBg: "bg-green-600",
-      faIcon: "fas fa-file-excel"
+      faIcon: "fas fa-file-excel",
+      category: "conversion_from_pdf"
     },
     {
       name: "PDF to PPT",
       path: "/pdf-to-ppt",
       description: "Convert PDF pages to PowerPoint slides",
       iconBg: "bg-orange-600",
-      faIcon: "fas fa-file-powerpoint"
+      faIcon: "fas fa-file-powerpoint",
+      category: "conversion_from_pdf"
     },
     {
       name: "PDF to TXT",
       path: "/pdf-to-txt",
       description: "Extract plain text content from PDF",
       iconBg: "bg-slate-500",
-      faIcon: "fas fa-file-alt"
+      faIcon: "fas fa-file-alt",
+      category: "conversion_from_pdf"
     },
     {
       name: "PDF to JSON",
       path: "/pdf-to-json",
       description: "Extract structured data as JSON",
       iconBg: "bg-violet-500",
-      faIcon: "fas fa-code"
+      faIcon: "fas fa-code",
+      category: "conversion_from_pdf"
     },
     {
       name: "PNG to PDF",
       path: "/png-to-pdf",
       description: "Convert PNG images to PDF document",
       iconBg: "bg-lime-500",
-      faIcon: "fas fa-file-image"
+      faIcon: "fas fa-file-image",
+      category: "conversion_to_pdf"
     },
     {
       name: "Word to PDF",
       path: "/word-to-pdf",
       description: "Convert Word documents to PDF format",
       iconBg: "bg-sky-600",
-      faIcon: "fas fa-file-word"
+      faIcon: "fas fa-file-word",
+      category: "conversion_to_pdf"
     },
     {
       name: "Excel to PDF",
       path: "/excel-to-pdf",
       description: "Convert Excel spreadsheets to PDF format",
       iconBg: "bg-emerald-600",
-      faIcon: "fas fa-file-excel"
+      faIcon: "fas fa-file-excel",
+      category: "conversion_to_pdf"
     },
   ];
 
@@ -284,8 +328,14 @@ export default function Home() {
             </p>
           </div>
 
+          {/* Tools Filter */}
+          <ToolsFilter 
+            tools={tools}
+            onFilteredToolsChange={setFilteredTools}
+          />
+
           <div className="grid grid-cols-1 gap-4 max-w-lg mx-auto">
-            {tools.map((tool) => (
+            {filteredTools.map((tool) => (
               <Link key={tool.path} href={tool.path}>
                 <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 p-6 border border-gray-200 dark:border-gray-700 cursor-pointer group">
                   <div className="flex items-center">
