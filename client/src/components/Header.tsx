@@ -19,7 +19,9 @@ export function Header() {
   const theme = 'light';
   const toggleTheme = () => {};
   const [location] = useLocation();
-  const { user } = useAuth();
+  // Temporarily disabled auth functionality
+  // const { user } = useAuth();
+  const user = null;
 
   const handleSignOut = async () => {
     try {
