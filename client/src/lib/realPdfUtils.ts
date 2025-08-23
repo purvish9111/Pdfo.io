@@ -308,7 +308,7 @@ export async function addPageNumbers(file: File, settings: PageNumberSettings): 
 // Get PDF page count using PDF.js for accuracy
 export async function getPDFPageCount(file: File): Promise<number> {
   try {
-    console.log('📊 Getting page count for:', file.name);
+    // PRODUCTION: Getting PDF page count
     
     // FIXED: Use centralized PDF.js worker initialization
     initializePDFJS();
@@ -323,10 +323,10 @@ export async function getPDFPageCount(file: File): Promise<number> {
     const pdf = await loadingTask.promise;
     const pageCount = pdf.numPages;
     
-    console.log('✅ Page count:', pageCount);
+    // PRODUCTION: Retrieved page count successfully
     return pageCount;
   } catch (error) {
-    console.error('❌ Error getting PDF page count:', error);
+    // PRODUCTION: Failed to get PDF page count
     return 0;
   }
 }
@@ -334,7 +334,7 @@ export async function getPDFPageCount(file: File): Promise<number> {
 // Generate actual PDF pages array from file with thumbnails
 export async function generateRealPDFPages(file: File): Promise<PDFPage[]> {
   try {
-    console.log('🔄 Generating PDF pages for:', file.name);
+    // PRODUCTION: Generating PDF page objects
     
     // FIXED: Use centralized PDF.js worker initialization
     initializePDFJS();
@@ -342,11 +342,11 @@ export async function generateRealPDFPages(file: File): Promise<PDFPage[]> {
     const pageCount = await getPDFPageCount(file);
     
     if (pageCount === 0) {
-      console.warn('⚠️ No pages found in PDF');
+      // PRODUCTION: Empty PDF detected
       return [];
     }
     
-    console.log('📄 Creating', pageCount, 'page objects');
+    // PRODUCTION: Creating page objects array
     const pages = Array.from({ length: pageCount }, (_, index) => ({
       id: `page-${index + 1}-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
       pageNumber: index + 1,
@@ -354,10 +354,10 @@ export async function generateRealPDFPages(file: File): Promise<PDFPage[]> {
       deleted: false,
     }));
     
-    console.log('✅ Generated', pages.length, 'PDF pages');
+    // PRODUCTION: PDF pages generated successfully
     return pages;
   } catch (error) {
-    console.error('❌ Error generating PDF pages:', error);
+    // PRODUCTION: Failed to generate PDF pages
     return [];
   }
 }
@@ -395,7 +395,7 @@ export async function getPDFMetadata(file: File): Promise<PDFMetadata> {
       keywords: Array.isArray(pdf.getKeywords()) ? (pdf.getKeywords() as unknown as string[])!.join(', ') : (pdf.getKeywords() as string || ''),
     };
   } catch (error) {
-    console.error('Error getting PDF metadata:', error);
+    // PRODUCTION: Failed to read PDF metadata
     return { title: '', author: '', subject: '', keywords: '' };
   }
 }
@@ -555,7 +555,7 @@ export async function convertPDFToImages(file: File, format: 'jpg' | 'png' | 'ti
 
 // Convert PDF to Word document using enhanced text extraction
 export async function convertPDFToWord(file: File, options: DocumentConversionOptions = {}): Promise<Blob> {
-  console.log('🔄 Converting PDF to Word with enhanced text extraction:', file.name);
+  // PRODUCTION: Starting PDF to Word conversion
   
   try {
     const pdfjsLib = (window as any).pdfjsLib;
@@ -616,7 +616,7 @@ export async function convertPDFToWord(file: File, options: DocumentConversionOp
     }
     
     htmlContent += '</body></html>';
-    console.log('✅ Enhanced text extraction completed');
+    // PRODUCTION: Text extraction completed
     
     // Create a proper HTML structure that Word can import
     const wordCompatibleHTML = `
@@ -645,14 +645,14 @@ ${htmlContent.replace('<html><head><meta charset="utf-8"><title>Converted from P
       type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' 
     });
   } catch (error) {
-    console.error('❌ Error converting PDF to Word:', error);
+    // PRODUCTION: PDF to Word conversion failed
     throw new Error('Failed to convert PDF to Word document');
   }
 }
 
 // Convert PDF to Excel using XLSX library
 export async function convertPDFToExcel(file: File, options: DocumentConversionOptions = {}): Promise<Blob> {
-  console.log('🔄 Converting PDF to Excel using XLSX:', file.name);
+  // PRODUCTION: Starting PDF to Excel conversion
   
   try {
     // Import XLSX dynamically
@@ -745,20 +745,20 @@ export async function convertPDFToExcel(file: File, options: DocumentConversionO
     
     // Generate Excel file
     const excelBuffer = XLSX.write(workbook, { type: 'array', bookType: 'xlsx' });
-    console.log('✅ Excel file created with', worksheetData.length - 1, 'data rows');
+    // PRODUCTION: Excel file created successfully
     
     return new Blob([excelBuffer], { 
       type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' 
     });
   } catch (error) {
-    console.error('❌ Error converting PDF to Excel:', error);
+    // PRODUCTION: PDF to Excel conversion failed
     throw new Error('Failed to convert PDF to Excel');
   }
 }
 
 // Convert PDF to PowerPoint using pptxgenjs
 export async function convertPDFToPPT(file: File): Promise<Blob> {
-  console.log('🔄 Converting PDF to PowerPoint using pptxgenjs:', file.name);
+  // PRODUCTION: Starting PDF to PowerPoint conversion
   
   try {
     // Import PptxGenJS dynamically
@@ -774,7 +774,7 @@ export async function convertPDFToPPT(file: File): Promise<Blob> {
     const arrayBuffer = await file.arrayBuffer();
     const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
     
-    console.log('✅ Processing', pdf.numPages, 'pages for PowerPoint');
+    // PRODUCTION: Processing pages for PowerPoint
     
     for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
       const page = await pdf.getPage(pageNum);
@@ -868,20 +868,20 @@ export async function convertPDFToPPT(file: File): Promise<Blob> {
     
     // Generate PowerPoint file
     const pptBuffer = await pptx.write({ outputType: 'arraybuffer' }) as ArrayBuffer;
-    console.log('✅ PowerPoint presentation created with', pdf.numPages, 'slides');
+    // PRODUCTION: PowerPoint presentation created
     
     return new Blob([pptBuffer], { 
       type: 'application/vnd.openxmlformats-officedocument.presentationml.presentation' 
     });
   } catch (error) {
-    console.error('❌ Error converting PDF to PowerPoint:', error);
+    // PRODUCTION: PDF to PowerPoint conversion failed
     throw new Error('Failed to convert PDF to PowerPoint');
   }
 }
 
 // Convert PDF to TIFF images (enhanced implementation)
 export async function convertPDFToTIFF(file: File): Promise<Blob> {
-  console.log('🔄 Converting PDF to TIFF using enhanced rendering:', file.name);
+  // PRODUCTION: Starting PDF to TIFF conversion
   
   try {
     const pdfjsLib = (window as any).pdfjsLib;
@@ -915,12 +915,12 @@ export async function convertPDFToTIFF(file: File): Promise<Blob> {
       images.push(imageBlob);
     }
     
-    console.log('✅ TIFF-compatible images created from', pdf.numPages, 'pages');
+    // PRODUCTION: TIFF images created successfully
     
     // Create ZIP file with TIFF extension (PNG format for compatibility)
     return createZipFromBlobs(images, 'tiff');
   } catch (error) {
-    console.error('❌ Error converting PDF to TIFF:', error);
+    // PRODUCTION: PDF to TIFF conversion failed
     throw new Error('Failed to convert PDF to TIFF');
   }
 }
@@ -1053,7 +1053,7 @@ export async function convertImagesToPDF(files: File[], options: ImageToPDFOptio
 
 // Convert Word document to PDF using mammoth.js
 export async function convertWordToPDF(file: File): Promise<Blob> {
-  console.log('🔄 Converting Word to PDF using mammoth.js:', file.name);
+  // PRODUCTION: Starting Word to PDF conversion
   
   try {
     // Import mammoth dynamically
@@ -1064,7 +1064,7 @@ export async function convertWordToPDF(file: File): Promise<Blob> {
     
     // Convert Word to HTML using mammoth
     const result = await mammoth.convertToHtml({ arrayBuffer });
-    console.log('✅ Word document converted to HTML');
+    // PRODUCTION: Word document converted to HTML
     
     // Create a PDF from the HTML content
     const pdfDoc = await PDFDocument.create();
@@ -1142,18 +1142,18 @@ export async function convertWordToPDF(file: File): Promise<Blob> {
     }
     
     const pdfBytes = await pdfDoc.save();
-    console.log('✅ PDF created from Word document using mammoth.js');
+    // PRODUCTION: PDF created from Word document
     
     return new Blob([pdfBytes], { type: 'application/pdf' });
   } catch (error) {
-    console.error('❌ Error converting Word to PDF:', error);
+    // PRODUCTION: Word to PDF conversion failed
     throw new Error('Failed to convert Word document to PDF. Please ensure it\'s a valid .docx file.');
   }
 }
 
 // Convert Excel spreadsheet to PDF using xlsx
 export async function convertExcelToPDF(file: File): Promise<Blob> {
-  console.log('🔄 Converting Excel to PDF using xlsx:', file.name);
+  // PRODUCTION: Starting Excel to PDF conversion
   
   try {
     // Import XLSX dynamically
@@ -1162,7 +1162,7 @@ export async function convertExcelToPDF(file: File): Promise<Blob> {
     // Read the Excel file
     const arrayBuffer = await file.arrayBuffer();
     const workbook = XLSX.read(arrayBuffer, { type: 'array' });
-    console.log('✅ Excel workbook loaded, sheets:', workbook.SheetNames.length);
+    // PRODUCTION: Excel workbook loaded successfully
     
     // Create PDF document
     const pdfDoc = await PDFDocument.create();
@@ -1226,11 +1226,11 @@ export async function convertExcelToPDF(file: File): Promise<Blob> {
     });
     
     const pdfBytes = await pdfDoc.save();
-    console.log('✅ PDF created from Excel using xlsx');
+    // PRODUCTION: PDF created from Excel
     
     return new Blob([pdfBytes], { type: 'application/pdf' });
   } catch (error) {
-    console.error('❌ Error converting Excel to PDF:', error);
+    // PRODUCTION: Excel to PDF conversion failed
     throw new Error('Failed to convert Excel to PDF. Please ensure it\'s a valid .xlsx or .xls file.');
   }
 }

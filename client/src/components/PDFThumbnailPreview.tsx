@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -40,18 +40,13 @@ export function PDFThumbnailPreview({ files, onThumbnailsGenerated }: PDFThumbna
           t.error && (t.error.includes('GlobalWorkerOptions') || t.error.includes('worker'))
         );
 
-        console.log('Generated thumbnails:', generatedThumbnails.map((t: PDFThumbnail) => ({ 
-          fileName: t.file.name, 
-          hasThumb: !!t.thumbnailUrl, 
-          pageCount: t.pageCount,
-          error: t.error 
-        })));
-        console.log('Has worker errors:', hasWorkerErrors);
+        // PRODUCTION: Removed debug logging for performance optimization
+        // PRODUCTION: Removed debug logging for performance optimization
 
         // Always use the main PDF thumbnails (simplified after cleanup)
         setThumbnails(generatedThumbnails);
       } catch (error) {
-        console.error('Error generating thumbnails:', error);
+        // PRODUCTION: Removed error logging for performance optimization
         // Set empty thumbnails on error
         setThumbnails([]);
       }

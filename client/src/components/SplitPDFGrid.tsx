@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { FileText, Scissors, Download } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { SinglePDFThumbnail } from '@/components/SinglePDFThumbnail';

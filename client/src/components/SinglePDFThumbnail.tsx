@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { generatePDFThumbnail, type PDFThumbnail } from "@/lib/pdfThumbnails";
 import { FileText, AlertCircle, Image } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -21,7 +21,7 @@ export function SinglePDFThumbnail({ file, className = "", pageNumber }: SingleP
         const result = await generatePDFThumbnail(file, pageNumber);
         setThumbnail(result);
       } catch (error) {
-        console.error('❌ SinglePDFThumbnail generation failed:', error);
+        // PRODUCTION: Removed error logging for performance optimization
         setThumbnail({
           file,
           thumbnailUrl: '',

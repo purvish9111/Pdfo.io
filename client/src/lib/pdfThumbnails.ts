@@ -21,18 +21,18 @@ export interface PDFThumbnail {
  */
 export async function generatePDFThumbnail(file: File, pageNumber?: number): Promise<PDFThumbnail> {
   try {
-    console.log('🖼️ Generating thumbnail for:', file.name);
+    // PRODUCTION: Starting PDF thumbnail generation
     
     // Ensure worker is configured before processing
     if (!pdfjsLib.GlobalWorkerOptions.workerSrc) {
-      console.log('⚙️ Setting up PDF.js worker...');
+      // PRODUCTION: Configuring PDF.js worker
       pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.js';
     }
-    console.log('📋 Worker configured:', pdfjsLib.GlobalWorkerOptions.workerSrc);
+    // PRODUCTION: Worker configuration complete
     
     // Read file as array buffer
     const arrayBuffer = await file.arrayBuffer();
-    console.log('📄 File size:', arrayBuffer.byteLength, 'bytes');
+    // PRODUCTION: File loaded into buffer
     
     // Validate PDF header
     const uint8Array = new Uint8Array(arrayBuffer);
@@ -40,7 +40,7 @@ export async function generatePDFThumbnail(file: File, pageNumber?: number): Pro
     if (!header.startsWith('%PDF-')) {
       throw new Error(`Invalid PDF header: ${header}`);
     }
-    console.log('✅ Valid PDF header:', header);
+    // PRODUCTION: PDF header validation passed
     
     // Load PDF document with enhanced configuration
     const loadingTask = pdfjsLib.getDocument({
@@ -49,19 +49,19 @@ export async function generatePDFThumbnail(file: File, pageNumber?: number): Pro
     });
     
     const pdf = await loadingTask.promise;
-    console.log('📚 PDF loaded successfully, pages:', pdf.numPages);
+    // PRODUCTION: PDF document loaded successfully
     
     // Get the specified page (default to first page)
     const targetPage = pageNumber || 1;
     const page = await pdf.getPage(targetPage);
-    console.log(`📄 Page ${targetPage} loaded`);
+    // PRODUCTION: Target page loaded for rendering
     
     // Calculate scale for thumbnail (max width: 200px, max height: 250px)
     const viewport = page.getViewport({ scale: 1 });
     const scale = Math.min(200 / viewport.width, 250 / viewport.height);
     const scaledViewport = page.getViewport({ scale });
     
-    console.log('📐 Viewport:', viewport.width, 'x', viewport.height, '→', scaledViewport.width, 'x', scaledViewport.height);
+    // PRODUCTION: Viewport calculated for thumbnail scale
     
     // Create canvas for rendering
     const canvas = document.createElement('canvas');
@@ -80,13 +80,13 @@ export async function generatePDFThumbnail(file: File, pageNumber?: number): Pro
       canvas: canvas,
     };
     
-    console.log('🎨 Starting render...');
+    // PRODUCTION: Starting canvas render
     await page.render(renderContext).promise;
-    console.log('✅ Render complete!');
+    // PRODUCTION: Canvas render completed
     
     // Convert canvas to data URL
     const thumbnailUrl = canvas.toDataURL('image/png');
-    console.log('Thumbnail generated successfully for:', file.name);
+    // PRODUCTION: Thumbnail generated successfully
     
     return {
       file,
@@ -94,9 +94,9 @@ export async function generatePDFThumbnail(file: File, pageNumber?: number): Pro
       pageCount: pdf.numPages,
     };
   } catch (error) {
-    console.error('PDF thumbnail generation failed for:', file.name, error);
+    // PRODUCTION: Thumbnail generation failed
     const errorMessage = error instanceof Error ? error.message : 'Failed to generate thumbnail';
-    console.error('Error details:', errorMessage);
+    // PRODUCTION: Error details logged
     return {
       file,
       thumbnailUrl: '',

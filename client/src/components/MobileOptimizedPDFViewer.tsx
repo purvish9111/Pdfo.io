@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { ChevronLeft, ChevronRight, ZoomIn, ZoomOut, RotateCw, Download, Share2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { MobileUtils, useMobileOptimization } from '@/lib/mobile-optimization';

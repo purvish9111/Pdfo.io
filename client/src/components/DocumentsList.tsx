@@ -88,11 +88,11 @@ export function DocumentsList({
       const activeIndex = files.findIndex((file, index) => `${file.name}-${file.size}-${index}` === active.id);
       const overIndex = files.findIndex((file, index) => `${file.name}-${file.size}-${index}` === over.id);
       
-      console.log('📋 Found indices:', { activeIndex, overIndex });
+      // PRODUCTION: Removed debug logging for performance optimization
       
       if (activeIndex !== -1 && overIndex !== -1) {
         const newFiles = arrayMove(files, activeIndex, overIndex);
-        console.log('✅ Files reordered:', newFiles.map(f => f.name));
+        // PRODUCTION: Removed debug logging for performance optimization
         onFilesChange(newFiles);
       }
     }

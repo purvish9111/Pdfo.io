@@ -2,7 +2,7 @@
  * Performance provider component for global performance monitoring
  */
 
-import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
+import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 
 interface PerformanceContextType {
   isSlowConnection: boolean;

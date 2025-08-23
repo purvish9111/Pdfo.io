@@ -59,7 +59,7 @@ export const usePerformance = (componentName: string) => {
       return result;
     } catch (error) {
       const duration = performance.now() - start;
-      console.error(`❌ Operation "${operationName}" failed after ${duration.toFixed(2)}ms:`, error);
+      // PRODUCTION: Removed error logging for performance optimization
       throw error;
     }
   }, []);
@@ -88,7 +88,7 @@ export const usePDFPerformance = () => {
           try {
             await nextOperation();
           } catch (error) {
-            console.error('PDF operation failed:', error);
+            // PRODUCTION: Removed error logging for performance optimization
           }
           
           // Small delay between operations to prevent UI blocking

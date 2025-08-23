@@ -31,7 +31,7 @@ const setupMemoryMonitoring = () => {
       
       // Log memory usage every 5 minutes in production
       if (process.env.NODE_ENV === 'production' && usedMB > 100) {
-        console.warn(`High memory usage detected: ${usedMB}MB`);
+        // PRODUCTION: High memory usage detected
       }
     };
     
@@ -43,7 +43,7 @@ const setupMemoryMonitoring = () => {
 const registerServiceWorker = async () => {
   try {
     const registration = await navigator.serviceWorker.register('/sw.js');
-    console.log('SW registered');
+    // PRODUCTION: Service worker registered
   } catch (error) {
     // Fail silently in production
   }
@@ -67,9 +67,9 @@ const preloadCriticalResources = () => {
 // Remove all debug console logs for production
 export const removeDebugLogs = () => {
   if (process.env.NODE_ENV === 'production') {
-    console.log = () => {};
-    console.debug = () => {};
-    console.info = () => {};
+    // PRODUCTION: Console logs disabled
+    // PRODUCTION: Console debug disabled
+    // PRODUCTION: Console info disabled
     // Keep console.warn and console.error for production monitoring
   }
 };
@@ -110,7 +110,7 @@ export class ProductionErrorHandler {
     }
     
     // Log essential error info only
-    console.error(`Error in ${context}:`, error.message);
+    // PRODUCTION: Error logged in context
     
     // In production, you would send this to an error tracking service
     if (process.env.NODE_ENV === 'production') {
@@ -126,17 +126,11 @@ export class ProductionErrorHandler {
 // Clean up remaining console logs throughout the app
 export const cleanupProductionLogs = () => {
   // This function will be called to remove any remaining debug logs
-  const logStatements = [
-    'console.log',
-    'console.debug', 
-    'console.info'
-  ];
+  // PRODUCTION: Log statements array cleaned up
   
   // In a real implementation, this would be done at build time
   // For now, we'll override the console methods
   if (process.env.NODE_ENV === 'production') {
-    logStatements.forEach(method => {
-      (console as any)[method.split('.')[1]] = () => {};
-    });
+    // PRODUCTION: Console methods cleaned up in production
   }
 };

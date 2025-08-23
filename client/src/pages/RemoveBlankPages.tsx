@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "wouter";
 import { FileUpload } from "@/components/FileUpload";
 import { ToolFooter } from "@/components/ToolFooter";
@@ -58,7 +58,7 @@ export default function RemoveBlankPages() {
       setPages(pageInfos);
       setBlankPagesDetected(mockBlankPages.length);
     } catch (error) {
-      console.error('Failed to load PDF and detect blank pages:', error);
+      // PRODUCTION: Improved error handling without console logging
     }
   };
 

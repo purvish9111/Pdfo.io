@@ -1,5 +1,6 @@
-import { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import * as pdfjsLib from 'pdfjs-dist';
+import { FileText } from 'lucide-react';
 
 // Configure PDF.js to work without external worker
 pdfjsLib.GlobalWorkerOptions.workerSrc = '';
@@ -61,7 +62,7 @@ export function SimplePDFPreview({ file, pageNumber = 1, className = "", onError
         }).promise;
 
       } catch (err) {
-        console.error('Error rendering PDF:', err);
+        // PRODUCTION: Removed error logging for performance optimization
         const errorMsg = 'PDF preview unavailable';
         setError(errorMsg);
         onError?.(errorMsg);

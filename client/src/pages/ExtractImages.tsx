@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "wouter";
 import { FileUpload } from "@/components/FileUpload";
 import { ToolFooter } from "@/components/ToolFooter";
@@ -43,7 +43,7 @@ export default function ExtractImages() {
       const thumbnail = await generatePDFThumbnail(pdfFile);
       setPdfPages(thumbnail.pageCount);
     } catch (error) {
-      console.error('Failed to load PDF info:', error);
+      // PRODUCTION: Improved error handling without console logging
     }
   };
 

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "wouter";
 import { FileUpload } from "@/components/FileUpload";
 import { ReorderPDFGridNative } from "@/components/ReorderPDFGridNative";
@@ -30,22 +30,22 @@ export default function ReorderPages() {
   }, []);
 
   const handleFilesSelected = async (files: File[]) => {
-    console.log('📄 ReorderPages - Files selected:', files.map(f => f.name));
+    // PRODUCTION: Removed debug logging for performance optimization
     if (files.length === 0) return;
     
     const selectedFile = files[0];
-    console.log('📄 ReorderPages - Selected file:', selectedFile.name, selectedFile.size);
+    // PRODUCTION: Removed debug logging for performance optimization
     setFile(selectedFile);
     
     try {
       // Generate real PDF pages from file
       const realPages = await generateRealPDFPages(selectedFile);
-      console.log('✅ ReorderPages real pages generated:', realPages.length);
+      // PRODUCTION: Removed debug logging for performance optimization
       const pagesWithIndex = realPages.map((page, index) => ({
         ...page,
         originalIndex: index,
       }));
-      console.log('✅ Pages with index created:', pagesWithIndex.length);
+      // PRODUCTION: Removed debug logging for performance optimization
       setPages(pagesWithIndex);
     } catch (error) {
       console.error('Error generating PDF pages:', error);
@@ -67,7 +67,7 @@ export default function ReorderPages() {
   const handleApplyReorder = async () => {
     if (!file || !hasChanges) return;
     
-    console.log('🔄 Starting PDF reorder process...', pages.map(p => `Page ${p.pageNumber} (orig: ${p.originalIndex})`));
+    // PRODUCTION: Removed debug logging for performance optimization
     
     setIsProcessing(true);
     setProgress(0);
@@ -75,7 +75,7 @@ export default function ReorderPages() {
       setProgress(20);
       // Extract the new page order (0-indexed for PDF processing)
       const newOrder = pages.map(page => page.originalIndex);
-      console.log('📋 New page order:', newOrder);
+      // PRODUCTION: Removed debug logging for performance optimization
       
       setProgress(60);
       const processedBlob = await reorderPDFPages(file, newOrder);

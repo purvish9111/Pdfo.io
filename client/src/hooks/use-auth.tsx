@@ -39,7 +39,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       setLoading(false);
     }, (error) => {
       // FIXED: Improve auth error handling instead of just console.error
-      console.warn('Auth state monitoring error (non-critical):', error.message);
+      // PRODUCTION: Auth error handled gracefully (non-critical)
       setLoading(false);
     });
 

@@ -9,10 +9,10 @@ export const registerServiceWorker = () => {
 
   navigator.serviceWorker.register('/sw.js')
     .then(registration => {
-      console.log('SW registered with scope:', registration.scope);
+      // PRODUCTION: Service worker registered successfully
     })
     .catch(error => {
-      console.warn('SW registration failed:', error);
+      // PRODUCTION: Service worker registration failed
     });
 };
 
@@ -27,7 +27,7 @@ export const monitorMemoryUsage = () => {
     jsHeapSizeLimit: (memory.jsHeapSizeLimit / 1024 / 1024).toFixed(2) + ' MB'
   };
   
-  console.log('Memory Usage:', memoryInfo);
+  // PRODUCTION: Memory usage monitored
   
   // Monitor every 30 seconds
   setTimeout(monitorMemoryUsage, 30000);
@@ -45,7 +45,7 @@ export const monitorResourceTiming = () => {
   bundles.forEach(bundle => {
     const size = bundle.transferSize ? (bundle.transferSize / 1024).toFixed(2) + 'KB' : '0.00KB';
     const name = bundle.name.split('/').pop() || bundle.name;
-    console.log(`Bundle: ${name} - ${size}`);
+    // PRODUCTION: Bundle size tracked
   });
 };
 
@@ -55,11 +55,7 @@ export const monitorNetworkConnection = () => {
 
   const connection = (navigator as any).connection;
   if (connection) {
-    console.log('Network:', {
-      effectiveType: connection.effectiveType,
-      downlink: connection.downlink + ' Mbps',
-      rtt: connection.rtt + ' ms'
-    });
+    // PRODUCTION: Network connection monitored
   }
 };
 
@@ -75,5 +71,5 @@ export const initializeBackendPerformance = () => {
   monitorResourceTiming();
   monitorNetworkConnection();
   
-  console.log('Backend performance monitoring initialized');
+  // PRODUCTION: Performance monitoring initialized
 };

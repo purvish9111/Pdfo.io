@@ -2,7 +2,7 @@
  * Optimized image component with lazy loading and WebP support
  */
 
-import { useState, useEffect, useRef, ImgHTMLAttributes } from 'react';
+import React, { useState, useEffect, useRef, ImgHTMLAttributes } from 'react';
 import { cn } from '@/lib/utils';
 
 interface OptimizedImageProps extends Omit<ImgHTMLAttributes<HTMLImageElement>, 'src'> {

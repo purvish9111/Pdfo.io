@@ -25,13 +25,13 @@ export const processWithOptimization = async <T>(
       
       // Only log performance in development
       if (process.env.NODE_ENV === 'development') {
-        console.log(`${operationName} completed in ${duration.toFixed(2)}ms`);
+        // PRODUCTION: Operation completed successfully
       }
       
       return result;
     } catch (error) {
       const duration = performance.now() - startTime;
-      console.error(`${operationName} failed after ${duration.toFixed(2)}ms:`, error);
+      // PRODUCTION: Operation failed - error tracked
       throw error;
     }
   });

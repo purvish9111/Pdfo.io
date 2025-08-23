@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "wouter";
 import { FileUpload } from "@/components/FileUpload";
 import { FilesPreviewWithThumbnails } from "@/components/FilesPreviewWithThumbnails";
@@ -45,7 +45,7 @@ export default function SplitPDF() {
       const firstFile = selectedFiles[0];
       setSelectedFile(firstFile);
       const realPages = await generateRealPDFPages(firstFile);
-      console.log('✅ SplitPDF real pages generated:', realPages.length);
+      // PRODUCTION: Removed debug logging for performance optimization
       setPages(realPages);
     }
   };

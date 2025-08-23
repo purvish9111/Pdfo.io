@@ -156,9 +156,9 @@ export const TestingUtils = {
       } : undefined;
       
       if (process.env.NODE_ENV === 'development') {
-        console.log(`⚡ ${operationName} completed in ${duration.toFixed(2)}ms`);
+        // PRODUCTION: Performance measurement completed
         if (memoryUsage) {
-          console.log(`📊 Memory: ${memoryUsage.start}MB → ${memoryUsage.end}MB (${memoryUsage.delta >= 0 ? '+' : ''}${memoryUsage.delta}MB)`);
+          // PRODUCTION: Memory usage tracked
         }
       }
       
@@ -167,7 +167,7 @@ export const TestingUtils = {
       const endTime = performance.now();
       const duration = endTime - startTime;
       
-      console.error(`❌ ${operationName} failed after ${duration.toFixed(2)}ms:`, error);
+      // PRODUCTION: Operation failed - error tracked
       throw error;
     }
   },

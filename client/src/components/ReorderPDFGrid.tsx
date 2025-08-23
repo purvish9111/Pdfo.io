@@ -1,5 +1,4 @@
-import { useState } from 'react';
-import * as React from 'react';
+import React, { useState } from 'react';
 import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors, DragOverlay } from '@dnd-kit/core';
 import { arrayMove, SortableContext, sortableKeyboardCoordinates, rectSortingStrategy } from '@dnd-kit/sortable';
 import { useSortable } from '@dnd-kit/sortable';
@@ -130,22 +129,18 @@ export function ReorderPDFGrid({ file, pages, onReorder, isProcessing }: Reorder
     const { active, over } = event;
     setActiveId(null);
     
-    console.log('🎯 ReorderPDFGrid drag end:', { 
-      active: active?.id, 
-      over: over?.id,
-      hasOver: !!over 
-    });
+    // PRODUCTION: Removed debug logging for performance optimization
 
     if (active && over && active.id !== over.id) {
       setCurrentPages((items) => {
         const oldIndex = items.findIndex((item) => item.id === active.id);
         const newIndex = items.findIndex((item) => item.id === over.id);
         
-        console.log('📋 ReorderPDFGrid indices:', { oldIndex, newIndex, itemsLength: items.length });
+        // PRODUCTION: Removed debug logging for performance optimization
         
         if (oldIndex !== -1 && newIndex !== -1) {
           const reordered = arrayMove(items, oldIndex, newIndex);
-          console.log('✅ ReorderPDFGrid pages reordered successfully:', reordered.map(p => p.pageNumber));
+          // PRODUCTION: Removed debug logging for performance optimization
           return reordered;
         }
         return items;

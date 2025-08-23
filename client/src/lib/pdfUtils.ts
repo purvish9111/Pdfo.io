@@ -14,22 +14,22 @@ export async function mergePDFs(
   files: File[], 
   onProgress?: (current: number, total: number) => void
 ): Promise<Blob> {
-  console.log('🔄 mergePDFs delegating to realMergePDFs');
+  // PRODUCTION: Delegating to real merge implementation
   return realMergePDFs(files, onProgress);
 }
 
 export async function splitPDF(file: File, pageRanges: number[][]): Promise<Blob[]> {
-  console.log('🔄 splitPDF delegating to realSplitPDF');
+  // PRODUCTION: Delegating to real split implementation
   return realSplitPDF(file, pageRanges);
 }
 
 export async function reorderPDFPages(file: File, newOrder: number[]): Promise<Blob> {
-  console.log('🔄 reorderPDFPages delegating to realReorderPDFPages');
+  // PRODUCTION: Delegating to real reorder implementation
   return realReorderPDFPages(file, newOrder);
 }
 
 export async function compressPDF(file: File, compressionLevel: CompressionLevel): Promise<Blob> {
-  console.log('🔄 compressPDF delegating to realCompressPDF');
+  // PRODUCTION: Delegating to real compress implementation
   return realCompressPDF(file, compressionLevel);
 }
 
@@ -59,7 +59,7 @@ export function downloadBlob(blob: Blob, filename: string) {
 }
 
 export async function generatePages(file: File): Promise<PDFPage[]> {
-  console.log('🔄 generatePages delegating to generateRealPDFPages');
+  // PRODUCTION: Delegating to real page generation
   return generateRealPDFPages(file);
 }
 

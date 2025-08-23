@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "wouter";
 import { FileUpload } from "@/components/FileUpload";
 import { DocumentsList } from "@/components/DocumentsList";
@@ -27,7 +27,7 @@ export default function MergePDF() {
   }, []);
 
   const handleFilesSelected = (selectedFiles: File[]) => {
-    console.log('📄 MergePDF - Files selected:', selectedFiles.map(f => f.name));
+    // PRODUCTION: Removed debug logging for performance optimization
     if (selectedFiles.length === 0) return;
     
     // Allow adding more files to existing ones

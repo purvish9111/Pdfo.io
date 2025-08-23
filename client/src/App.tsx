@@ -7,7 +7,8 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { Header } from "@/components/Header";
 import { AuthProvider } from "@/hooks/use-auth";
-import { OptimizedLazyRoute, lazyRoutes } from "@/components/OptimizedLazyRoute";
+import { Suspense, lazy } from "react";
+import { Loader2 } from "lucide-react";
 import { PerformanceProvider } from "@/components/PerformanceProvider";
 import { initGA } from "./lib/analytics";
 import { useAnalytics } from "./hooks/use-analytics";
@@ -18,43 +19,54 @@ import { initializePerformanceMonitoring } from "./lib/performance-monitor";
 // DISABLED: These imports cause CSS corruption
 // import { injectCriticalCSS, optimizeNonCriticalCSS } from "./lib/critical-css";
 // import { initializeAllPerformanceOptimizations } from "./lib/performance-bootstrap";
-// Import all pages directly for instant access (no lazy loading for better performance)
+// Use lazy loading for better bundle optimization - reduces main bundle size
 import Home from "@/pages/Home";
-import Login from "@/pages/Login";
-import SignUp from "@/pages/SignUp";
-import MergePDF from "@/pages/MergePDF";
-import SplitPDF from "@/pages/SplitPDF";
-import ReorderPages from "@/pages/ReorderPages";
-import DeletePages from "@/pages/DeletePages";
-import RotatePDF from "@/pages/RotatePDF";
-import PageNumbers from "@/pages/PageNumbers";
-import EditMetadata from "@/pages/EditMetadata";
-import WatermarkPDF from "@/pages/WatermarkPDF";
-import LockPDF from "@/pages/LockPDF";
-import UnlockPDF from "@/pages/UnlockPDF";
-import CompressPDF from "@/pages/CompressPDF";
-import PDFToJPG from "@/pages/PDFToJPG";
-import PDFToPNG from "@/pages/PDFToPNG";
-import PDFToTIFF from "@/pages/PDFToTIFF";
-import PDFToWord from "@/pages/PDFToWord";
-import PDFToExcel from "@/pages/PDFToExcel";
-import PDFToPPT from "@/pages/PDFToPPT";
-import PDFToTXT from "@/pages/PDFToTXT";
-import PDFToJSON from "@/pages/PDFToJSON";
-import PNGToPDF from "@/pages/PNGToPDF";
-import WordToPDF from "@/pages/WordToPDF";
-import ExcelToPDF from "@/pages/ExcelToPDF";
-import ExtractImages from "@/pages/ExtractImages";
-import OptimizePDF from "@/pages/OptimizePDF";
-import RemoveBlankPages from "@/pages/RemoveBlankPages";
-import AddHeaderFooter from "@/pages/AddHeaderFooter";
-// FIXED: Import missing page components
 import About from "@/pages/About";
 import Contact from "@/pages/Contact";
 import Privacy from "@/pages/Privacy";
 import Terms from "@/pages/Terms";
-import Dashboard from "@/pages/Dashboard";
 import NotFound from "@/pages/not-found";
+
+// Lazy load PDF tools for bundle optimization
+const Login = lazy(() => import("@/pages/Login"));
+const SignUp = lazy(() => import("@/pages/SignUp"));
+const Dashboard = lazy(() => import("@/pages/Dashboard"));
+const MergePDF = lazy(() => import("@/pages/MergePDF"));
+const SplitPDF = lazy(() => import("@/pages/SplitPDF"));
+const ReorderPages = lazy(() => import("@/pages/ReorderPages"));
+const DeletePages = lazy(() => import("@/pages/DeletePages"));
+const RotatePDF = lazy(() => import("@/pages/RotatePDF"));
+const PageNumbers = lazy(() => import("@/pages/PageNumbers"));
+const EditMetadata = lazy(() => import("@/pages/EditMetadata"));
+const WatermarkPDF = lazy(() => import("@/pages/WatermarkPDF"));
+const LockPDF = lazy(() => import("@/pages/LockPDF"));
+const UnlockPDF = lazy(() => import("@/pages/UnlockPDF"));
+const CompressPDF = lazy(() => import("@/pages/CompressPDF"));
+const ExtractImages = lazy(() => import("@/pages/ExtractImages"));
+const OptimizePDF = lazy(() => import("@/pages/OptimizePDF"));
+const RemoveBlankPages = lazy(() => import("@/pages/RemoveBlankPages"));
+const AddHeaderFooter = lazy(() => import("@/pages/AddHeaderFooter"));
+const PDFToJPG = lazy(() => import("@/pages/PDFToJPG"));
+const PDFToPNG = lazy(() => import("@/pages/PDFToPNG"));
+const PDFToTIFF = lazy(() => import("@/pages/PDFToTIFF"));
+const PDFToWord = lazy(() => import("@/pages/PDFToWord"));
+const PDFToExcel = lazy(() => import("@/pages/PDFToExcel"));
+const PDFToPPT = lazy(() => import("@/pages/PDFToPPT"));
+const PDFToTXT = lazy(() => import("@/pages/PDFToTXT"));
+const PDFToJSON = lazy(() => import("@/pages/PDFToJSON"));
+const PNGToPDF = lazy(() => import("@/pages/PNGToPDF"));
+const WordToPDF = lazy(() => import("@/pages/WordToPDF"));
+const ExcelToPDF = lazy(() => import("@/pages/ExcelToPDF"));
+
+// Loading component for lazy routes
+const LazyLoader = () => (
+  <div className="flex items-center justify-center min-h-[400px]">
+    <div className="flex flex-col items-center space-y-4">
+      <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
+      <p className="text-sm text-gray-600 dark:text-gray-400">Loading tool...</p>
+    </div>
+  </div>
+);
 // FIXED: Removed unused LazyRoute import causing errors
 // import { LazyRoute } from "@/components/LazyRoute";
 
@@ -73,44 +85,44 @@ function Router() {
     <Switch>
       <Route path="/" component={Home} />
       
-      {/* Authentication Routes */}
-      <Route path="/login" component={Login} />
-      <Route path="/signup" component={SignUp} />
-      <Route path="/auth" component={Login} />
+      {/* Authentication Routes - Lazy Loaded */}
+      <Route path="/login" component={() => <Suspense fallback={<LazyLoader />}><Login /></Suspense>} />
+      <Route path="/signup" component={() => <Suspense fallback={<LazyLoader />}><SignUp /></Suspense>} />
+      <Route path="/auth" component={() => <Suspense fallback={<LazyLoader />}><Login /></Suspense>} />
       
-      {/* PDF Manipulation Tools - Direct Imports for Instant Loading */}
-      <Route path="/merge" component={MergePDF} />
-      <Route path="/split" component={SplitPDF} />
-      <Route path="/reorder" component={ReorderPages} />
-      <Route path="/delete" component={DeletePages} />
-      <Route path="/rotate" component={RotatePDF} />
-      <Route path="/page-numbers" component={PageNumbers} />
+      {/* PDF Manipulation Tools - Lazy Loaded for Bundle Optimization */}
+      <Route path="/merge" component={() => <Suspense fallback={<LazyLoader />}><MergePDF /></Suspense>} />
+      <Route path="/split" component={() => <Suspense fallback={<LazyLoader />}><SplitPDF /></Suspense>} />
+      <Route path="/reorder" component={() => <Suspense fallback={<LazyLoader />}><ReorderPages /></Suspense>} />
+      <Route path="/delete" component={() => <Suspense fallback={<LazyLoader />}><DeletePages /></Suspense>} />
+      <Route path="/rotate" component={() => <Suspense fallback={<LazyLoader />}><RotatePDF /></Suspense>} />
+      <Route path="/page-numbers" component={() => <Suspense fallback={<LazyLoader />}><PageNumbers /></Suspense>} />
       
-      {/* Advanced Tools - Direct Imports for Instant Loading */}
-      <Route path="/edit-metadata" component={EditMetadata} />
-      <Route path="/watermark-pdf" component={WatermarkPDF} />
-      <Route path="/lock-pdf" component={LockPDF} />
-      <Route path="/unlock-pdf" component={UnlockPDF} />
-      <Route path="/compress-pdf" component={CompressPDF} />
-      <Route path="/extract-images" component={ExtractImages} />
-      <Route path="/optimize-pdf" component={OptimizePDF} />
-      <Route path="/remove-blank-pages" component={RemoveBlankPages} />
-      <Route path="/add-header-footer" component={AddHeaderFooter} />
+      {/* Advanced Tools - Lazy Loaded for Bundle Optimization */}
+      <Route path="/edit-metadata" component={() => <Suspense fallback={<LazyLoader />}><EditMetadata /></Suspense>} />
+      <Route path="/watermark-pdf" component={() => <Suspense fallback={<LazyLoader />}><WatermarkPDF /></Suspense>} />
+      <Route path="/lock-pdf" component={() => <Suspense fallback={<LazyLoader />}><LockPDF /></Suspense>} />
+      <Route path="/unlock-pdf" component={() => <Suspense fallback={<LazyLoader />}><UnlockPDF /></Suspense>} />
+      <Route path="/compress-pdf" component={() => <Suspense fallback={<LazyLoader />}><CompressPDF /></Suspense>} />
+      <Route path="/extract-images" component={() => <Suspense fallback={<LazyLoader />}><ExtractImages /></Suspense>} />
+      <Route path="/optimize-pdf" component={() => <Suspense fallback={<LazyLoader />}><OptimizePDF /></Suspense>} />
+      <Route path="/remove-blank-pages" component={() => <Suspense fallback={<LazyLoader />}><RemoveBlankPages /></Suspense>} />
+      <Route path="/add-header-footer" component={() => <Suspense fallback={<LazyLoader />}><AddHeaderFooter /></Suspense>} />
       
-      {/* PDF Conversion Tools - Direct Imports for Instant Loading */}
-      <Route path="/pdf-to-jpg" component={PDFToJPG} />
-      <Route path="/pdf-to-png" component={PDFToPNG} />
-      <Route path="/pdf-to-tiff" component={PDFToTIFF} />
-      <Route path="/pdf-to-word" component={PDFToWord} />
-      <Route path="/pdf-to-excel" component={PDFToExcel} />
-      <Route path="/pdf-to-ppt" component={PDFToPPT} />
-      <Route path="/pdf-to-txt" component={PDFToTXT} />
-      <Route path="/pdf-to-json" component={PDFToJSON} />
+      {/* PDF Conversion Tools - Lazy Loaded for Bundle Optimization */}
+      <Route path="/pdf-to-jpg" component={() => <Suspense fallback={<LazyLoader />}><PDFToJPG /></Suspense>} />
+      <Route path="/pdf-to-png" component={() => <Suspense fallback={<LazyLoader />}><PDFToPNG /></Suspense>} />
+      <Route path="/pdf-to-tiff" component={() => <Suspense fallback={<LazyLoader />}><PDFToTIFF /></Suspense>} />
+      <Route path="/pdf-to-word" component={() => <Suspense fallback={<LazyLoader />}><PDFToWord /></Suspense>} />
+      <Route path="/pdf-to-excel" component={() => <Suspense fallback={<LazyLoader />}><PDFToExcel /></Suspense>} />
+      <Route path="/pdf-to-ppt" component={() => <Suspense fallback={<LazyLoader />}><PDFToPPT /></Suspense>} />
+      <Route path="/pdf-to-txt" component={() => <Suspense fallback={<LazyLoader />}><PDFToTXT /></Suspense>} />
+      <Route path="/pdf-to-json" component={() => <Suspense fallback={<LazyLoader />}><PDFToJSON /></Suspense>} />
       
-      {/* Reverse Conversion Tools - Direct Imports for Instant Loading */}
-      <Route path="/png-to-pdf" component={PNGToPDF} />
-      <Route path="/word-to-pdf" component={WordToPDF} />
-      <Route path="/excel-to-pdf" component={ExcelToPDF} />
+      {/* Reverse Conversion Tools - Lazy Loaded for Bundle Optimization */}
+      <Route path="/png-to-pdf" component={() => <Suspense fallback={<LazyLoader />}><PNGToPDF /></Suspense>} />
+      <Route path="/word-to-pdf" component={() => <Suspense fallback={<LazyLoader />}><WordToPDF /></Suspense>} />
+      <Route path="/excel-to-pdf" component={() => <Suspense fallback={<LazyLoader />}><ExcelToPDF /></Suspense>} />
       
       {/* Company Pages */}
       <Route path="/about" component={About} />
@@ -118,7 +130,7 @@ function Router() {
       <Route path="/terms" component={Terms} />
       <Route path="/contact" component={Contact} />
 
-      <Route path="/dashboard" component={Dashboard} />
+      <Route path="/dashboard" component={() => <Suspense fallback={<LazyLoader />}><Dashboard /></Suspense>} />
       <Route path="/:rest*" component={NotFound} />
     </Switch>
   );

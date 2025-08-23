@@ -1,10 +1,11 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "wouter";
 import { FileUpload } from "@/components/FileUpload";
 import { RotatePDFGrid } from "@/components/RotatePDFGrid";
 import { ToolFooter } from "@/components/ToolFooter";
 import { ProgressBar } from "@/components/ProgressBar";
 import { BuyMeCoffeeButton } from "@/components/BuyMeCoffeeButton";
+import { Button } from "@/components/ui/button";
 import { rotatePDFPages, downloadBlob, generateRealPDFPages } from "@/lib/realPdfUtils";
 import { useToast } from "@/hooks/use-toast";
 
@@ -28,16 +29,16 @@ export default function RotatePDF() {
   }, []);
 
   const handleFilesSelected = async (files: File[]) => {
-    console.log('Rotate - Files selected:', files);
+    // PRODUCTION: Removed debug logging for performance optimization
     const selectedFile = files[0];
-    console.log('Rotate - Selected file:', selectedFile.name, selectedFile.size);
+    // PRODUCTION: Removed debug logging for performance optimization
     setFile(selectedFile);
     setRotatedBlob(null);
     
     try {
       // Generate real PDF pages from file
       const realPages = await generateRealPDFPages(selectedFile);
-      console.log('Rotate - Generated pages:', realPages);
+      // PRODUCTION: Removed debug logging for performance optimization
       const pagesWithRotation = realPages.map(page => ({
         ...page,
         rotation: 0,

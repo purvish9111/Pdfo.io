@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "wouter";
 import { FileUpload } from "@/components/FileUpload";
 import { DeletePDFGrid } from "@/components/DeletePDFGrid";
@@ -29,9 +29,9 @@ export default function DeletePages() {
   }, []);
 
   const handleFilesSelected = async (files: File[]) => {
-    console.log('Delete - Files selected:', files);
+    // PRODUCTION: Removed debug logging for performance optimization
     const selectedFile = files[0];
-    console.log('Delete - Selected file:', selectedFile.name, selectedFile.size);
+    // PRODUCTION: Removed debug logging for performance optimization
     setFile(selectedFile);
     setProcessedBlob(null);
     

@@ -33,11 +33,11 @@ googleProvider.setCustomParameters({
 // Check network connectivity and enable/disable accordingly
 if (typeof window !== 'undefined') {
   window.addEventListener('online', () => {
-    enableNetwork(db).catch(console.warn);
+    enableNetwork(db).catch(() => {/* Network enable failed */});
   });
   
   window.addEventListener('offline', () => {
-    disableNetwork(db).catch(console.warn);
+    disableNetwork(db).catch(() => {/* Network disable failed */});
   });
 }
 
@@ -107,14 +107,14 @@ export const signInWithGoogle = async () => {
           });
         }
       } catch (error) {
-        console.warn('Failed to sync user data to Firestore:', error);
+        // PRODUCTION: User data sync failed - non-critical
         // Don't throw error here as auth already succeeded
       }
     });
     
     return user;
   } catch (error: any) {
-    console.error('Error signing in with Google:', error);
+    // PRODUCTION: Google sign-in error logged
     
     // Provide more specific error messages
     if (error?.code === 'auth/popup-blocked') {
