@@ -23,8 +23,8 @@ export function MainFooter() {
               <img 
                 src="/logo.png"
                 alt="PDFo Logo" 
-                className="h-8 w-8 object-contain"
-                style={{ height: '32px', width: '32px', objectFit: 'contain', maxHeight: '32px', maxWidth: '32px' }}
+                className="h-10 w-10 object-contain"
+                style={{ height: '40px', width: '40px', objectFit: 'contain', maxHeight: '40px', maxWidth: '40px' }}
               />
             </div>
             <p className="text-gray-400 mb-6 max-w-md leading-relaxed">

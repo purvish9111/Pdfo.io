@@ -35,7 +35,7 @@ export function Header() {
             <img 
               src="/logo.png" 
               alt="PDFo - Free Online PDF Tools Home" 
-              className="h-16 object-contain" 
+              className="h-10 object-contain" 
             />
           </Link>
 
