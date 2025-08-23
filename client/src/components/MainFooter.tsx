@@ -24,13 +24,13 @@ export function MainFooter() {
                 src="/logo.png"
                 alt="PDFo Logo" 
                 style={{ 
-                  height: '40px !important', 
-                  width: '40px !important', 
+                  height: '24px !important', 
+                  width: '24px !important', 
                   objectFit: 'contain',
-                  maxHeight: '40px !important', 
-                  maxWidth: '40px !important',
-                  minHeight: '40px !important',
-                  minWidth: '40px !important'
+                  maxHeight: '24px !important', 
+                  maxWidth: '24px !important',
+                  minHeight: '24px !important',
+                  minWidth: '24px !important'
                 }}
               />
             </div>

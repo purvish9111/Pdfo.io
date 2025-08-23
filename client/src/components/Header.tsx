@@ -35,7 +35,15 @@ export function Header() {
             <img 
               src="/logo.png" 
               alt="PDFo - Free Online PDF Tools Home" 
-              className="h-10 object-contain" 
+              style={{ 
+                height: '24px !important', 
+                width: '24px !important', 
+                objectFit: 'contain',
+                maxHeight: '24px !important', 
+                maxWidth: '24px !important',
+                minHeight: '24px !important',
+                minWidth: '24px !important'
+              }}
             />
           </Link>
 
