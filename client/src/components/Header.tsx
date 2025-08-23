@@ -14,14 +14,9 @@ import { useAuth } from "@/hooks/use-auth";
 import { signOutUser } from "@/lib/firebase";
 
 export function Header() {
-  // Temporarily disabled theme functionality
-  // const { theme, toggleTheme } = useTheme();
-  const theme = 'light';
-  const toggleTheme = () => {};
+  const { theme, toggleTheme } = useTheme();
   const [location] = useLocation();
-  // Temporarily disabled auth functionality
-  // const { user } = useAuth();
-  const user = null;
+  const { user } = useAuth();
 
   const handleSignOut = async () => {
     try {

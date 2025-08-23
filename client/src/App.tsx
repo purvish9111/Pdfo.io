@@ -6,7 +6,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { Header } from "@/components/Header";
-// import { AuthProvider } from "@/hooks/use-auth";
+import { AuthProvider } from "@/hooks/use-auth";
 import { Suspense, lazy } from "react";
 import { Loader2 } from "lucide-react";
 import { PerformanceProvider } from "@/components/PerformanceProvider";
@@ -159,16 +159,19 @@ function App() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      {/* TEMPORARILY DISABLED: PerformanceProvider causing React Hook errors */}
-      {/* <PerformanceProvider> */}
-        {/* All providers disabled to fix React hooks systematic error */}
-        <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-          <Header />
-          <main>
-            <Router />
-          </main>
-        </div>
-      {/* </PerformanceProvider> */}
+      <ThemeProvider>
+        <AuthProvider>
+          <TooltipProvider>
+            <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+              <Header />
+              <main>
+                <Router />
+              </main>
+            </div>
+            <Toaster />
+          </TooltipProvider>
+        </AuthProvider>
+      </ThemeProvider>
     </QueryClientProvider>
   );
 }
