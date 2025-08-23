@@ -1,7 +1,6 @@
 import { useState } from "react";
-import { Search, Filter, X } from "lucide-react";
+import { Filter, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 
 interface Tool {
   name: string;
@@ -36,7 +35,6 @@ const CATEGORY_LABELS = {
 };
 
 export function ToolsFilter({ tools, onFilteredToolsChange }: ToolsFilterProps) {
-  const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState(CATEGORIES.ALL);
   const [showFilters, setShowFilters] = useState(false);
 
@@ -61,40 +59,21 @@ export function ToolsFilter({ tools, onFilteredToolsChange }: ToolsFilterProps) 
     return filtered;
   };
 
-  const handleSearchChange = (query: string) => {
-    setSearchQuery(query);
-    const filtered = filterTools(query, selectedCategory);
-    onFilteredToolsChange(filtered);
-  };
-
   const handleCategoryChange = (category: string) => {
     setSelectedCategory(category);
-    const filtered = filterTools(searchQuery, category);
+    const filtered = filterTools("", category);
     onFilteredToolsChange(filtered);
   };
 
   const clearFilters = () => {
-    setSearchQuery("");
     setSelectedCategory(CATEGORIES.ALL);
     onFilteredToolsChange(tools);
   };
 
-  const hasActiveFilters = searchQuery.trim() || selectedCategory !== CATEGORIES.ALL;
+  const hasActiveFilters = selectedCategory !== CATEGORIES.ALL;
 
   return (
-    <div className="mb-8 space-y-4" 
-         style={{backgroundColor: '#ffeeee', border: '3px solid red', padding: '20px'}}>
-      {/* Search Bar */}
-      <div className="relative max-w-md mx-auto">
-        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
-        <Input
-          type="text"
-          placeholder="Search PDF tools..."
-          value={searchQuery}
-          onChange={(e) => handleSearchChange(e.target.value)}
-          className="pl-10 pr-4 py-3 w-full text-lg border-gray-300 dark:border-gray-600"
-        />
-      </div>
+    <div className="mb-8 space-y-4">
 
       {/* Filter Toggle Button */}
       <div className="flex justify-center">
@@ -107,7 +86,7 @@ export function ToolsFilter({ tools, onFilteredToolsChange }: ToolsFilterProps) 
           Categories
           {hasActiveFilters && (
             <span className="bg-blue-500 text-white text-xs px-2 py-1 rounded-full">
-              {selectedCategory !== CATEGORIES.ALL ? 1 : 0}
+              1
             </span>
           )}
         </Button>
@@ -154,10 +133,6 @@ export function ToolsFilter({ tools, onFilteredToolsChange }: ToolsFilterProps) 
       {/* Active Filter Summary */}
       {hasActiveFilters && (
         <div className="text-center text-sm text-gray-600 dark:text-gray-400">
-          {searchQuery && (
-            <span>Searching for "{searchQuery}"</span>
-          )}
-          {searchQuery && selectedCategory !== CATEGORIES.ALL && <span> • </span>}
           {selectedCategory !== CATEGORIES.ALL && (
             <span>Category: {CATEGORY_LABELS[selectedCategory]}</span>
           )}
