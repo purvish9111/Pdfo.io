@@ -35,8 +35,8 @@ export function Header() {
             <img 
               src="/logo.png" 
               alt="PDFo - Free Online PDF Tools Home" 
-              className="h-8 w-8 object-contain" 
-              style={{ height: '32px', width: '32px', objectFit: 'contain', maxHeight: '32px', maxWidth: '32px' }}
+              className="object-contain" 
+              style={{ height: '15px', objectFit: 'contain' }}
             />
           </Link>
 
