@@ -23,15 +23,16 @@ export function MainFooter() {
               <img 
                 src="/logo.png"
                 alt="PDFo Logo" 
+                className="block"
                 style={{ 
-                  height: '16px !important', 
-                  width: '16px !important', 
+                  height: '16px', 
+                  width: '16px', 
                   objectFit: 'contain',
-                  maxHeight: '16px !important', 
-                  maxWidth: '16px !important',
-                  minHeight: '16px !important',
-                  minWidth: '16px !important'
-                }}
+                  maxHeight: '16px', 
+                  maxWidth: '16px',
+                  minHeight: '16px',
+                  minWidth: '16px'
+                } as React.CSSProperties}
               />
             </div>
             <p className="text-gray-400 mb-6 max-w-md leading-relaxed">
