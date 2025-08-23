@@ -82,7 +82,8 @@ export function ToolsFilter({ tools, onFilteredToolsChange }: ToolsFilterProps) 
   const hasActiveFilters = searchQuery.trim() || selectedCategory !== CATEGORIES.ALL;
 
   return (
-    <div className="mb-8 space-y-4">
+    <div className="mb-8 space-y-4 border-2 border-red-500 p-4"
+         style={{backgroundColor: '#ffeeee'}}>
       {/* Search Bar */}
       <div className="relative max-w-md mx-auto">
         <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
