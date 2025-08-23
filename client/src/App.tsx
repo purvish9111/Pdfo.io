@@ -161,18 +161,13 @@ function App() {
     <QueryClientProvider client={queryClient}>
       {/* TEMPORARILY DISABLED: PerformanceProvider causing React Hook errors */}
       {/* <PerformanceProvider> */}
-        {/* Temporarily disabled AuthProvider to fix React hooks error */}
-        <ThemeProvider>
-          <TooltipProvider>
-            <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-              <Header />
-              <main>
-                <Router />
-              </main>
-            </div>
-            <Toaster />
-          </TooltipProvider>
-        </ThemeProvider>
+        {/* All providers disabled to fix React hooks systematic error */}
+        <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+          <Header />
+          <main>
+            <Router />
+          </main>
+        </div>
       {/* </PerformanceProvider> */}
     </QueryClientProvider>
   );
