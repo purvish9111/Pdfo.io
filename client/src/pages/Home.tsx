@@ -18,11 +18,6 @@ interface Tool {
 export default function Home() {
   const [filteredTools, setFilteredTools] = useState<Tool[]>([]);
   
-  // Initialize filteredTools with all tools when component mounts
-  useEffect(() => {
-    setFilteredTools(tools);
-  }, []);
-  
   const homeSEO = {
     title: "PDFo - Free Online PDF Tools | Merge, Split, Convert & Edit PDFs",
     description: "Free online PDF tools to merge, split, compress, convert, and edit PDF files. 26+ professional PDF tools with drag-and-drop interface. No registration required.",
@@ -262,6 +257,11 @@ export default function Home() {
       category: "conversion_to_pdf"
     },
   ];
+
+  // Initialize filteredTools with all tools when component mounts
+  useEffect(() => {
+    setFilteredTools(tools);
+  }, []);
 
   const scrollToTools = () => {
     document.getElementById('tools-section')?.scrollIntoView({ 
