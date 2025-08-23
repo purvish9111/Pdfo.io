@@ -35,16 +35,7 @@ export function Header() {
             <img 
               src="/logo.png" 
               alt="PDFo - Free Online PDF Tools Home" 
-              className="block"
-              style={{ 
-                height: '60px', 
-                width: '60px', 
-                objectFit: 'contain',
-                maxHeight: '60px', 
-                maxWidth: '60px',
-                minHeight: '60px',
-                minWidth: '60px'
-              } as React.CSSProperties}
+              className="logo-60px"
             />
           </Link>
 
