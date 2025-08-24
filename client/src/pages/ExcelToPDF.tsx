@@ -7,6 +7,7 @@ import { BuyMeCoffeeButton } from "@/components/BuyMeCoffeeButton";
 import { Button } from "@/components/ui/button";
 import { convertExcelToPDF, downloadBlob } from "@/lib/realPdfUtils";
 import { useToast } from "@/hooks/use-toast";
+import { trackToolUsage } from "@/lib/analytics";
 
 export default function ExcelToPDF() {
   const [file, setFile] = useState<File | null>(null);
@@ -36,7 +37,7 @@ export default function ExcelToPDF() {
 
   const handleDownload = () => {
     if (!convertedFile) return;
-    downloadBlob(convertedFile, 'converted-from-excel.pdf');
+    downloadBlob(convertedFile, 'PDFo_ExcelToPDF.pdf');
   };
 
   const handleConvert = async () => {
@@ -50,6 +51,10 @@ export default function ExcelToPDF() {
       const pdfBlob = await convertExcelToPDF(file);
       setProgress(100);
       setConvertedFile(pdfBlob);
+      
+      // Track usage for dashboard
+      await trackToolUsage("Excel to PDF", "conversion", 1);
+      
       toast({
         title: "Success!",
         description: "Excel spreadsheet has been converted to PDF successfully. Download button available below.",

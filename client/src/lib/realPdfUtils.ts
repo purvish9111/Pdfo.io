@@ -731,9 +731,46 @@ ${htmlContent.replace('<html><head><meta charset="utf-8"><title>Converted from P
 </body>
 </html>`;
     
-    return new Blob([wordCompatibleHTML], { 
-      type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' 
-    });
+    // Create proper DOCX structure using mammoth approach
+    const mammoth = await import('mammoth');
+    
+    // Create a more Word-compatible document structure
+    const docxTemplate = `
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
+  <w:body>
+    ${htmlContent.split('\n').map(line => 
+      line.trim() ? `<w:p><w:r><w:t>${line.trim()}</w:t></w:r></w:p>` : '<w:p></w:p>'
+    ).join('')}
+  </w:body>
+</w:document>`;
+
+    // Create proper DOCX blob with correct structure
+    const JSZip = await import('jszip');
+    const zip = new JSZip.default();
+    
+    // Add the main document content
+    zip.file('word/document.xml', docxTemplate);
+    
+    // Add required DOCX structure files
+    zip.file('[Content_Types].xml', `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">
+  <Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>
+  <Default Extension="xml" ContentType="application/xml"/>
+  <Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/>
+</Types>`);
+    
+    zip.file('_rels/.rels', `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
+  <Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/>
+</Relationships>`);
+    
+    zip.file('word/_rels/document.xml.rels', `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
+</Relationships>`);
+    
+    const docxBlob = await zip.generateAsync({ type: 'blob', mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
+    return docxBlob;
   } catch (error) {
     // PRODUCTION: PDF to Word conversion failed
     throw new Error('Failed to convert PDF to Word document');
@@ -1152,18 +1189,44 @@ export async function convertWordToPDF(file: File): Promise<Blob> {
     // Read the Word file
     const arrayBuffer = await file.arrayBuffer();
     
-    // Convert Word to HTML using mammoth
-    const result = await mammoth.convertToHtml({ arrayBuffer });
-    // PRODUCTION: Word document converted to HTML
+    // Convert Word to HTML with better formatting preservation
+    const result = await mammoth.convertToHtml({ 
+      arrayBuffer 
+    }, {
+      styleMap: [
+        "p[style-name='Heading 1'] => h1:fresh",
+        "p[style-name='Heading 2'] => h2:fresh", 
+        "b => strong",
+        "i => em"
+      ]
+    });
+    // PRODUCTION: Word document converted to HTML with formatting
     
-    // Create a PDF from the HTML content
+    // Create a PDF from the HTML content with better formatting
     const pdfDoc = await PDFDocument.create();
     const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
     const boldFont = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
+    const italicFont = await pdfDoc.embedFont(StandardFonts.HelveticaOblique);
     
-    // Parse HTML content (simplified HTML to text conversion)
-    const htmlText = result.value.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ');
-    const lines = htmlText.split(/[.!?]+/).filter(line => line.trim());
+    // Enhanced HTML parsing to preserve formatting
+    const htmlContent = result.value;
+    const paragraphs = htmlContent.split(/<\/p>|<br\s*\/?>/).filter(p => p.trim());
+    
+    // Extract structured content with formatting
+    const formattedContent = paragraphs.map(p => {
+      const text = p.replace(/<[^>]*>/g, '').trim();
+      const isBold = /<(strong|b)>/.test(p);
+      const isItalic = /<(em|i)>/.test(p);
+      const isHeading = /<h[1-6]>/.test(p);
+      
+      return {
+        text,
+        isBold: isBold || isHeading,
+        isItalic,
+        isHeading,
+        fontSize: isHeading ? 16 : 12
+      };
+    }).filter(item => item.text);
     
     let currentPage = pdfDoc.addPage();
     let { width, height } = currentPage.getSize();
@@ -1180,20 +1243,32 @@ export async function convertWordToPDF(file: File): Promise<Blob> {
     });
     yPosition -= lineHeight * 2;
     
-    for (const line of lines) {
-      const cleanLine = line.trim();
-      if (!cleanLine) continue;
+    // Enhanced text rendering with formatting preservation
+    for (const contentItem of formattedContent) {
+      if (!contentItem.text) continue;
       
-      // Word wrap for long lines
-      const words = cleanLine.split(' ');
+      // Select appropriate font based on formatting
+      let selectedFont = font;
+      if (contentItem.isBold && contentItem.isItalic) {
+        selectedFont = boldFont; // Best approximation
+      } else if (contentItem.isBold) {
+        selectedFont = boldFont;
+      } else if (contentItem.isItalic) {
+        selectedFont = italicFont;
+      }
+      
+      // Word wrap with formatting
+      const words = contentItem.text.split(' ');
       let currentLine = '';
+      const itemFontSize = contentItem.fontSize;
+      const itemLineHeight = itemFontSize * 1.4;
       
       for (const word of words) {
         const testLine = currentLine + (currentLine ? ' ' : '') + word;
-        const textWidth = font.widthOfTextAtSize(testLine, fontSize);
+        const textWidth = selectedFont.widthOfTextAtSize(testLine, itemFontSize);
         
         if (textWidth > width - 100) {
-          // Draw current line and start new one
+          // Draw current line
           if (currentLine) {
             if (yPosition < 50) {
               currentPage = pdfDoc.addPage();
@@ -1203,10 +1278,10 @@ export async function convertWordToPDF(file: File): Promise<Blob> {
             currentPage.drawText(currentLine, {
               x: 50,
               y: yPosition,
-              size: fontSize,
-              font,
+              size: itemFontSize,
+              font: selectedFont,
             });
-            yPosition -= lineHeight;
+            yPosition -= itemLineHeight;
           }
           currentLine = word;
         } else {
@@ -1224,10 +1299,15 @@ export async function convertWordToPDF(file: File): Promise<Blob> {
         currentPage.drawText(currentLine, {
           x: 50,
           y: yPosition,
-          size: fontSize,
-          font,
+          size: itemFontSize,
+          font: selectedFont,
         });
-        yPosition -= lineHeight;
+        yPosition -= itemLineHeight;
+      }
+      
+      // Add extra spacing for headings
+      if (contentItem.isHeading) {
+        yPosition -= itemLineHeight * 0.5;
       }
     }
     

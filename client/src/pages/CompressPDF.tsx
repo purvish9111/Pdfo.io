@@ -40,7 +40,7 @@ export default function CompressPDF() {
 
   const handleDownload = () => {
     if (!compressedBlob) return;
-    downloadBlob(compressedBlob, `compressed-${file?.name || 'document.pdf'}`);
+    downloadBlob(compressedBlob, 'PDFo_Compress.pdf');
   };
 
   const formatFileSize = (bytes: number) => {

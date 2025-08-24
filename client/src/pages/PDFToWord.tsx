@@ -9,6 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { convertPDFToWord, downloadBlob, type DocumentConversionOptions } from "@/lib/realPdfUtils";
 import { useToast } from "@/hooks/use-toast";
+import { trackToolUsage } from "@/lib/analytics";
 
 export default function PDFToWord() {
   const [file, setFile] = useState<File | null>(null);
@@ -30,7 +31,7 @@ export default function PDFToWord() {
 
   const handleDownload = () => {
     if (!convertedFile) return;
-    downloadBlob(convertedFile, 'converted-document.docx');
+    downloadBlob(convertedFile, 'PDFo_Word.docx');
   };
 
   const handleConvert = async () => {
@@ -45,6 +46,10 @@ export default function PDFToWord() {
       const docBlob = await convertPDFToWord(file, options);
       setProgress(100);
       setConvertedFile(docBlob);
+      
+      // Track usage for dashboard
+      await trackToolUsage("PDF to Word", "conversion", 1);
+      
       toast({
         title: "Success!",
         description: "PDF has been converted to Word document successfully. Download button available below.",

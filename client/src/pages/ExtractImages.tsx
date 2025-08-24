@@ -36,7 +36,7 @@ export default function ExtractImages() {
 
   const handleDownloadZip = () => {
     if (!extractedImagesZip) return;
-    downloadBlob(extractedImagesZip, 'extracted-images.zip');
+    downloadBlob(extractedImagesZip, 'PDFo_ExtractImages.zip');
   };
 
   const loadPDFInfo = async (pdfFile: File) => {
@@ -99,7 +99,7 @@ export default function ExtractImages() {
     if (!extractedImagesZip) return;
     
     try {
-      downloadBlob(extractedImagesZip, 'extracted-images.zip');
+      downloadBlob(extractedImagesZip, 'PDFo_ExtractImages.zip');
       toast({
         title: "Success!",
         description: "All images downloaded as ZIP file.",

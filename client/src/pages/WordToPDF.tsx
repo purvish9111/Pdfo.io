@@ -7,6 +7,7 @@ import { BuyMeCoffeeButton } from "@/components/BuyMeCoffeeButton";
 import { Button } from "@/components/ui/button";
 import { convertWordToPDF, downloadBlob } from "@/lib/realPdfUtils";
 import { useToast } from "@/hooks/use-toast";
+import { trackToolUsage } from "@/lib/analytics";
 
 export default function WordToPDF() {
   const [file, setFile] = useState<File | null>(null);
@@ -36,7 +37,7 @@ export default function WordToPDF() {
 
   const handleDownload = () => {
     if (!convertedFile) return;
-    downloadBlob(convertedFile, 'converted-from-word.pdf');
+    downloadBlob(convertedFile, 'PDFo_WordToPDF.pdf');
   };
 
   const handleConvert = async () => {
@@ -50,6 +51,10 @@ export default function WordToPDF() {
       const pdfBlob = await convertWordToPDF(file);
       setProgress(100);
       setConvertedFile(pdfBlob);
+      
+      // Track usage for dashboard
+      await trackToolUsage("Word to PDF", "conversion", 1);
+      
       toast({
         title: "Success!",
         description: "Word document has been converted to PDF successfully. Download button available below.",

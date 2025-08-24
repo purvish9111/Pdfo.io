@@ -42,7 +42,7 @@ export default function AddHeaderFooter() {
 
   const handleDownload = () => {
     if (!processedBlob) return;
-    downloadBlob(processedBlob, 'header-footer-added.pdf');
+    downloadBlob(processedBlob, 'PDFo_HeaderFooter.pdf');
   };
 
   const loadPDFInfo = async (pdfFile: File) => {
@@ -389,21 +389,21 @@ export default function AddHeaderFooter() {
               </Card>
             </div>
           </div>
-          
-          {/* Download Button - Fixed: Added missing download button */}
-          {processedBlob && !isProcessing && (
-            <div className="text-center space-y-4 mt-6">
-              <Button
-                onClick={handleDownload}
-                size="lg"
-                className="bg-green-500 hover:bg-green-600 text-white px-8"
-              >
-                <i className="fas fa-download mr-2"></i>
-                Download PDF with Header & Footer
-              </Button>
-              <BuyMeCoffeeButton />
-            </div>
-          )}
+        )}
+        
+        {/* Download Button */}
+        {processedBlob && !isProcessing && (
+          <div className="text-center space-y-4 mt-6">
+            <Button
+              onClick={handleDownload}
+              size="lg"
+              className="bg-green-500 hover:bg-green-600 text-white px-8"
+            >
+              <i className="fas fa-download mr-2"></i>
+              Download PDF with Header & Footer
+            </Button>
+            <BuyMeCoffeeButton />
+          </div>
         )}
       </div>
       

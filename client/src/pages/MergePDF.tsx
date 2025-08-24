@@ -89,7 +89,7 @@ export default function MergePDF() {
     if (mergedPdfUrl) {
       const a = document.createElement('a');
       a.href = mergedPdfUrl;
-      a.download = 'merged-document.pdf';
+      a.download = 'PDFo_Merge.pdf';
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);

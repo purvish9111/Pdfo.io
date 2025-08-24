@@ -65,7 +65,7 @@ export default function WatermarkPDF() {
 
   const handleDownload = () => {
     if (!convertedFile) return;
-    downloadBlob(convertedFile, 'watermarked-document.pdf');
+    downloadBlob(convertedFile, 'PDFo_Watermark.pdf');
   };
 
   const handleAddWatermark = async () => {
