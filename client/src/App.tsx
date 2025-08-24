@@ -5,6 +5,8 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Header } from "@/components/Header";
+import { ThemeProvider } from "@/components/ThemeProvider";
+import { AuthProvider } from "@/hooks/use-auth";
 import { initGA } from "./lib/analytics";
 import { useAnalytics } from "./hooks/use-analytics";
 import { initializePDFJS } from "./lib/pdf-worker-config";
@@ -138,15 +140,19 @@ function App() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-          <Header />
-          <main>
-            <Router />
-          </main>
-        </div>
-        <Toaster />
-      </TooltipProvider>
+      <AuthProvider>
+        <ThemeProvider>
+          <TooltipProvider>
+            <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+              <Header />
+              <main>
+                <Router />
+              </main>
+            </div>
+            <Toaster />
+          </TooltipProvider>
+        </ThemeProvider>
+      </AuthProvider>
     </QueryClientProvider>
   );
 }

@@ -1,4 +1,5 @@
 import { Link, useLocation } from "wouter";
+import { useTheme } from "./ThemeProvider";
 import { Moon, Sun, Menu, User, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -9,21 +10,20 @@ import {
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle, SheetDescription } from "@/components/ui/sheet";
+import { useAuth } from "@/hooks/use-auth";
+import { signOutUser } from "@/lib/firebase";
 
 export function Header() {
+  const { theme, toggleTheme } = useTheme();
   const [location] = useLocation();
-  // Temporarily disabled theme and auth until providers are fixed
-  const theme: 'light' | 'dark' = 'light';
-  const user: any = null;
+  const { user } = useAuth();
 
   const handleSignOut = async () => {
-    // Temporarily disabled until auth is fixed
-    console.log("Sign out functionality temporarily disabled");
-  };
-
-  const toggleTheme = () => {
-    // Temporarily disabled until theme provider is fixed
-    console.log("Theme switching temporarily disabled");
+    try {
+      await signOutUser();
+    } catch (error) {
+      console.error("Error signing out:", error);
+    }
   };
 
   return (
