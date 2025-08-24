@@ -408,14 +408,14 @@ function parseHexColor(hex: string) {
   return rgb(r, g, b);
 }
 
-// Add watermark to PDF - Fixed: Improved reliability
+// Add watermark to PDF - Enhanced with image support
 export async function addWatermarkToPDF(file: File, settings: WatermarkSettings): Promise<Blob> {
   const arrayBuffer = await file.arrayBuffer();
   const pdf = await PDFDocument.load(arrayBuffer);
   const pages = pdf.getPages();
   
   if (settings.type === 'text' && settings.text) {
-    const font = await pdf.embedFont(StandardFonts.Helvetica);
+    const font = await pdf.embedFont(StandardFonts.HelveticaBold);
     const color = settings.color ? parseHexColor(settings.color) : rgb(0, 0, 0);
     
     pages.forEach(page => {
@@ -450,6 +450,62 @@ export async function addWatermarkToPDF(file: File, settings: WatermarkSettings)
         rotate: degrees(settings.rotation),
       });
     });
+  } else if (settings.type === 'image' && settings.imageFile) {
+    try {
+      // Convert image file to array buffer
+      const imageBytes = await settings.imageFile.arrayBuffer();
+      let embeddedImage;
+      
+      // Determine image type and embed accordingly
+      const fileType = settings.imageFile.type;
+      if (fileType.includes('png')) {
+        embeddedImage = await pdf.embedPng(imageBytes);
+      } else if (fileType.includes('jpg') || fileType.includes('jpeg')) {
+        embeddedImage = await pdf.embedJpg(imageBytes);
+      } else {
+        // For other formats, try PNG first, then JPG
+        try {
+          embeddedImage = await pdf.embedPng(imageBytes);
+        } catch {
+          embeddedImage = await pdf.embedJpg(imageBytes);
+        }
+      }
+      
+      const imageDims = embeddedImage.scale(0.5); // Scale down by default
+      
+      pages.forEach(page => {
+        const { width, height } = page.getSize();
+        
+        let x: number, y: number;
+        switch (settings.position) {
+          case 'top-left':
+            x = 50; y = height - imageDims.height - 50;
+            break;
+          case 'top-right':
+            x = width - imageDims.width - 50; y = height - imageDims.height - 50;
+            break;
+          case 'bottom-left':
+            x = 50; y = 50;
+            break;
+          case 'bottom-right':
+            x = width - imageDims.width - 50; y = 50;
+            break;
+          default:
+            x = (width - imageDims.width) / 2; y = (height - imageDims.height) / 2;
+        }
+        
+        page.drawImage(embeddedImage, {
+          x, y,
+          width: imageDims.width,
+          height: imageDims.height,
+          opacity: settings.opacity,
+          rotate: degrees(settings.rotation),
+        });
+      });
+    } catch (error) {
+      console.error('Error embedding image watermark:', error);
+      throw new Error('Failed to add image watermark. Please try a different image format.');
+    }
   }
   
   const pdfBytes = await pdf.save();

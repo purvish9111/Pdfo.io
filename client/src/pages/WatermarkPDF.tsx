@@ -159,6 +159,7 @@ export default function WatermarkPDF() {
                           onChange={(e) => setSettings(prev => ({ ...prev, text: e.target.value }))}
                           placeholder="Enter watermark text"
                           className="mt-1"
+                          data-testid="input-watermark-text"
                         />
                       </div>
                       
@@ -168,11 +169,34 @@ export default function WatermarkPDF() {
                           id="font-size"
                           type="number"
                           value={settings.fontSize || 36}
-                          onChange={(e) => setSettings(prev => ({ ...prev, fontSize: parseInt(e.target.value) }))}
+                          onChange={(e) => {
+                            const value = e.target.value;
+                            if (value === '' || (parseInt(value) >= 12 && parseInt(value) <= 100)) {
+                              setSettings(prev => ({ ...prev, fontSize: value === '' ? 36 : parseInt(value) }));
+                            }
+                          }}
+                          onKeyDown={(e) => {
+                            // Allow backspace, delete, tab, escape, enter, arrow keys
+                            if ([8, 9, 27, 13, 37, 38, 39, 40, 46].includes(e.keyCode) ||
+                                // Allow Ctrl+A, Ctrl+C, Ctrl+V, Ctrl+X
+                                (e.keyCode === 65 && e.ctrlKey) ||
+                                (e.keyCode === 67 && e.ctrlKey) ||
+                                (e.keyCode === 86 && e.ctrlKey) ||
+                                (e.keyCode === 88 && e.ctrlKey)) {
+                              return;
+                            }
+                            // Ensure that it is a number and stop the keypress
+                            if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+                              e.preventDefault();
+                            }
+                          }}
                           min="12"
-                          max="72"
+                          max="100"
+                          placeholder="36"
                           className="mt-1"
+                          data-testid="input-font-size"
                         />
+                        <p className="text-xs text-gray-500 mt-1">Size between 12-100px</p>
                       </div>
                       
                       <div>
@@ -183,9 +207,37 @@ export default function WatermarkPDF() {
                           value={settings.color || '#ff0000'}
                           onChange={(e) => setSettings(prev => ({ ...prev, color: e.target.value }))}
                           className="mt-1 h-10"
+                          data-testid="input-watermark-color"
                         />
                       </div>
                     </>
+                  )}
+                  
+                  {watermarkType === 'image' && (
+                    <div>
+                      <Label htmlFor="watermark-image" className="text-sm font-medium text-gray-700 dark:text-gray-300">Upload Image</Label>
+                      <div className="mt-1">
+                        <input
+                          id="watermark-image"
+                          type="file"
+                          accept="image/*"
+                          onChange={(e) => {
+                            const file = e.target.files?.[0];
+                            if (file) {
+                              setSettings(prev => ({ ...prev, imageFile: file }));
+                            }
+                          }}
+                          className="block w-full text-sm text-gray-500 dark:text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-teal-50 file:text-teal-700 hover:file:bg-teal-100 dark:file:bg-gray-700 dark:file:text-gray-300"
+                          data-testid="input-watermark-image"
+                        />
+                        <p className="text-xs text-gray-500 mt-1">PNG, JPG, GIF up to 5MB</p>
+                        {settings.imageFile && (
+                          <div className="mt-2 p-2 bg-green-50 dark:bg-green-900/20 rounded border border-green-200 dark:border-green-800">
+                            <p className="text-sm text-green-800 dark:text-green-200">✓ Image selected: {settings.imageFile.name}</p>
+                          </div>
+                        )}
+                      </div>
+                    </div>
                   )}
 
                   <div>
@@ -236,8 +288,9 @@ export default function WatermarkPDF() {
                 <div className="mt-6">
                   <Button
                     onClick={handleAddWatermark}
-                    disabled={isProcessing || (watermarkType === 'text' && !settings.text)}
-                    className="w-full bg-teal-600 hover:bg-teal-700 text-white"
+                    disabled={isProcessing || (watermarkType === 'text' && !settings.text) || (watermarkType === 'image' && !settings.imageFile)}
+                    className="w-full bg-teal-600 hover:bg-teal-700 text-white disabled:opacity-50 disabled:cursor-not-allowed"
+                    data-testid="button-add-watermark"
                   >
                     {isProcessing ? "Adding Watermark..." : "Add Watermark"}
                   </Button>
@@ -252,7 +305,11 @@ export default function WatermarkPDF() {
                 {pages.length > 0 ? (
                   <div className="space-y-4">
                     <div className="text-sm text-gray-600 dark:text-gray-400 mb-4">
-                      Preview with watermark: "{settings.text}" at {Math.round(settings.opacity * 100)}% opacity
+                      {watermarkType === 'text' ? (
+                        <span>Preview with watermark: "{settings.text}" at {Math.round(settings.opacity * 100)}% opacity</span>
+                      ) : (
+                        <span>Preview with image watermark{settings.imageFile ? `: ${settings.imageFile.name}` : ''} at {Math.round(settings.opacity * 100)}% opacity</span>
+                      )}
                     </div>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-h-96 overflow-y-auto">
                       {pages.slice(0, 4).map((page) => (
@@ -270,16 +327,26 @@ export default function WatermarkPDF() {
                               transform: `rotate(${settings.rotation}deg)`,
                             }}
                           >
-                            <div 
-                              className="font-bold select-none"
-                              style={{ 
-                                color: settings.color, 
-                                fontSize: `${Math.max((settings.fontSize || 36) / 4, 8)}px`,
-                                textShadow: '1px 1px 2px rgba(0,0,0,0.3)'
-                              }}
-                            >
-                              {settings.text || 'WATERMARK'}
-                            </div>
+                            {watermarkType === 'text' ? (
+                              <div 
+                                className="font-bold select-none"
+                                style={{ 
+                                  color: settings.color, 
+                                  fontSize: `${Math.max((settings.fontSize || 36) / 4, 8)}px`,
+                                  textShadow: '1px 1px 2px rgba(0,0,0,0.3)'
+                                }}
+                              >
+                                {settings.text || 'WATERMARK'}
+                              </div>
+                            ) : settings.imageFile ? (
+                              <div className="w-8 h-8 bg-teal-200 dark:bg-teal-700 rounded border border-teal-400 flex items-center justify-center text-xs font-semibold text-teal-800 dark:text-teal-200">
+                                IMG
+                              </div>
+                            ) : (
+                              <div className="text-xs text-gray-500 font-medium">
+                                No Image
+                              </div>
+                            )}
                           </div>
                           
                           {/* Page Content */}
@@ -321,15 +388,25 @@ export default function WatermarkPDF() {
             {/* Download Button */}
             {convertedFile && !isProcessing && (
               <div className="text-center space-y-4 mt-6">
-                <Button
+                <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-4 mb-4">
+                  <p className="text-green-800 dark:text-green-200 font-medium mb-2">
+                    ✅ Watermark Added Successfully!
+                  </p>
+                  <p className="text-sm text-green-600 dark:text-green-400">
+                    Your PDF is ready with the {watermarkType} watermark applied.
+                  </p>
+                </div>
+                <button
                   onClick={handleDownload}
-                  size="lg"
-                  className="bg-green-500 hover:bg-green-600 text-white px-8"
+                  className="inline-flex items-center px-8 py-4 text-lg font-medium bg-green-500 hover:bg-green-600 text-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+                  data-testid="button-download-watermarked"
                 >
-                  <i className="fas fa-download mr-2"></i>
+                  <i className="fas fa-download mr-3"></i>
                   Download Watermarked PDF
-                </Button>
-                <BuyMeCoffeeButton />
+                </button>
+                <div className="mt-4">
+                  <BuyMeCoffeeButton />
+                </div>
               </div>
             )}
             
