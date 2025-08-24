@@ -264,64 +264,64 @@ export default function Home() {
   const otherTools = [
     {
       name: "Image Compressor",
-      path: "/image-compressor",
-      description: "Compress JPG/PNG images without quality loss",
+      path: "#",
+      description: "Coming Soon - Compress JPG/PNG images without quality loss",
       iconBg: "bg-green-500",
       faIcon: "fas fa-compress-alt",
       category: "image"
     },
     {
       name: "URL Shortener",
-      path: "/url-shortener", 
-      description: "Create short links with click analytics",
+      path: "#", 
+      description: "Coming Soon - Create short links with click analytics",
       iconBg: "bg-blue-500",
       faIcon: "fas fa-link",
       category: "utility"
     },
     {
       name: "QR Code Generator",
-      path: "/qr-generator",
-      description: "Generate QR codes for text, URLs, and data",
+      path: "#",
+      description: "Coming Soon - Generate QR codes for text, URLs, and data",
       iconBg: "bg-purple-500",
       faIcon: "fas fa-qrcode", 
       category: "utility"
     },
     {
       name: "Password Generator",
-      path: "/password-generator",
-      description: "Create strong, secure passwords",
+      path: "#",
+      description: "Coming Soon - Create strong, secure passwords",
       iconBg: "bg-red-500",
       faIcon: "fas fa-key",
       category: "security"
     },
     {
       name: "Color Palette",
-      path: "/color-palette",
-      description: "Extract colors from images and create palettes",
+      path: "#",
+      description: "Coming Soon - Extract colors from images and create palettes",
       iconBg: "bg-pink-500",
       faIcon: "fas fa-palette",
       category: "design"
     },
     {
       name: "Unit Converter",
-      path: "/unit-converter",
-      description: "Convert length, weight, temperature units",
+      path: "#",
+      description: "Coming Soon - Convert length, weight, temperature units",
       iconBg: "bg-orange-500",
       faIcon: "fas fa-calculator",
       category: "utility"
     },
     {
       name: "Hash Generator",
-      path: "/hash-generator",
-      description: "Generate MD5, SHA256, SHA512 hashes",
+      path: "#",
+      description: "Coming Soon - Generate MD5, SHA256, SHA512 hashes",
       iconBg: "bg-gray-500",
       faIcon: "fas fa-hashtag",
       category: "security"
     },
     {
       name: "Base64 Encoder",
-      path: "/base64-encoder",
-      description: "Encode/decode text and files to Base64",
+      path: "#",
+      description: "Coming Soon - Encode/decode text and files to Base64",
       iconBg: "bg-indigo-500",
       faIcon: "fas fa-code",
       category: "utility"
