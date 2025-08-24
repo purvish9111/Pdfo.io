@@ -7,6 +7,7 @@ import { BuyMeCoffeeButton } from "@/components/BuyMeCoffeeButton";
 import { Button } from "@/components/ui/button";
 import { compressPDF, downloadBlob, type CompressionLevel } from "@/lib/realPdfUtils";
 import { useToast } from "@/hooks/use-toast";
+import { trackToolUsage } from "@/lib/analytics";
 import { SEOHead } from "@/components/SEOHead";
 import { toolSEOData } from "@/lib/seo-data";
 
@@ -72,6 +73,9 @@ export default function CompressPDF() {
       setCompressionLevel(level);
       setCompressedBlob(processedBlob);
       setProgress(100);
+      
+      // Track usage for dashboard
+      await trackToolUsage("Compress PDF", "optimization", 1);
       
       toast({
         title: "Success!",

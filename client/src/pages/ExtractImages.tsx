@@ -9,6 +9,7 @@ import { SinglePDFThumbnail } from "@/components/SinglePDFThumbnail";
 import { generatePDFThumbnail } from "@/lib/pdfThumbnails";
 import { extractImagesFromPDF, downloadBlob } from "@/lib/realPdfUtils";
 import { useToast } from "@/hooks/use-toast";
+import { trackToolUsage } from "@/lib/analytics";
 import { Download, Package } from "lucide-react";
 
 interface ExtractedImage {
@@ -64,6 +65,9 @@ export default function ExtractImages() {
       setExtractedImages(result.images);
       setExtractedImagesZip(result.zipBlob);
       setProgress(100);
+      
+      // Track usage for dashboard
+      await trackToolUsage("Extract Images", "conversion", 1);
       
       toast({
         title: "Success!",

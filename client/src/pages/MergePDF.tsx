@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { ToolFooter } from "@/components/ToolFooter";
 import { mergePDFs } from "@/lib/realPdfUtils";
 import { useToast } from "@/hooks/use-toast";
+import { trackToolUsage } from "@/lib/analytics";
 import { Download, Coffee } from "lucide-react";
 import { SEOHead } from "@/components/SEOHead";
 import { ProgressBar } from "@/components/ProgressBar";
@@ -64,6 +65,9 @@ export default function MergePDF() {
       setMergedPdfUrl(url);
       
       setProgress(100);
+      
+      // Track usage for dashboard
+      await trackToolUsage("Merge PDF", "manipulation", files.length);
       
       toast({
         title: "Success!",

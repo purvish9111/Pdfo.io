@@ -59,3 +59,30 @@ export const trackEvent = (
     value: value,
   });
 };
+
+// Track usage to backend API for dashboard - Fixed: Added missing usage tracking
+export const trackToolUsage = async (toolName: string, toolType: string, filesProcessed: number = 1) => {
+  try {
+    const user = JSON.parse(localStorage.getItem('user') || 'null');
+    if (!user?.uid) return;
+
+    await fetch('/api/user/usage', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        userId: user.uid,
+        toolName,
+        toolType,
+        filesProcessed,
+        timestamp: new Date(),
+      }),
+    });
+    
+    // Also track with Google Analytics
+    trackEvent('tool_usage', toolType, toolName, filesProcessed);
+  } catch (error) {
+    console.error('Failed to track usage:', error);
+  }
+};

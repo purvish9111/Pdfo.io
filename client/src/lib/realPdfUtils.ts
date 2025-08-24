@@ -400,7 +400,15 @@ export async function getPDFMetadata(file: File): Promise<PDFMetadata> {
   }
 }
 
-// Add watermark to PDF
+// Helper function to parse hex color - Fixed: Moved before usage
+function parseHexColor(hex: string) {
+  const r = parseInt(hex.slice(1, 3), 16) / 255;
+  const g = parseInt(hex.slice(3, 5), 16) / 255;
+  const b = parseInt(hex.slice(5, 7), 16) / 255;
+  return rgb(r, g, b);
+}
+
+// Add watermark to PDF - Fixed: Improved reliability
 export async function addWatermarkToPDF(file: File, settings: WatermarkSettings): Promise<Blob> {
   const arrayBuffer = await file.arrayBuffer();
   const pdf = await PDFDocument.load(arrayBuffer);
@@ -587,13 +595,6 @@ export async function compressPDF(file: File, level: CompressionLevel): Promise<
   }
 }
 
-// Helper function to parse hex color
-function parseHexColor(hex: string) {
-  const r = parseInt(hex.slice(1, 3), 16) / 255;
-  const g = parseInt(hex.slice(3, 5), 16) / 255;
-  const b = parseInt(hex.slice(5, 7), 16) / 255;
-  return rgb(r, g, b);
-}
 
 // Convert PDF to images (JPG/PNG/TIFF)
 export async function convertPDFToImages(file: File, format: 'jpg' | 'png' | 'tiff', options: ImageConversionOptions = {}): Promise<Blob> {

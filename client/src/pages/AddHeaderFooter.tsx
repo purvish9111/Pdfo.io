@@ -13,6 +13,7 @@ import { SinglePDFThumbnail } from "@/components/SinglePDFThumbnail";
 import { generatePDFThumbnail } from "@/lib/pdfThumbnails";
 import { addHeadersFooters, downloadBlob } from "@/lib/realPdfUtils";
 import { useToast } from "@/hooks/use-toast";
+import { trackToolUsage } from "@/lib/analytics";
 import { Type, AlignCenter, Palette } from "lucide-react";
 
 export default function AddHeaderFooter() {
@@ -63,6 +64,10 @@ export default function AddHeaderFooter() {
       const modifiedBlob = await addHeadersFooters(file, headerText, footerText);
       setProgress(100);
       setProcessedBlob(modifiedBlob);
+      
+      // Track usage for dashboard - Fixed: Added missing tracking
+      await trackToolUsage("Add Header & Footer", "manipulation", 1);
+      
       toast({
         title: "Success!",
         description: "Header and footer have been added to your PDF. Download button available below.",
@@ -384,11 +389,25 @@ export default function AddHeaderFooter() {
               </Card>
             </div>
           </div>
+          
+          {/* Download Button - Fixed: Added missing download button */}
+          {processedBlob && !isProcessing && (
+            <div className="text-center space-y-4 mt-6">
+              <Button
+                onClick={handleDownload}
+                size="lg"
+                className="bg-green-500 hover:bg-green-600 text-white px-8"
+              >
+                <i className="fas fa-download mr-2"></i>
+                Download PDF with Header & Footer
+              </Button>
+              <BuyMeCoffeeButton />
+            </div>
+          )}
         )}
       </div>
       
       <ToolFooter />
-      <BuyMeCoffeeButton />
     </>
   );
 }

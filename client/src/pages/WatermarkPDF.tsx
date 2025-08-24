@@ -12,6 +12,7 @@ import { Slider } from "@/components/ui/slider";
 import { addWatermarkToPDF, downloadBlob, generateRealPDFPages, type WatermarkSettings } from "@/lib/realPdfUtils";
 import { SinglePDFThumbnail } from "@/components/SinglePDFThumbnail";
 import { useToast } from "@/hooks/use-toast";
+import { trackToolUsage } from "@/lib/analytics";
 
 interface PDFPage {
   id: string;
@@ -77,6 +78,10 @@ export default function WatermarkPDF() {
       const watermarkedBlob = await addWatermarkToPDF(file, settings);
       setProgress(100);
       setConvertedFile(watermarkedBlob);
+      
+      // Track usage for dashboard - Fixed: Added missing tracking
+      await trackToolUsage("Watermark PDF", "security", 1);
+      
       toast({
         title: "Success!",
         description: "Watermark has been added to your PDF successfully. Download button available below.",
