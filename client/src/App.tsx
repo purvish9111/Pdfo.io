@@ -7,16 +7,11 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { Header } from "@/components/Header";
 import { Suspense, lazy } from "react";
 import { Loader2 } from "lucide-react";
-import { PerformanceProvider } from "@/components/PerformanceProvider";
 import { initGA } from "./lib/analytics";
 import { useAnalytics } from "./hooks/use-analytics";
 import { initializePDFJS } from "./lib/pdf-worker-config";
 import { initializePerformanceMonitoring } from "./lib/performance-monitor";
-// DISABLED: File deleted to prevent CSS corruption
-// import { initializeWebVitalsOptimizations } from "./lib/web-vitals-optimization";
-// DISABLED: These imports cause CSS corruption
-// import { injectCriticalCSS, optimizeNonCriticalCSS } from "./lib/critical-css";
-// import { initializeAllPerformanceOptimizations } from "./lib/performance-bootstrap";
+
 // Use lazy loading for better bundle optimization - reduces main bundle size
 import Home from "@/pages/Home";
 import About from "@/pages/About";
@@ -74,8 +69,6 @@ const LazyLoader = () => (
     </div>
   </div>
 );
-// FIXED: Removed unused LazyRoute import causing errors
-// import { LazyRoute } from "@/components/LazyRoute";
 
 function Router() {
   const [location] = useLocation();
@@ -167,10 +160,6 @@ function App() {
     
     // Initialize performance monitoring
     initializePerformanceMonitoring();
-    
-    // DISABLED: Optimization scripts corrupt CSS classes and design
-    // These scripts remove h-8, w-8, object-contain and other needed classes
-    // initializeAllPerformanceOptimizations();
   }, []);
 
   return (
