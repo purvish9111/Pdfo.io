@@ -30,7 +30,7 @@ export default function UnlockPDF() {
 
   const handleDownload = () => {
     if (!convertedFile) return;
-    downloadBlob(convertedFile, 'unlocked-document.pdf');
+    downloadBlob(convertedFile, 'PDFo_Unlock.pdf');
   };
 
   const canUnlock = password.length > 0 && !isProcessing;

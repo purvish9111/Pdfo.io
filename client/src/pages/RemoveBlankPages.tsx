@@ -38,7 +38,7 @@ export default function RemoveBlankPages() {
 
   const handleDownload = () => {
     if (!processedBlob) return;
-    downloadBlob(processedBlob, 'no-blank-pages.pdf');
+    downloadBlob(processedBlob, 'PDFo_RemoveBlank.pdf');
   };
 
   const loadPDFAndDetectBlankPages = async (pdfFile: File) => {

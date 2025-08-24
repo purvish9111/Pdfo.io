@@ -57,7 +57,7 @@ export default function RotatePDF() {
 
   const handleDownload = () => {
     if (!rotatedBlob) return;
-    downloadBlob(rotatedBlob, 'rotated-document.pdf');
+    downloadBlob(rotatedBlob, 'PDFo_Rotate.pdf');
   };
 
   const handleRotate = async (updatedPages: PDFPage[]) => {

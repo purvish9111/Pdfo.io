@@ -32,7 +32,7 @@ export default function PDFToTXT() {
 
   const handleDownload = () => {
     if (!convertedFile) return;
-    downloadBlob(convertedFile, 'converted-text.txt');
+    downloadBlob(convertedFile, 'PDFo_ToTXT.txt');
   };
 
   const handleConvert = async () => {

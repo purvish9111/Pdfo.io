@@ -58,7 +58,7 @@ export default function PageNumbers() {
 
   const handleDownload = () => {
     if (!numberedBlob) return;
-    downloadBlob(numberedBlob, 'numbered-document.pdf');
+    downloadBlob(numberedBlob, 'PDFo_PageNumbers.pdf');
   };
 
   const handleAddPageNumbers = async (settings: PageNumberSettings) => {

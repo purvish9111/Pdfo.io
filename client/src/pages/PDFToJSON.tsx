@@ -30,7 +30,7 @@ export default function PDFToJSON() {
 
   const handleDownload = () => {
     if (!convertedFile) return;
-    downloadBlob(convertedFile, 'pdf-data.json');
+    downloadBlob(convertedFile, 'PDFo_ToJSON.json');
   };
 
   const handleConvert = async () => {

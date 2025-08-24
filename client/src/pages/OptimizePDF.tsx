@@ -121,7 +121,7 @@ export default function OptimizePDF() {
 
   const handleDownload = () => {
     if (!optimizedFile) return;
-    downloadBlob(optimizedFile, 'optimized-document.pdf');
+    downloadBlob(optimizedFile, 'PDFo_Optimize.pdf');
   };
 
   const formatFileSize = (bytes: number) => {

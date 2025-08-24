@@ -30,7 +30,7 @@ export default function PDFToPNG() {
 
   const handleDownload = () => {
     if (!convertedFile) return;
-    downloadBlob(convertedFile, 'pdf-images.zip');
+    downloadBlob(convertedFile, 'PDFo_ToPNG.zip');
   };
 
   const handleConvert = async () => {

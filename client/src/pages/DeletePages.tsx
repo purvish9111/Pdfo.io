@@ -57,7 +57,7 @@ export default function DeletePages() {
 
   const handleDownload = () => {
     if (!processedBlob) return;
-    downloadBlob(processedBlob, 'pages-deleted-document.pdf');
+    downloadBlob(processedBlob, 'PDFo_DeletePages.pdf');
   };
 
   const handleDelete = async (updatedPages: PDFPage[]) => {

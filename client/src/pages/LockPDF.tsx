@@ -31,7 +31,7 @@ export default function LockPDF() {
 
   const handleDownload = () => {
     if (!convertedFile) return;
-    downloadBlob(convertedFile, 'password-protected.pdf');
+    downloadBlob(convertedFile, 'PDFo_Lock.pdf');
   };
 
   const passwordsMatch = password === confirmPassword && password.length > 0;

@@ -30,7 +30,7 @@ export default function PDFToTIFF() {
 
   const handleDownload = () => {
     if (!convertedFile) return;
-    downloadBlob(convertedFile, 'pdf-tiff-images.zip');
+    downloadBlob(convertedFile, 'PDFo_ToTIFF.zip');
   };
 
   const handleConvert = async () => {

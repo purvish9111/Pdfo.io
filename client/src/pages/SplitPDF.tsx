@@ -246,8 +246,8 @@ export default function SplitPDF() {
                     const startPage = group[0].pageNumber;
                     const endPage = group[group.length - 1].pageNumber;
                     const fileName = startPage === endPage 
-                      ? `split-page-${startPage}.pdf`
-                      : `split-pages-${startPage}-${endPage}.pdf`;
+                      ? `PDFo_Split_Page${startPage}.pdf`
+                      : `PDFo_Split_Pages${startPage}-${endPage}.pdf`;
                     
                     return (
                       <Button

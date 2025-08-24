@@ -131,7 +131,7 @@ export default function PNGToPDF() {
 
   const handleDownload = () => {
     if (!convertedFile) return;
-    downloadBlob(convertedFile, 'images-to-pdf.pdf');
+    downloadBlob(convertedFile, 'PDFo_PNGToPDF.pdf');
   };
 
   const handleCreatePDF = async () => {

@@ -40,7 +40,7 @@ export default function EditMetadata() {
 
   const handleDownload = () => {
     if (!updatedBlob) return;
-    downloadBlob(updatedBlob, 'metadata-updated.pdf');
+    downloadBlob(updatedBlob, 'PDFo_EditMetadata.pdf');
   };
 
   const handleUpdateMetadata = async () => {

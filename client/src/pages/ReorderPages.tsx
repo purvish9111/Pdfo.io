@@ -102,7 +102,7 @@ export default function ReorderPages() {
 
   const handleDownload = () => {
     if (reorderedBlob) {
-      downloadBlob(reorderedBlob, 'reordered-document.pdf');
+      downloadBlob(reorderedBlob, 'PDFo_Reorder.pdf');
     }
   };
 

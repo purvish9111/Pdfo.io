@@ -27,7 +27,7 @@ export default function PDFToPPT() {
 
   const handleDownload = () => {
     if (!convertedFile) return;
-    downloadBlob(convertedFile, 'converted-presentation.pptx');
+    downloadBlob(convertedFile, 'PDFo_ToPPT.pptx');
   };
 
   const handleConvert = async () => {

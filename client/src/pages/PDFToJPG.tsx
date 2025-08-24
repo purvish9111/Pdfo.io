@@ -30,7 +30,7 @@ export default function PDFToJPG() {
 
   const handleDownload = () => {
     if (!convertedFile) return;
-    downloadBlob(convertedFile, 'pdf-images.zip');
+    downloadBlob(convertedFile, 'PDFo_ToJPG.zip');
   };
 
   const handleConvert = async () => {

@@ -30,7 +30,7 @@ export default function PDFToExcel() {
 
   const handleDownload = () => {
     if (!convertedFile) return;
-    downloadBlob(convertedFile, 'converted-spreadsheet.xlsx');
+    downloadBlob(convertedFile, 'PDFo_ToExcel.xlsx');
   };
 
   const handleConvert = async () => {
