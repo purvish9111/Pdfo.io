@@ -177,6 +177,21 @@ export default function EditMetadata() {
               </div>
             </div>
             
+            {/* Download Button */}
+            {updatedBlob && !isProcessing && (
+              <div className="text-center space-y-4 mt-6">
+                <Button
+                  onClick={handleDownload}
+                  size="lg"
+                  className="bg-green-500 hover:bg-green-600 text-white px-8"
+                  data-testid="button-download-metadata"
+                >
+                  <i className="fas fa-download mr-2"></i>
+                  Download Updated PDF
+                </Button>
+              </div>
+            )}
+            
             <ProgressBar 
               progress={progress} 
               isVisible={isProcessing} 

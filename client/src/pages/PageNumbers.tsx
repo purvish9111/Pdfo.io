@@ -138,6 +138,20 @@ export default function PageNumbers() {
               onAddPageNumbers={handleAddPageNumbers}
               isProcessing={isProcessing}
             />
+            {/* Download Button */}
+            {numberedBlob && !isProcessing && (
+              <div className="text-center space-y-4 mt-6">
+                <button
+                  onClick={handleDownload}
+                  className="inline-flex items-center px-8 py-4 text-lg font-medium bg-green-500 hover:bg-green-600 text-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
+                  data-testid="button-download-numbered"
+                >
+                  <i className="fas fa-download mr-2"></i>
+                  Download Numbered PDF
+                </button>
+              </div>
+            )}
+            
             <ProgressBar 
               progress={progress} 
               isVisible={isProcessing} 
