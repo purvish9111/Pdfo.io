@@ -49,14 +49,7 @@ import PNGToPDF from "@/pages/PNGToPDF";
 import WordToPDF from "@/pages/WordToPDF";
 import ExcelToPDF from "@/pages/ExcelToPDF";
 
-// Other Tools - Direct imports for instant loading
-import ImageCompressor from "@/pages/ImageCompressor";
-import URLShortener from "@/pages/URLShortener";
-import QRGenerator from "@/pages/QRGenerator";
-import PasswordGenerator from "@/pages/PasswordGenerator";
-import ColorPalette from "@/pages/ColorPalette";
-import UnitConverter from "@/pages/UnitConverter";
-import HashGenerator from "@/pages/HashGenerator";
+// Other Tools - Disabled per user request
 
 function Router() {
   const [location] = useLocation();
@@ -112,14 +105,7 @@ function Router() {
       <Route path="/word-to-pdf" component={WordToPDF} />
       <Route path="/excel-to-pdf" component={ExcelToPDF} />
       
-      {/* Other Tools - Non-PDF Tools */}
-      <Route path="/image-compressor" component={ImageCompressor} />
-      <Route path="/url-shortener" component={URLShortener} />
-      <Route path="/qr-generator" component={QRGenerator} />
-      <Route path="/password-generator" component={PasswordGenerator} />
-      <Route path="/color-palette" component={ColorPalette} />
-      <Route path="/unit-converter" component={UnitConverter} />
-      <Route path="/hash-generator" component={HashGenerator} />
+      {/* Other Tools - Disabled per user request */}
       
       {/* Company Pages */}
       <Route path="/about" component={About} />
