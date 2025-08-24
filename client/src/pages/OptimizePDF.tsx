@@ -238,12 +238,26 @@ export default function OptimizePDF() {
                 </Button>
               </div>
             </div>
+            
+            {/* Download Button - Fixed: Added missing download button */}
+            {optimizedFile && !isProcessing && showResults && (
+              <div className="text-center space-y-4 mt-6">
+                <Button
+                  onClick={handleDownload}
+                  size="lg"
+                  className="bg-green-500 hover:bg-green-600 text-white px-8"
+                >
+                  <i className="fas fa-download mr-2"></i>
+                  Download Optimized PDF
+                </Button>
+                <BuyMeCoffeeButton />
+              </div>
+            )}
           </>
         )}
       </div>
       
       <ToolFooter />
-      <BuyMeCoffeeButton />
     </>
   );
 }

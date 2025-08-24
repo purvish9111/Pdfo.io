@@ -9,7 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
 import { SinglePDFThumbnail } from "@/components/SinglePDFThumbnail";
 import { generatePDFThumbnail } from "@/lib/pdfThumbnails";
-import { removeBlankPages, downloadBlob } from "@/lib/realPdfUtils";
+import { removeBlankPages, downloadBlob, detectBlankPages } from "@/lib/realPdfUtils";
 import { useToast } from "@/hooks/use-toast";
 import { Trash2 } from "lucide-react";
 
@@ -45,20 +45,24 @@ export default function RemoveBlankPages() {
     try {
       const thumbnail = await generatePDFThumbnail(pdfFile);
       
-      // Simulate blank page detection - in real implementation, analyze page content
-      const totalPages = thumbnail.pageCount;
-      const mockBlankPages = [2, 5, 8]; // Simulate pages 2, 5, and 8 as blank
+      // Real blank page detection using PDF.js
+      const blankPages = await detectBlankPages(pdfFile);
       
-      const pageInfos: PageInfo[] = Array.from({ length: totalPages }, (_, index) => ({
+      const pageInfos: PageInfo[] = Array.from({ length: thumbnail.pageCount }, (_, index) => ({
         pageNumber: index + 1,
-        isBlank: mockBlankPages.includes(index + 1),
-        isSelected: mockBlankPages.includes(index + 1) // Auto-select blank pages
+        isBlank: blankPages.includes(index + 1),
+        isSelected: blankPages.includes(index + 1) // Auto-select blank pages
       }));
       
       setPages(pageInfos);
-      setBlankPagesDetected(mockBlankPages.length);
+      setBlankPagesDetected(blankPages.length);
     } catch (error) {
-      // PRODUCTION: Improved error handling without console logging
+      console.error('Error detecting blank pages:', error);
+      toast({
+        title: "Error",
+        description: "Failed to analyze PDF pages. Please try again.",
+        variant: "destructive",
+      });
     }
   };
 

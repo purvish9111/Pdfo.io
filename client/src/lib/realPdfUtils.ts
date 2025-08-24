@@ -1391,6 +1391,99 @@ export async function extractImagesFromPDF(file: File): Promise<{ images: { url:
   return { images: extractedImages, zipBlob };
 }
 
+// Detect blank pages in PDF
+export async function detectBlankPages(file: File): Promise<number[]> {
+  await initializePDFJS();
+  const pdfjsLib = (window as any).pdfjsLib;
+  const arrayBuffer = await file.arrayBuffer();
+  const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+  
+  const blankPages: number[] = [];
+  
+  for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
+    const page = await pdf.getPage(pageNum);
+    const textContent = await page.getTextContent();
+    
+    // Check if page has text content
+    const hasText = textContent.items.length > 0 && 
+                   textContent.items.some((item: any) => item.str.trim().length > 0);
+    
+    // If no text, check for graphics/images by rendering to canvas
+    if (!hasText) {
+      const viewport = page.getViewport({ scale: 0.5 }); // Low scale for faster processing
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      
+      if (ctx) {
+        canvas.width = viewport.width;
+        canvas.height = viewport.height;
+        
+        // Fill with white background
+        ctx.fillStyle = 'white';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        
+        await page.render({
+          canvasContext: ctx,
+          viewport: viewport
+        }).promise;
+        
+        // Get image data and check for non-white pixels
+        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        const data = imageData.data;
+        
+        let hasContent = false;
+        // Sample pixels to check for content (not purely white)
+        for (let i = 0; i < data.length; i += 16) { // Sample every 4th pixel
+          const r = data[i];
+          const g = data[i + 1];
+          const b = data[i + 2];
+          
+          // If pixel is not white or very close to white
+          if (r < 250 || g < 250 || b < 250) {
+            hasContent = true;
+            break;
+          }
+        }
+        
+        if (!hasContent) {
+          blankPages.push(pageNum);
+        }
+      } else {
+        // Fallback: if no text and can't render, assume it's blank
+        blankPages.push(pageNum);
+      }
+    }
+  }
+  
+  return blankPages;
+}
+
+// Remove blank pages from PDF
+export async function removeBlankPages(file: File): Promise<Blob> {
+  const arrayBuffer = await file.arrayBuffer();
+  const pdf = await PDFDocument.load(arrayBuffer);
+  
+  // Detect blank pages first
+  const blankPageNumbers = await detectBlankPages(file);
+  
+  // Convert to 0-indexed for pdf-lib
+  const blankPageIndices = blankPageNumbers.map(num => num - 1);
+  
+  // Create new PDF with non-blank pages
+  const newPdf = await PDFDocument.create();
+  const pages = pdf.getPages();
+  
+  for (let i = 0; i < pages.length; i++) {
+    if (!blankPageIndices.includes(i)) {
+      const [copiedPage] = await newPdf.copyPages(pdf, [i]);
+      newPdf.addPage(copiedPage);
+    }
+  }
+  
+  const pdfBytes = await newPdf.save();
+  return new Blob([pdfBytes], { type: 'application/pdf' });
+}
+
 // Add Headers/Footers to PDF
 export async function addHeadersFooters(file: File, headerText: string, footerText: string): Promise<Blob> {
   const arrayBuffer = await file.arrayBuffer();
@@ -1428,33 +1521,6 @@ export async function addHeadersFooters(file: File, headerText: string, footerTe
   return new Blob([pdfBytes], { type: 'application/pdf' });
 }
 
-// Remove Blank Pages
-export async function removeBlankPages(file: File): Promise<Blob> {
-  const pdfjsLib = (window as any).pdfjsLib;
-  const arrayBuffer = await file.arrayBuffer();
-  const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
-  const pdfDoc = await PDFDocument.load(arrayBuffer);
-  
-  const pagesToKeep: number[] = [];
-  
-  for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
-    const page = await pdf.getPage(pageNum);
-    const content = await page.getTextContent();
-    
-    const hasText = content.items.some((item: any) => item.str.trim().length > 0);
-    
-    if (hasText) {
-      pagesToKeep.push(pageNum - 1); // Convert to 0-indexed
-    }
-  }
-  
-  const newPdf = await PDFDocument.create();
-  const copiedPages = await newPdf.copyPages(pdfDoc, pagesToKeep);
-  copiedPages.forEach((page) => newPdf.addPage(page));
-  
-  const pdfBytes = await newPdf.save();
-  return new Blob([pdfBytes], { type: 'application/pdf' });
-}
 
 // PDF Optimizer - Remove unused resources
 export async function optimizePDF(file: File): Promise<Blob> {
