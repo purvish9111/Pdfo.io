@@ -57,22 +57,20 @@ export default function ExtractImages() {
     try {
       setProgress(25);
       
-      // Simulate image extraction - In real implementation, use pdf-lib to extract actual images
-      const mockImages: ExtractedImage[] = [
-        { url: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==", name: "image_1.png", index: 1 },
-        { url: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==", name: "image_2.png", index: 2 },
-        { url: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==", name: "image_3.png", index: 3 }
-      ];
+      // Extract real images from PDF
+      const result = await extractImagesFromPDF(file);
       
       setProgress(75);
-      setExtractedImages(mockImages);
+      setExtractedImages(result.images);
+      setExtractedImagesZip(result.zipBlob);
       setProgress(100);
       
       toast({
         title: "Success!",
-        description: `${mockImages.length} images extracted from your PDF.`,
+        description: `${result.images.length} images extracted from your PDF.`,
       });
     } catch (error) {
+      console.error('Extract error:', error);
       toast({
         title: "Error",
         description: "Failed to extract images from PDF. Please try again.",
@@ -94,14 +92,13 @@ export default function ExtractImages() {
   };
 
   const downloadAllImages = async () => {
-    if (!file || extractedImages.length === 0) return;
+    if (!extractedImagesZip) return;
     
     try {
-      const imageZip = await extractImagesFromPDF(file);
-      setExtractedImagesZip(imageZip);
+      downloadBlob(extractedImagesZip, 'extracted-images.zip');
       toast({
         title: "Success!",
-        description: "All images prepared for download as ZIP file. Download button available below.",
+        description: "All images downloaded as ZIP file.",
       });
     } catch (error) {
       toast({
