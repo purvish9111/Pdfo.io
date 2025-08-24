@@ -161,6 +161,21 @@ export default function DeletePages() {
               className="mt-6"
             />
             
+            {/* Download Button - Fixed: Added missing download button */}
+            {processedBlob && !isProcessing && (
+              <div className="text-center space-y-4 mt-6">
+                <Button
+                  onClick={handleDownload}
+                  size="lg"
+                  className="bg-green-500 hover:bg-green-600 text-white px-8"
+                >
+                  <i className="fas fa-download mr-2"></i>
+                  Download PDF with Deleted Pages
+                </Button>
+                <BuyMeCoffeeButton />
+              </div>
+            )}
+            
             {file && !isProcessing && (
               <div className="mt-4 flex justify-center">
                 <Button
@@ -169,6 +184,7 @@ export default function DeletePages() {
                     setFile(null);
                     setPages([]);
                     setProgress(0);
+                    setProcessedBlob(null);
                   }}
                   className="text-gray-600 dark:text-gray-300"
                 >
